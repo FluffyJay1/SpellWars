@@ -1,7 +1,7 @@
-import java.awt.List;
-import java.util.ArrayList;
-import java.util.Collections;
+package mechanic;
 
+
+import java.util.ArrayList;
 import org.newdawn.slick.Graphics;
 /*
  * My Ideas:
@@ -13,11 +13,21 @@ import org.newdawn.slick.Graphics;
  * -This means that their pathfinding gets updated as well
  */
 
-public class Map {
-	int gWidth = 12; //GRID WIDTH
-	int gHeight = 8; //GRID HEIGHT
-	Boolean[][] pathGrid = new Boolean[x][y];
+import mechanic.GameElement;
+import towers.Tower;
+
+public class GameMap {
+	
+	int gWidth; //GRID WIDTH
+	int gHeight; //GRID HEIGHT
+	Boolean[][] pathGrid = new Boolean[gWidth][gHeight];
 	ArrayList<GameElement> elementList = new ArrayList<>();
+	
+	public GameMap(int height, int width){
+		gWidth = width;
+		gHeight = height;
+	}
+	
 	public void update() {
 		//Updates everything (positions)
 		for(int i = 0; i < elementList.size(); i++) {
@@ -28,7 +38,7 @@ public class Map {
 	public void draw(Graphics g) {
 		for(int i = 0; i < elementList.size(); i++) {
 			GameElement temp = elementList.get(i);
-			g.draw(temp.pic, temp.loc.x, temp.loc.y); //Takes the image of each game element and draws them at their loc (point)
+			g.drawImage(temp.getImage(), (float)temp.getX(), (float)temp.getY()); //Takes the image of each game element and draws them at their loc (point)
 		}
 	}
 	public void placeTower(Tower theTower) { //Will snap the tower to the grid and also change the boolean pathfinding array so that that square is blocked

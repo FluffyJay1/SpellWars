@@ -1,23 +1,27 @@
-
+package mechanic;
 import org.newdawn.slick.Image;
 
+import mechanic.DamageType;
+import mechanic.Point;
+
 public class GameElement {
-	double hp;
-	double maxHP;
-	double speed;
-	double orientation; // in radians
-	Point loc;
-	double size; // in pixels
-	Image pic;
-	double dmg;
-	DamageType type;
-	double reload; // in frames
-	double aoe; // in pixels
-	double range;
-	GameElement target;
+
+	private double hp;
+	private double maxHP;
+	private double speed;
+	private double orientation; // in degrees
+	private Point loc;
+	private double size; // in pixels
+	private double dmg;
+	private DamageType type;
+	private double reload; // in frames
+	private double aoe; // in pixels
+	private double range;
+	private GameElement target;
 	static DamageType[] types = DamageType.values();
 	static double[] resistances = new double[types.length];
-	double cost;
+	private double cost;
+	private Image pic;
 	
 	public GameElement() {
 		this(new Point());
@@ -160,5 +164,17 @@ public class GameElement {
 	 */
 	public void move() {
 		
+	}
+	
+	public Image getImage(){
+		return this.pic;
+	}
+	
+	public double getX(){
+		return this.loc.x;
+	}
+	
+	public double getY(){
+		return this.loc.y;
 	}
 }

@@ -1,3 +1,5 @@
+package mechanic;
+
 
 public class Point {
 	double x;
