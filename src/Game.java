@@ -9,6 +9,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import states.StateGame;
 import states.StateMenu;
 
 public class Game extends StateBasedGame {
@@ -31,6 +32,7 @@ public class Game extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		// TODO Auto-generated method stub
+		addState(new StateGame(STATE_GAME));
 		addState(new StateMenu(STATE_MENU));
 		
 	}
