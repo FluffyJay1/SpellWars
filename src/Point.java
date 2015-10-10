@@ -60,6 +60,7 @@ public class Point {
 	
 	/**
 	 * Find the magnitude of the vector between two points
+	 * 
 	 * Parameters should be instantiated
 	 * 
 	 * @param p1	A point
@@ -73,6 +74,7 @@ public class Point {
 	
 	/**
 	 * Find angle in degrees of the vector between two points
+	 * 
 	 * Parameters should be instantiated
 	 * 
 	 * @param start	The original point
@@ -85,6 +87,7 @@ public class Point {
 	
 	/**
 	 * Find angle in degrees of a vector
+	 * 
 	 * Parameters should be instantiated
 	 * 
 	 * @param vec	The vector
@@ -96,6 +99,7 @@ public class Point {
 	
 	/**
 	 * Find angle in radians of the vector between two points
+	 * 
 	 * Parameters should be instantiated
 	 * 
 	 * @param start	The original point
@@ -108,6 +112,7 @@ public class Point {
 	
 	/**
 	 * Find angle in radians of a vector
+	 * 
 	 * Parameters should be instantiated
 	 * 
 	 * @param vec	The vector
@@ -122,6 +127,7 @@ public class Point {
 	
 	/**
 	 * Find the vector between two points
+	 * 
 	 * Parameters should be instantiated
 	 * 
 	 * @param start	The original point
@@ -144,7 +150,47 @@ public class Point {
 	}
 	
 	/**
+	 * Find the short distance vector that puts your closest to target
+	 * 
+	 * @param loc				The current location
+	 * @param target			The target location
+	 * @param possibleFactors	The number of angles in 2pi that we examine
+	 * @return					The short distance vector that brings you closest to target
+	 */
+	public Point getClosestAngleVector(Point loc, Point target, int possibleFactors) {
+		double interval = 2 * Math.PI / possibleFactors;
+		double exact = this.getDirectionRad(loc, target);
+		double closestFactor = 0;
+		
+		for (double angleFactor = 1; angleFactor < possibleFactors; angleFactor++) {
+			if (Math.abs(angleFactor * interval - exact) < Math.abs(closestFactor * interval - exact)) {
+				closestFactor = angleFactor;
+			}
+		}
+		if (closestFactor % 2 == 0) {
+			return this.makeStateInteger(this.getVector(1, closestFactor * interval));
+		}
+		return this.makeStateInteger(this.getVector(1, closestFactor * interval));
+	}
+	
+	/**
+	 * Round a point's state to the nearest integer values
+	 * 
+	 * Parameters must be instantiated
+	 * 
+	 * @param p	The point with the given state
+	 * @return	A different point with integer state (stored as double)
+	 */
+	public Point makeStateInteger(Point p) {
+		Point perfect = new Point();
+		perfect.x = (int) (p.x += 0.5);
+		perfect.y = (int) (p.y += 0.5);
+		return perfect;
+	}
+	
+	/**
 	 * Find the vector given a distance and a direction
+	 * 
 	 * Parameters should be instantiated
 	 * 
 	 * @param distance	The distance to travel
@@ -177,6 +223,7 @@ public class Point {
 	
 	/**
 	 * Find the point you would arrive at given a starting point, a distance, and a direction
+	 * 
 	 * Parameters should be instantiated
 	 * 
 	 * @param start		The starting point
@@ -191,6 +238,7 @@ public class Point {
 	
 	/**
 	 * Find the point you would arrive at given a starting point, and a traveling vector
+	 * 
 	 * Parameters should be instantiated
 	 * 
 	 * @param start		The starting point

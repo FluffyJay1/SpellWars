@@ -29,7 +29,7 @@ public class Game extends BasicGame {
 	public void render(GameContainer arg0, Graphics g) throws SlickException {
 		g.drawImage(images.get("Cool Math Games"), 0, 0);
 	}
-
+	
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
 		Image i = new Image("res/images.png");
