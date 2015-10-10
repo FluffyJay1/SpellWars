@@ -6,6 +6,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import GameMap;
+
 public class StateGame extends BasicGameState{
 	
 	private int id;
@@ -17,8 +19,8 @@ public class StateGame extends BasicGameState{
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		// TODO Auto-generated method stub
-		
-	}
+		GameMap map = new GameMap(125, 125);
+	}	
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException {

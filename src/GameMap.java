@@ -1,5 +1,6 @@
-import java.util.ArrayList;
 
+
+import java.util.ArrayList;
 import org.newdawn.slick.Graphics;
 /*
  * My Ideas:
@@ -11,12 +12,17 @@ import org.newdawn.slick.Graphics;
  * -This means that their pathfinding gets updated as well
  */
 
-public class Map {
+public class GameMap {
 	
-	int gWidth = 12; //GRID WIDTH
-	int gHeight = 8; //GRID HEIGHT
+	int gWidth; //GRID WIDTH
+	int gHeight; //GRID HEIGHT
 	Boolean[][] pathGrid = new Boolean[gWidth][gHeight];
 	ArrayList<GameElement> elementList = new ArrayList<>();
+	
+	public GameMap(int height, int width){
+		gWidth = width;
+		gHeight = height;
+	}
 	
 	public void update() {
 		//Updates everything (positions)
