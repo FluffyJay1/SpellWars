@@ -5,7 +5,7 @@ public class GameElement {
 	double hp;
 	double maxHP;
 	double speed;
-	double orientation; // in degrees
+	double orientation; // in radians
 	Point loc;
 	double size; // in pixels
 	Image pic;
