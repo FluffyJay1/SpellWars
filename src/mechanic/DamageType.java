@@ -1,6 +1,8 @@
+package mechanic;
+
 
 public enum DamageType {
 	kinetic,
-	energy,
+	thermal,
 	temporal,
 }

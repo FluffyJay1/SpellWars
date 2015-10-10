@@ -4,15 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Point;
+import org.newdawn.slick.state.StateBasedGame;
 
-public class Game extends BasicGame {
+import states.StateGame;
+import states.StateMenu;
+
+public class Game extends StateBasedGame {
+	public static int STATE_MENU = 0;
+	public static int STATE_GAME = 1;
+	public static int STATE_HELP = 2;
+	
 	Map<String, Image> images = new HashMap<String, Image>();
 	
 	public static void main(String[] args) throws SlickException{
@@ -26,22 +30,11 @@ public class Game extends BasicGame {
 	}
 
 	@Override
-	public void render(GameContainer arg0, Graphics g) throws SlickException {
-		g.drawImage(images.get("Cool Math Games"), 0, 0);
+	public void initStatesList(GameContainer container) throws SlickException {
+		// TODO Auto-generated method stub
+		addState(new StateGame(STATE_GAME));
+		addState(new StateMenu(STATE_MENU));		
 	}
 
-	@Override
-	public void init(GameContainer arg0) throws SlickException {
-		Image i = new Image("res/images.png");
-		images.put("Cool Math Games", i);
-	}
-
-	@Override
-	public void update(GameContainer container, int arg1) throws SlickException {
-		Input in = container.getInput();
-		Point point = new Point(0, 0);
-		
-		
-	}
 
 }
