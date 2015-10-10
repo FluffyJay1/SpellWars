@@ -8,7 +8,7 @@
 	<classpathentry kind="lib" path="libs/lwjgl.jar"/>
 	<classpathentry kind="lib" path="libs/slick.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Tower Defense Game/libs/native"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Tower-Defense-Game/libs/native"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
