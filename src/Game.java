@@ -18,7 +18,6 @@ public class Game extends StateBasedGame {
 	
 	Map<String, Image> images = new HashMap<String, Image>();
 	
-	
 	public static void main(String[] args) throws SlickException{
 		AppGameContainer app = new AppGameContainer(new Game("BTD Battles"));
 		app.setDisplayMode(800, 800, false);
@@ -33,6 +32,7 @@ public class Game extends StateBasedGame {
 	public void initStatesList(GameContainer container) throws SlickException {
 		// TODO Auto-generated method stub
 		addState(new StateMenu(STATE_MENU));
+		
 	}
 
 
