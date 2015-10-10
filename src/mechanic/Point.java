@@ -1,7 +1,6 @@
 
 package mechanic;
 
-
 public class Point {
 	double x;
 	double y;
@@ -70,8 +69,8 @@ public class Point {
 	 * @param p2	A point
 	 * @return		The the magnitude of the vector from the original point to the destination point
 	 */
-	public double getDistance(Point p1, Point p2) { // Returns the magnitude, always non-negative
-		Point vec = this.getVector(p1, p2);
+	public static double getDistance(Point p1, Point p2) { // Returns the magnitude, always non-negative
+		Point vec = getVector(p1, p2);
 		return Math.sqrt(Math.pow(vec.x, 2) + Math.pow(vec.y, 2)); // Use distance formula
 	}
 	
@@ -84,8 +83,8 @@ public class Point {
 	 * @param end	The destination point
 	 * @return		The angle of the vector in degrees from the original point to the destination point
 	 */
-	public double getDirectionDeg(Point start, Point end) {
-		return Math.toDegrees(this.getDirectionRad(start, end));
+	public static double getDirectionDeg(Point start, Point end) {
+		return Math.toDegrees(getDirectionRad(start, end));
 	}
 	
 	/**
@@ -96,8 +95,8 @@ public class Point {
 	 * @param vec	The vector
 	 * @return		The angle of the vector in degrees
 	 */
-	public double getDirectionDeg(Point vec) {
-		return Math.toDegrees(this.getDirectionRad(vec));
+	public static double getDirectionDeg(Point vec) {
+		return Math.toDegrees(getDirectionRad(vec));
 	}
 	
 	/**
@@ -109,8 +108,8 @@ public class Point {
 	 * @param end	The destination point
 	 * @return		The angle of the vector in radians from the original point to the destination point
 	 */
-	public double getDirectionRad(Point start, Point end) {
-		return getDirectionRad(this.getVector(start, end));
+	public static double getDirectionRad(Point start, Point end) {
+		return getDirectionRad(getVector(start, end));
 	}
 	
 	/**
@@ -121,7 +120,7 @@ public class Point {
 	 * @param vec	The vector
 	 * @return		The angle of the vector in radians
 	 */
-	public double getDirectionRad(Point vec) {
+	public static double getDirectionRad(Point vec) {
 		if (vec.y >= 0) {
 			return Math.acos(vec.y / vec.x);
 		}
@@ -137,7 +136,7 @@ public class Point {
 	 * @param end	The destination point
 	 * @return		The vector from the original point to the destination point
 	 */
-	public Point getVector(Point start, Point end) {
+	public static Point getVector(Point start, Point end) {
 		double dx;
 		double dy;
 		
@@ -160,9 +159,9 @@ public class Point {
 	 * @param possibleFactors	The number of angles in 2pi that we examine
 	 * @return					The short distance vector that brings you closest to target
 	 */
-	public Point getClosestAngleVector(Point loc, Point target, int possibleFactors) {
+	public static Point getClosestAngleVector(Point loc, Point target, int possibleFactors) {
 		double interval = 2 * Math.PI / possibleFactors;
-		double exact = this.getDirectionRad(loc, target);
+		double exact = getDirectionRad(loc, target);
 		double closestFactor = 0;
 		
 		for (double angleFactor = 1; angleFactor < possibleFactors; angleFactor++) {
@@ -171,9 +170,9 @@ public class Point {
 			}
 		}
 		if (closestFactor % 2 == 0) {
-			return this.makeStateInteger(this.getVector(1, closestFactor * interval));
+			return makeStateInteger(getVector(1, closestFactor * interval));
 		}
-		return this.makeStateInteger(this.getVector(1, closestFactor * interval));
+		return makeStateInteger(getVector(1, closestFactor * interval));
 	}
 	
 	/**
@@ -184,7 +183,7 @@ public class Point {
 	 * @param p	The point with the given state
 	 * @return	A different point with integer state (stored as double)
 	 */
-	public Point makeStateInteger(Point p) {
+	public static Point makeStateInteger(Point p) {
 		Point perfect = new Point();
 		perfect.x = (int) (p.x += 0.5);
 		perfect.y = (int) (p.y += 0.5);
@@ -200,7 +199,7 @@ public class Point {
 	 * @param direction	The direction to travel (in radians)
 	 * @return			The vector you will travel
 	 */
-	public Point getVector(double distance, double direction) {
+	public static Point getVector(double distance, double direction) {
 		if (distance < 0) { // You cannot travel negative distance!
 			return new Point(); // No traveled vector
 		}
@@ -234,9 +233,9 @@ public class Point {
 	 * @param direction	The direction to travel (in radians)
 	 * @return			The point you will end up at
 	 */
-	public Point getFuturePoint(Point start, double distance, double direction) {
-		Point vec = this.getVector(distance, direction);
-		return this.getFuturePoint(start, vec);
+	public static Point getFuturePoint(Point start, double distance, double direction) {
+		Point vec = getVector(distance, direction);
+		return getFuturePoint(start, vec);
 	}
 	
 	/**
@@ -248,7 +247,7 @@ public class Point {
 	 * @param vec		The vector to travel
 	 * @return			The point you will end up at
 	 */
-	public Point getFuturePoint(Point start, Point vec) {
+	public static Point getFuturePoint(Point start, Point vec) {
 		return new Point(start.x + vec.x, start.y + vec.y);
 	}
 	
@@ -257,7 +256,20 @@ public class Point {
 	 * 
 	 * @param p	The point to clone
 	 */
-	public Point clone(Point p) {
+	public static Point clone(Point p) {
 		return new Point(p.x, p.y);
+	}
+	
+	/**
+	 * Figure out if 2 points have the same state
+	 * 
+	 * Parameters must be initialized
+	 * 
+	 * @param p1	The first point
+	 * @param p2	The second point
+	 * @return		Whether or not they have the same state
+	 */
+	public static boolean equals(Point p1, Point p2) {
+		return p1.x == p2.x && p1.y == p2.y;
 	}
 }
