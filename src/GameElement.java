@@ -1,41 +1,163 @@
 
-import java.awt.Point;
+import org.newdawn.slick.Image;
 
 public class GameElement {
-	int hp;
-	int maxhp;
+	double hp;
+	double maxHP;
 	double speed;
 	double orientation; // in degrees
 	Point loc;
-	int size; // in pixels
-	// pic;
-	int dmg;
+	double size; // in pixels
+	Image pic;
+	double dmg;
 	DamageType type;
-	int reload; // in frames
-	int aoe; // in pixels
-	Monster target;
+	double reload; // in frames
+	double aoe; // in pixels
+	double range;
+	GameElement target;
 	static DamageType[] types = DamageType.values();
-	int[] resistances = new int[types.length];
-	int cost;
+	static double[] resistances = new double[types.length];
+	double cost;
 	
-	public int getHP() {
+	public GameElement() {
+		this(new Point());
+	}
+	
+	public GameElement(Point loc) {
+		this(0, 0, 0, 0, loc, 0, null, 0, null, 0, 0, 0, null, 0);
+	}
+	
+	/* INCOMPLETE */ public GameElement(double hp, double maxHP, double speed, double orientation, Point loc, double size, Image pic, double dmg, DamageType type, double reload, 
+			double aoe, double range, GameElement target, double cost) {
+		this.changeHP(hp);
+		this.changeMaxHP(maxHP);
+		this.changeSpeed(speed);
+		this.changeOrientation(orientation);
+		this.changeLoc(loc);
+	}
+	
+	/**
+	 * Access instance variable hp
+	 * 
+	 * @return the value of instance variable hp
+	 */
+	public double getHP() {
 		return this.hp;
 	}
 	
-	public void changeHP(int hp) {
+	/**
+	 * Modify instance variable hp
+	 * 
+	 * If hp < 0, sets hp to 0
+	 * If hp > maxHP, sets hp to maxHP
+	 * 
+	 * @param hp	The new value of hp
+	 */
+	public void changeHP(double hp) {
 		if (hp < 0) {
 			this.hp = 0;
+		} else if (hp > this.maxHP) {
+			this.hp = this.maxHP;
+		} else {
+			this.hp = hp;
 		}
 	}
 	
-	public int getMaxHP() {
-		return this.hp;
+	/**
+	 * Access instance variable maxHP
+	 * 
+	 * @return	The value of maxHP
+	 */
+	public double getMaxHP() {
+		return this.maxHP;
 	}
 	
-	public void changeMaxHP(int maxHP) {
+	/**
+	 * Modify instance variable maxHP
+	 * 
+	 * Also calls changeHP to logic check
+	 * 
+	 * @param maxHP
+	 */
+	public void changeMaxHP(double maxHP) {
+		this.maxHP = maxHP;
 		
+		this.changeHP(this.hp);
 	}
 	
+	/**
+	 * Access instance variable speed
+	 * 
+	 * @return	The value of speed
+	 */
+	public double getSpeed() {
+		return this.speed;
+	}
+	
+	/**
+	 * Modify instance variable speed
+	 * 
+	 * If speed is negative, speed will be set as 0
+	 * 
+	 * @param speed	The new value of speed
+	 */
+	public void changeSpeed(double speed) {
+		if (speed < 0) { // Speed cannot be negative!
+			this.speed = 0;
+		} else {
+			this.speed = speed;
+		}
+	}
+	
+	/**
+	 * Access instance variable orientation
+	 * 
+	 * @return	The value of orientation
+	 */
+	public double getOrientation() {
+		return this.orientation;
+	}
+	
+	/**
+	 * Modify instance variable orientation
+	 * 
+	 * If orientation is greater than 2pi or less than 0, orientation will be converted to equivalent value between 0 and 2pi before being set
+	 * 
+	 * @param orientation	The new value of orientation
+	 */
+	public void changeOrientation(double orientation) {
+		while (orientation > 2 * Math.PI) {
+			orientation -= 2 * Math.PI;
+		}
+		while (orientation < 0) {
+			orientation += 2 * Math.PI;
+		}
+		
+		this.orientation = orientation;
+	}
+	
+	/**
+	 * Access instance variable loc
+	 * 
+	 * @return	The location of the GameElement
+	 */
+	public Point getLoc() {
+		return this.loc;
+	}
+	
+	/**
+	 * Modify instance variable loc
+	 * 
+	 * @param loc	The new location of the GameElement
+	 */
+	public void changeLoc(Point loc) {
+		this.loc = loc;
+	}
+	
+	/**
+	 * 
+	 * 
+	 */
 	public void move() {
 		
 	}
