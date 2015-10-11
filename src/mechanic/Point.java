@@ -1,6 +1,8 @@
 
 package mechanic;
 
+import java.util.ArrayList;
+
 public class Point {
 	double x;
 	double y;
@@ -271,5 +273,47 @@ public class Point {
 	 */
 	public static boolean equals(Point p1, Point p2) {
 		return p1.x == p2.x && p1.y == p2.y;
+	}
+	
+	/**
+	 * Find the 4 closest points to given point
+	 * 
+	 * Parameter must be initialized
+	 * All indices are 1 unit away
+	 * 
+	 * @param p	Given point
+	 * @return	An ArrayList<Point> with the 4 points 1 unit away
+	 */
+	public static ArrayList<Point> proximity4(Point p) {
+		ArrayList<Point> adjacents = new ArrayList<Point>();
+		adjacents.add(new Point(p.x + 1, p.y));
+		adjacents.add(new Point(p.x, p.y + 1));
+		adjacents.add(new Point(p.x - 1, p.y));
+		adjacents.add(new Point(p.x, p.y - 1));
+		return adjacents;
+	}
+	
+	/**
+	 * Find the 8 closest points to given point
+	 * 
+	 * Parameter must be initialized
+	 * Even indices are 1 unit away
+	 * Odd indices are sqrt2 units away
+	 * Adjacent indices are adjacent points (0, and size() - 1 are adjacent)
+	 * 
+	 * @param p	Given point
+	 * @return	An ArrayList<Point> with the 8 points within sqrt2 units away
+	 */
+	public static ArrayList<Point> proximity8(Point p) {
+		ArrayList<Point> adjacents = new ArrayList<Point>();
+		adjacents.add(new Point(p.x + 1, p.y));
+		adjacents.add(new Point(p.x + 1, p.y + 1));
+		adjacents.add(new Point(p.x, p.y + 1));
+		adjacents.add(new Point(p.x - 1, p.y + 1));
+		adjacents.add(new Point(p.x - 1, p.y));
+		adjacents.add(new Point(p.x - 1, p.y - 1));
+		adjacents.add(new Point(p.x, p.y - 1));
+		adjacents.add(new Point(p.x + 1, p.y - 1));
+		return adjacents;
 	}
 }
