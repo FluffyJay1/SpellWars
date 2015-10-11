@@ -9,6 +9,7 @@ import mechanic.GameElement;
 import mechanic.Point;
 
 public class Monster extends GameElement {
+
 	public Monster() {
 		super();
 	}
@@ -134,5 +135,6 @@ public class Monster extends GameElement {
 		double ef1 = efficiency[(int) p1.getX()][(int) p1.getY()];
 		double ef2 = efficiency[(int) p1.getX()][(int) p1.getY()];
 		return ef1 - ef2;
+
 	}
 }

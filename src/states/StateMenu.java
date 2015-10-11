@@ -2,15 +2,20 @@
 package states;
 
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.fills.GradientFill;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import mechanic.Game;
 
 public class StateMenu extends BasicGameState implements ComponentListener{
 	
@@ -18,21 +23,25 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 	private Image startButton;
 	private Image gameTitle;
 	private StateBasedGame game;
-	private int id;
 	
-	public StateMenu(int id){
-		this.id = id;
+	public StateMenu(){
+
 	}
-	public void init(GameContainer arg0, StateBasedGame arg1)
-			throws SlickException {
+	public void init(GameContainer container, StateBasedGame arg1){
 		// TODO Auto-generated method stub
+		try{
 		startButton = new Image("res/StartButton.png");
+		}
+		catch (SlickException e){
+			System.out.println("Didn't find startbutton???");
+		}
 	}
 	
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) {
-    	start = new MouseOverArea(container,startButton,512, 364, 180,90);
+    	start = new MouseOverArea(container,startButton,512, 364, 180,90, this);
+
     	this.game  = game;
     }
 
@@ -51,15 +60,16 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
-		return id;
+		return Game.STATE_MENU;
 	}
 
 
 	@Override
 	public void componentActivated(AbstractComponent com) {
-		// TODO Auto-generated method stub
-		if (com == start )
-			game.enterState(id);
+		if (com == start ) {
+			game.enterState(Game.STATE_GAME);
+			
+		}
 	}
 
 }

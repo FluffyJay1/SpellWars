@@ -15,6 +15,7 @@ import org.newdawn.slick.Graphics;
  */
 
 import monsters.Monster;
+import projectiles.Projectile;
 import towers.Tower;
 
 public class GameMap {
@@ -23,14 +24,16 @@ public class GameMap {
 	int spawnY;
 	int gWidth; //GRID WIDTH
 	int gHeight; //GRID HEIGHT
-	boolean[][] pathGrid = new boolean[gWidth][gHeight];
-	ArrayList<GameElement> elementList = new ArrayList<>();
+	boolean[][] pathGrid;
+	ArrayList<GameElement> elementList = new ArrayList<GameElement>();
+	ArrayList<GameElement> elementBuffer = new ArrayList<GameElement>();
 	
 	public GameMap(int height, int width, int spawnX, int spawnY){
 		gWidth = width;
 		gHeight = height;
 		this.spawnX = spawnX;
 		this.spawnY = spawnY;
+		pathGrid = new boolean[gWidth][gHeight];
 	}
 	
 	public GameMap(int height, int width){
@@ -41,24 +44,37 @@ public class GameMap {
 		//Updates everything (positions)
 		for(int i = 0; i < elementList.size(); i++) {
 			elementList.get(i).update();
+			if(elementList.get(i).getRemove()){
+				elementList.remove(i);
+			}
 			//todo: set each game element's boolean list to the map's
 		}
+		elementList.addAll(elementBuffer);
+		elementBuffer.clear();
 	}
 	public void draw(Graphics g) {
 		for(int i = 0; i < elementList.size(); i++) {
 			GameElement temp = elementList.get(i);
-			temp.getImage().rotate((float)Math.toDegrees(temp.getOrientation()));
-			g.drawImage(temp.getImage(), (float)temp.getX(), (float)temp.getY()); //Takes the image of each game element and draws them at their loc (point)
+			//temp.getImage().rotate((float)Math.toDegrees(temp.getOrientation())); DECOMMENT THIS SECTION ASAP
+			temp.draw(g);
 		}
 	}
 	
 	public void placeTower(Tower theTower) { //Will snap the tower to the grid and also change the boolean pathfinding array so that that square is blocked
 		Tower tempTower = theTower;  //TODO: Convert loc position to grid position
-		elementList.add(tempTower);
-		pathGrid[(int) tempTower.getLoc().x][(int) tempTower.getLoc().y] = true;
+		elementBuffer.add(theTower);
+		//pathGrid[(int) tempTower.getLoc().x][(int) tempTower.getLoc().y] = true;  DECOMMENT THIS SECTION ASAP (only used for demos)
 	}
 	
 	public void spawnCreep(Monster creep) {
-		elementList.add(creep);
+		elementBuffer.add(creep);
+	}
+	
+	public ArrayList<GameElement> getElements(){
+		return elementList;
+	}
+	
+	public void addProjectile(Projectile p){
+		elementBuffer.add(p);
 	}
 }
