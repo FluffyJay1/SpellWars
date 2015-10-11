@@ -1,5 +1,6 @@
 package mechanic;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import mechanic.DamageType;
 import mechanic.Point;
@@ -176,5 +177,18 @@ public class GameElement {
 	
 	public double getY(){
 		return this.loc.y;
+	}
+	
+	public void update(){
+		
+	}
+	
+	public void setImage(String path){
+		try {
+			this.pic = new Image(path);
+		} catch (SlickException e) {
+			e.printStackTrace();
+			System.out.println("Unable to load image");
+		}
 	}
 }
