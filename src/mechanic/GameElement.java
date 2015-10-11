@@ -80,14 +80,16 @@ public class GameElement {
 	/**
 	 * Modify instance variable maxHP
 	 * 
-	 * Also calls changeHP to logic check
+	 * Also calls changeHP to maintain same health percentage
 	 * 
 	 * @param maxHP
 	 */
 	public void changeMaxHP(double maxHP) {
+		double ratio = this.hp / this.maxHP;
+		
 		this.maxHP = maxHP;
 		
-		this.changeHP(this.hp);
+		this.changeHP(this.hp * ratio);
 	}
 	
 	/**
