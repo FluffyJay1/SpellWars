@@ -1,10 +1,8 @@
 
 package mechanic;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-
-import mechanic.DamageType;
-import mechanic.Point;
 
 public class GameElement {
 
@@ -13,7 +11,7 @@ public class GameElement {
 	private double speed;
 	private double orientation; // in degrees
 	private Point loc;
-	private double size; // in pixels
+	private double size; // as a ratio (scale thing)
 	private double dmg;
 	private DamageType type;
 	private double reload; // in frames
@@ -24,13 +22,14 @@ public class GameElement {
 	static double[] resistances = new double[types.length];
 	private double cost;
 	private Image pic;
+	private boolean remove;
 	
 	public GameElement() {
 		this(new Point());
 	}
 	
 	public GameElement(Point loc) {
-		this(0, 0, 0, 0, loc, 0, null, 0, null, 0, 0, 0, null, 0);
+		this(1, 1, 0, 0, loc, 0, null, 0, null, 0, 0, 0, null, 0);
 	}
 	
 	/* INCOMPLETE */ public GameElement(double hp, double maxHP, double speed, double orientation, Point loc, double size, Image pic, double dmg, DamageType type, double reload, 
@@ -40,6 +39,7 @@ public class GameElement {
 		this.changeSpeed(speed);
 		this.changeOrientation(orientation);
 		this.changeLoc(loc);
+		this.remove = false;
 	}
 	
 	/**
@@ -62,6 +62,7 @@ public class GameElement {
 	public void changeHP(double hp) {
 		if (hp < 0) {
 			this.hp = 0;
+			remove = true;
 		} else if (hp > this.maxHP) {
 			this.hp = this.maxHP;
 		} else {
@@ -81,14 +82,16 @@ public class GameElement {
 	/**
 	 * Modify instance variable maxHP
 	 * 
-	 * Also calls changeHP to logic check
+	 * Also calls changeHP to maintain same health percentage
 	 * 
 	 * @param maxHP
 	 */
 	public void changeMaxHP(double maxHP) {
+		double ratio = this.hp / this.maxHP;
+		
 		this.maxHP = maxHP;
 		
-		this.changeHP(this.hp);
+		this.changeHP(this.hp * ratio);
 	}
 	
 	/**
@@ -188,8 +191,24 @@ public class GameElement {
 		try {
 			this.pic = new Image(path);
 		} catch (SlickException e) {
-			e.printStackTrace();
 			System.out.println("Unable to load image");
+			e.printStackTrace();
 		}
+	}
+	
+	public boolean getRemove(){
+		return remove;
+	}
+	
+	public void setRemove(boolean state){
+		remove = state;
+	}
+	
+	public void doDamage(double damage){
+		this.changeHP(hp - damage);
+	}
+	
+	public void draw(Graphics g){
+		g.drawImage(pic, (float) loc.x, (float) loc.y);
 	}
 }
