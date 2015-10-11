@@ -279,11 +279,12 @@ public class Point {
 	 * Find the 4 closest points to given point
 	 * 
 	 * Parameter must be initialized
+	 * All indices are 1 unit away
 	 * 
 	 * @param p	Given point
 	 * @return	An ArrayList<Point> with the 4 points 1 unit away
 	 */
-	public static ArrayList<Point> adjacent4(Point p) {
+	public static ArrayList<Point> proximity4(Point p) {
 		ArrayList<Point> adjacents = new ArrayList<Point>();
 		adjacents.add(new Point(p.x + 1, p.y));
 		adjacents.add(new Point(p.x, p.y + 1));
@@ -296,11 +297,14 @@ public class Point {
 	 * Find the 8 closest points to given point
 	 * 
 	 * Parameter must be initialized
+	 * Even indices are 1 unit away
+	 * Odd indices are sqrt2 units away
+	 * Adjacent indices are adjacent points (0, and size() - 1 are adjacent)
 	 * 
 	 * @param p	Given point
-	 * @return	An ArrayList<Point> with the 8 points within 2^1/2 unis away
+	 * @return	An ArrayList<Point> with the 8 points within sqrt2 units away
 	 */
-	public static ArrayList<Point> adjacent8(Point p) {
+	public static ArrayList<Point> proximity8(Point p) {
 		ArrayList<Point> adjacents = new ArrayList<Point>();
 		adjacents.add(new Point(p.x + 1, p.y));
 		adjacents.add(new Point(p.x + 1, p.y + 1));
