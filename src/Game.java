@@ -1,5 +1,4 @@
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,8 +31,9 @@ public class Game extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		// TODO Auto-generated method stub
+		addState(new StateMenu(STATE_MENU));
 		addState(new StateGame(STATE_GAME));
-		addState(new StateMenu(STATE_MENU));		
+			
 	}
 
 
