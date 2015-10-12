@@ -11,5 +11,10 @@ public class DefaultMonster extends Monster{
 		changeLoc(new Point(x,y));
 		setImage(imagePath);
 		this.changeMaxHP(MAXHP);
+		this.changeHP(MAXHP);
+	}
+	@Override
+	public void update() {
+		
 	}
 }

@@ -17,17 +17,17 @@ public class Laser extends Projectile {
 	public Laser(GameElement tower, GameElement monster){
 		this.tower = tower;
 		this.monster = monster;
-		delay = 50;
+		this.delay = 50;
 	}
 	
 	@Override
 	public void update(){
-		if(delay < 0){
-			setRemove(true);
+		if(this.delay < 0){
+			this.setRemove(true);
 			monster.doDamage(LASER_DAMAGE);
 		}
 		else{
-			delay--;
+			this.delay--;
 		}
 	}
 	

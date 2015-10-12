@@ -54,15 +54,16 @@ public class GameElement {
 	/**
 	 * Modify instance variable hp
 	 * 
-	 * If hp < 0, sets hp to 0
+	 * If hp < 0, sets hp to 0 and flags it to be removed next frame
 	 * If hp > maxHP, sets hp to maxHP
 	 * 
 	 * @param hp	The new value of hp
 	 */
 	public void changeHP(double hp) {
-		if (hp < 0) {
+		if (hp <= 0) {
 			this.hp = 0;
-			remove = true;
+			this.setRemove(true);
+			System.out.println("i am kill");
 		} else if (hp > this.maxHP) {
 			this.hp = this.maxHP;
 		} else {
@@ -205,10 +206,12 @@ public class GameElement {
 	}
 	
 	public void doDamage(double damage){
-		this.changeHP(hp - damage);
+		this.changeHP(this.hp - damage);
 	}
 	
 	public void draw(Graphics g){
-		g.drawImage(pic, (float) loc.x, (float) loc.y);
+		float width = this.getImage().getWidth();
+		float height = this.getImage().getHeight();
+		g.drawImage(pic, (float) loc.x - width/2, (float) loc.y - height/2);
 	}
 }

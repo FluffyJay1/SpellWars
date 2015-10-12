@@ -13,6 +13,7 @@ import monsters.DefaultMonster;
 import towers.DefaultTower;
 
 public class StateGame extends BasicGameState{
+	int delay = 0; //UNECCESARY VARIABLE, FOUND IN UPDATE
 	
 	GameMap map;
 	
@@ -34,13 +35,19 @@ public class StateGame extends BasicGameState{
 
 	@Override
 	public void render(GameContainer container, StateBasedGame arg1, Graphics g) throws SlickException {
+		g.clear();
 		map.draw(g);
 	}
 
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {
 		map.update();
-		map.spawnCreep(new DefaultMonster(Math.random() * 800/*125*/, Math.random() * 800 /*125*/)); // MAGIC NUMBER
+		delay--;
+		if(delay <= 0)
+		{
+			map.spawnCreep(new DefaultMonster(Math.random() * 800/*125*/, Math.random() * 800 /*125*/)); // MAGIC NUMBER
+			delay = 100;
+		}
 	}
 
 	@Override

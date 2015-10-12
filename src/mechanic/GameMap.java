@@ -43,7 +43,7 @@ public class GameMap {
 	public void update() {
 		//Updates everything (positions)
 		for(int i = 0; i < elementList.size(); i++) {
-			elementList.get(i).update();
+			elementList.get(i).update(); 
 			if(elementList.get(i).getRemove()){
 				elementList.remove(i);
 			}
@@ -53,6 +53,7 @@ public class GameMap {
 		elementBuffer.clear();
 	}
 	public void draw(Graphics g) {
+		g.clearClip();
 		for(int i = 0; i < elementList.size(); i++) {
 			GameElement temp = elementList.get(i);
 			//temp.getImage().rotate((float)Math.toDegrees(temp.getOrientation())); DECOMMENT THIS SECTION ASAP

@@ -45,7 +45,7 @@ public class Point {
 	}
 	
 	/**
-	 * Modify instance variable y
+	 * Modify instance variable x
 	 * 
 	 * @param x	The new x value
 	 */
@@ -60,6 +60,24 @@ public class Point {
 	 */
 	public void changeY(double y) {
 		this.y = y;
+	}
+	
+	/**
+	 * Change instance variable x
+	 * 
+	 * @param x The value to add to x
+	 */
+	public void addX(double x) {
+		this.x += x;
+	}
+	
+	/**
+	 * Change instance variable x
+	 * 
+	 * @param x The value to add to x
+	 */
+	public void addY(double y) {
+		this.y += y;
 	}
 	
 	/**
