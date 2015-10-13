@@ -54,7 +54,7 @@ public class StateGame extends BasicGameState{
 		if(delay <= 0)
 		{
 			map.spawnCreep(new DefaultMonster(Math.random() * 800/*125*/, Math.random() * 800 /*125*/, map)); // MAGIC NUMBER
-			delay = 1500;
+			delay = 50;
 		}
 	}
 
