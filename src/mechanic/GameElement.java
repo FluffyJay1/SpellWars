@@ -23,6 +23,7 @@ public class GameElement {
 	private double cost;
 	private Image pic;
 	private boolean remove;
+	private float fps = 1000;
 	
 	public GameElement() {
 		this(new Point());
@@ -63,7 +64,6 @@ public class GameElement {
 		if (hp <= 0) {
 			this.hp = 0;
 			this.setRemove(true);
-			System.out.println("i am kill");
 		} else if (hp > this.maxHP) {
 			this.hp = this.maxHP;
 		} else {
@@ -210,8 +210,16 @@ public class GameElement {
 	}
 	
 	public void draw(Graphics g){
-		float width = this.getImage().getWidth();
-		float height = this.getImage().getHeight();
-		g.drawImage(pic, (float) loc.x - width/2, (float) loc.y - height/2);
+		if(this.getImage() != null){
+			float width = this.getImage().getWidth();
+			float height = this.getImage().getHeight();
+			g.drawImage(pic, (float) loc.x - width/2, (float) loc.y - height/2);
+		}
+	}
+	public float getFPS() {
+		return fps;
+	}
+	public void passFPS(float fps) {
+		this.fps = fps;
 	}
 }

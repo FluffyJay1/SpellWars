@@ -3,6 +3,8 @@ package mechanic;
 
 import java.util.ArrayList;
 
+import monsters.Monster;
+
 import org.newdawn.slick.Graphics;
 /*
  * My Ideas:
@@ -14,7 +16,8 @@ import org.newdawn.slick.Graphics;
  * -This means that their pathfinding gets updated as well
  */
 
-import monsters.Monster;
+import particlesystem.ParticleBase;
+import particlesystem.ParticleEmitter;
 import projectiles.Projectile;
 import towers.Tower;
 
@@ -24,9 +27,12 @@ public class GameMap {
 	int spawnY;
 	int gWidth; //GRID WIDTH
 	int gHeight; //GRID HEIGHT
+	float fps;
 	boolean[][] pathGrid;
 	ArrayList<GameElement> elementList = new ArrayList<GameElement>();
 	ArrayList<GameElement> elementBuffer = new ArrayList<GameElement>();
+	ArrayList<ParticleBase> particleList = new ArrayList<ParticleBase>();
+	ArrayList<ParticleBase> particleBuffer = new ArrayList<ParticleBase>();
 	
 	public GameMap(int height, int width, int spawnX, int spawnY){
 		gWidth = width;
@@ -44,20 +50,33 @@ public class GameMap {
 		//Updates everything (positions)
 		for(int i = 0; i < elementList.size(); i++) {
 			elementList.get(i).update(); 
+			elementList.get(i).passFPS(fps);
 			if(elementList.get(i).getRemove()){
 				elementList.remove(i);
 			}
 			//todo: set each game element's boolean list to the map's
 		}
+		for(int i = 0; i < particleList.size(); i++) {
+			particleList.get(i).move();
+			particleList.get(i).passFPS(fps);
+			if(particleList.get(i).getRemove()){
+				particleList.remove(i);
+			}
+		}
 		elementList.addAll(elementBuffer);
 		elementBuffer.clear();
+		particleList.addAll(particleBuffer);
+		particleBuffer.clear();
 	}
 	public void draw(Graphics g) {
-		g.clearClip();
 		for(int i = 0; i < elementList.size(); i++) {
 			GameElement temp = elementList.get(i);
 			//temp.getImage().rotate((float)Math.toDegrees(temp.getOrientation())); DECOMMENT THIS SECTION ASAP
 			temp.draw(g);
+		}
+		for(int i = 0; i < particleList.size(); i++)
+		{
+			particleList.get(i).draw(g);
 		}
 	}
 	
@@ -77,5 +96,17 @@ public class GameMap {
 	
 	public void addProjectile(Projectile p){
 		elementBuffer.add(p);
+	}
+	public void addParticle(ParticleBase p){
+		particleBuffer.add(p);
+	}
+	public void addParticleEmitter(ParticleEmitter e) {
+		elementBuffer.add(e);
+	}
+	public void passFPS(int fps){
+		this.fps = (float) fps;
+		if(this.fps < 1){
+			this.fps = 1000;
+		}
 	}
 }

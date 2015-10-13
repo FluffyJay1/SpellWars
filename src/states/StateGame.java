@@ -1,15 +1,21 @@
 
 package states;
 
+import mechanic.Game;
+import mechanic.GameMap;
+import mechanic.Point;
+import monsters.DefaultMonster;
+
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import mechanic.Game;
-import mechanic.GameMap;
-import monsters.DefaultMonster;
+import particlesystem.ParticleEmitter;
+import particlesystem.emitterTypes;
 import towers.DefaultTower;
 
 public class StateGame extends BasicGameState{
@@ -30,7 +36,8 @@ public class StateGame extends BasicGameState{
 		System.out.println("THis isn't called");
 		map = new GameMap(125, 125);
 		map.placeTower(new DefaultTower(75.0 * 800 / 125,75.0 * 800 / 125, map)); //MAGIC NUMBER ALERT
-		map.spawnCreep(new DefaultMonster(0, 0));
+		map.spawnCreep(new DefaultMonster(0, 0, map));
+		
 	}
 
 	@Override
@@ -42,11 +49,12 @@ public class StateGame extends BasicGameState{
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {
 		map.update();
+		map.passFPS(arg0.getFPS());
 		delay--;
 		if(delay <= 0)
 		{
-			map.spawnCreep(new DefaultMonster(Math.random() * 800/*125*/, Math.random() * 800 /*125*/)); // MAGIC NUMBER
-			delay = 100;
+			map.spawnCreep(new DefaultMonster(Math.random() * 800/*125*/, Math.random() * 800 /*125*/, map)); // MAGIC NUMBER
+			delay = 1500;
 		}
 	}
 

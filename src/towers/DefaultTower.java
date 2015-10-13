@@ -1,11 +1,10 @@
 package towers;
 
-import org.newdawn.slick.Graphics;
-
 import mechanic.GameElement;
 import mechanic.GameMap;
 import mechanic.Point;
 import monsters.Monster;
+
 import projectiles.Laser;
 
 public class DefaultTower extends Tower{
