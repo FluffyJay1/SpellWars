@@ -20,7 +20,7 @@ import towers.DefaultTower;
 
 public class StateGame extends BasicGameState{
 	int delay = 0; //UNECCESARY VARIABLE, FOUND IN UPDATE
-	
+	double systemTime; //USED FOR FINDING FPS, USED IN UPDATE
 	GameMap map;
 	
 	public StateGame(){
@@ -49,12 +49,13 @@ public class StateGame extends BasicGameState{
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {
 		map.update();
-		map.passFPS(arg0.getFPS());
+		map.passFPS((float) (1000000000/(System.nanoTime() - systemTime))); //calculates difference in time per frame and converts into frames per second, and magic number is there since 1 second is 10^9 nanoseconds
+		systemTime = System.nanoTime();
 		delay--;
 		if(delay <= 0)
 		{
 			map.spawnCreep(new DefaultMonster(Math.random() * 800/*125*/, Math.random() * 800 /*125*/, map)); // MAGIC NUMBER
-			delay = 50;
+			delay = 500;
 		}
 	}
 

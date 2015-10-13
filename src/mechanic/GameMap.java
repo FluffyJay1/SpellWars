@@ -103,10 +103,10 @@ public class GameMap {
 	public void addParticleEmitter(ParticleEmitter e) {
 		elementBuffer.add(e);
 	}
-	public void passFPS(int fps){
-		this.fps = (float) fps;
-		if(this.fps < 1){
-			this.fps = 1000;
+	public void passFPS(float d){
+		this.fps = d;
+		if(this.fps == 0){
+			this.fps = 1;
 		}
 	}
 }
