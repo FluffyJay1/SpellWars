@@ -35,7 +35,7 @@ public class StateGame extends BasicGameState{
 		container.setClearEachFrame(true);
 		System.out.println("THis isn't called");
 		map = new GameMap(125, 125);
-		map.placeTower(new DefaultTower(75.0 * 800 / 125,75.0 * 800 / 125, map)); //MAGIC NUMBER ALERT
+		map.placeTower(new DefaultTower(400, 400, map)); //MAGIC NUMBER ALERT
 		map.spawnCreep(new DefaultMonster(0, 0, map));
 		
 	}
@@ -54,8 +54,8 @@ public class StateGame extends BasicGameState{
 		delay--;
 		if(delay <= 0)
 		{
-			map.spawnCreep(new DefaultMonster(Math.random() * 800/*125*/, Math.random() * 800 /*125*/, map)); // MAGIC NUMBER
-			delay = 500;
+			map.spawnCreep(new DefaultMonster(Math.random() * 800/*400*/, Math.random() * 800 /*400*/, map)); // MAGIC NUMBER
+			delay = 1000;
 		}
 	}
 

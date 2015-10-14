@@ -24,15 +24,15 @@ public class DefaultMonster extends Monster{
 	public void update() {
 		if(this.getRemove()) {
 			String i = "res/explosion.png";
-			ParticleEmitter pe = new ParticleEmitter(this.getLoc(), emitterTypes.POINT, i, true, /*point, emitter type, image path, alphaDecay*/
-					0, 0.5f, /*particle start scale*/
-					0.5f, 1, /*particle end scale*/
+			ParticleEmitter pe = new ParticleEmitter(this.getLoc(), emitterTypes.POINT_RADIAL, i, true, /*point, emitter type, image path, alphaDecay*/
+					0.0f, 0.5f, /*particle start scale*/
+					0.5f, 1.0f, /*particle end scale*/
 					2.5f, /*drag*/
-					-30, 30, /*rotational velocity*/
+					-300, 300, /*rotational velocity*/
 					0, 1, /*min and max lifetime*/
-					10, 500, /*min and max launch speed*/
-					0, 40, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
-					0, 0, 0, 0, map); /*keyvalues and map*/
+					100, 300, /*min and max launch speed*/
+					0, 90, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
+					0, 0, 50, 0, map); /*keyvalues and map*/
 			map.addParticleEmitter(pe);
 		}
 	}
