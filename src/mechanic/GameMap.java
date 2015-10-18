@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import monsters.Monster;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 /*
  * My Ideas:
@@ -15,6 +16,8 @@ import org.newdawn.slick.Graphics;
  * -Whenever a tower is placed, the tower game element's position gets snapped to the grid and the Map's boolean array gets updated, and so will each GameElement's boolean array
  * -This means that their pathfinding gets updated as well
  */
+
+
 
 import particlesystem.ParticleBase;
 import particlesystem.ParticleEmitter;
@@ -73,6 +76,17 @@ public class GameMap {
 			GameElement temp = elementList.get(i);
 			//temp.getImage().rotate((float)Math.toDegrees(temp.getOrientation())); DECOMMENT THIS SECTION ASAP
 			temp.draw(g);
+			//BELOW IS FOR DEBUGGING PURPOSES
+			if(temp instanceof Tower) {
+				if(((Tower) temp).targetIsTargetable()) {
+					g.setColor(Color.red);
+					g.drawOval((float)((Tower) temp).getTarget().getLoc().getX() - 50, (float)((Tower) temp).getTarget().getLoc().getY() - 50, 100, 100);
+				} else {
+					g.setColor(Color.white);
+				}
+				g.drawOval((float)temp.getLoc().getX() - ((Tower) temp).getAttackRange(), (float)temp.getLoc().getY() - ((Tower) temp).getAttackRange(), ((Tower) temp).getAttackRange() * 2, ((Tower) temp).getAttackRange() * 2);
+			}
+			//ABOVE IS FOR DEBUGGING PURPOSES
 		}
 		for(int i = 0; i < particleList.size(); i++)
 		{

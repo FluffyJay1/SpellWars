@@ -21,7 +21,7 @@ public class ParticleBase {
 	private float scale;
 	private float startScale;
 	private float endScale;
-	public float frametime = 0;
+	public float frametime;
 	
 	private boolean remove;
 

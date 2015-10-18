@@ -22,6 +22,7 @@ public class DefaultMonster extends Monster{
 	}
 	@Override
 	public void update() {
+		this.getLoc().addX(0.06);
 		if(this.getRemove()) {
 			String i = "res/explosion.png";
 			ParticleEmitter pe = new ParticleEmitter(this.getLoc(), emitterTypes.POINT_RADIAL, i, true, /*point, emitter type, image path, alphaDecay*/

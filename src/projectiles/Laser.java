@@ -8,7 +8,7 @@ import mechanic.GameElement;
 
 public class Laser extends Projectile {
 	
-	public static double LASER_DAMAGE = 10;
+	public static double LASER_DAMAGE = 125;
 	
 	GameElement tower;
 	GameElement monster;
@@ -17,7 +17,7 @@ public class Laser extends Projectile {
 	public Laser(GameElement tower, GameElement monster){
 		this.tower = tower;
 		this.monster = monster;
-		this.delay = 50;
+		this.delay = 250;
 	}
 	
 	@Override
@@ -33,7 +33,7 @@ public class Laser extends Projectile {
 	
 	@Override
 	public void draw(Graphics g){
-		if(delay > 0){
+		if(delay < 0){
 			return;
 		}
 		g.setColor(Color.yellow);

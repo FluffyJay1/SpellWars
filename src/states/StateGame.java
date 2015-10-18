@@ -17,6 +17,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import particlesystem.ParticleEmitter;
 import particlesystem.emitterTypes;
 import towers.DefaultTower;
+import towers.Tower;
 
 public class StateGame extends BasicGameState{
 	int delay = 0; //UNECCESARY VARIABLE, FOUND IN UPDATE
@@ -54,8 +55,8 @@ public class StateGame extends BasicGameState{
 		delay--;
 		if(delay <= 0)
 		{
-			map.spawnCreep(new DefaultMonster(Math.random() * 800/*400*/, Math.random() * 800 /*400*/, map)); // MAGIC NUMBER
-			delay = 1000;
+			map.spawnCreep(new DefaultMonster(/*Math.random() * 800*/0, Math.random() * 800 /*400*/, map)); // MAGIC NUMBER
+			delay = 3000;
 		}
 	}
 
