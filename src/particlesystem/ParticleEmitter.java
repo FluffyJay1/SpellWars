@@ -146,8 +146,8 @@ public class ParticleEmitter extends GameElement {
 			}
 			emissionTimer = emissionInterval;
 		}
-		emissionTimer -= 1/this.getFPS();
-		emitterLifetime -= 1/this.getFPS();
+		emissionTimer -= this.getFrameTime();
+		emitterLifetime -= this.getFrameTime();
 		if(emitterLifetime <= 0) {
 			this.setRemove(true);
 		}

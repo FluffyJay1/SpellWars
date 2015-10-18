@@ -21,7 +21,7 @@ public class ParticleBase {
 	private float scale;
 	private float startScale;
 	private float endScale;
-	public float fps = 300;
+	public float frametime = 0;
 	
 	private boolean remove;
 
@@ -74,12 +74,12 @@ public class ParticleBase {
 		g.drawImage(endPic, (float) loc.getX() - width/2, (float) loc.getY() - height/2);
 	}
 	public void move(){ //basically update
-		lifetime -= 1/this.fps; //lifetime decay
-		vel.changeX(vel.getX() * (1 - drag/this.fps)); //drag, which causes the particle to slow down over time (or speed up)
-		vel.changeY(vel.getY() * (1 - drag/this.fps)); //motion per frame is based on fps, which means theoretically it will move at the same speed at 30 fps and at 300 fps
-		loc.addX(vel.getX()/this.fps); //velocity
-		loc.addY(vel.getY()/this.fps);
-		orientation += rVel/this.fps; //rotational velocity
+		lifetime -= this.frametime; //lifetime decay
+		vel.changeX(vel.getX() * (1 - drag * this.frametime)); //drag, which causes the particle to slow down over time (or speed up)
+		vel.changeY(vel.getY() * (1 - drag * this.frametime)); //motion per frame is based on the time each frames takes, which means theoretically it will move at the same speed at 30 fps and at 300 fps
+		loc.addX(vel.getX() * this.frametime); //velocity
+		loc.addY(vel.getY() * this.frametime);
+		orientation += rVel * this.frametime; //rotational velocity
 		scale = startScale + (1 - lifetime/maxLifetime) * (endScale - startScale);
 		/*
 		while(this.orientation > 360) { //not actually radians wtf
@@ -99,7 +99,7 @@ public class ParticleBase {
 	public boolean getRemove() {
 		return remove;
 	}
-	public void passFPS(float fps) {
-		this.fps = fps; //simply just passes FPS to the particle so the particle can use that information to calculate how fast to go
+	public void passFrameTime(float frametime) {
+		this.frametime = frametime; //simply just passes the amount of time between each frame to the particle so the particle can use that information to calculate how fast to go
 	}
 }

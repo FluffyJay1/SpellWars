@@ -49,7 +49,7 @@ public class StateGame extends BasicGameState{
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {
 		map.update();
-		map.passFPS((float) (1000000000/(System.nanoTime() - systemTime))); //calculates difference in time per frame and converts into frames per second, and magic number is there since 1 second is 10^9 nanoseconds
+		map.passFrameTime((float) ((System.nanoTime() - systemTime) / 1000000000)); //calculates difference in time per frame , and magic number is there since 1 second is 10^9 nanoseconds
 		systemTime = System.nanoTime();
 		delay--;
 		if(delay <= 0)

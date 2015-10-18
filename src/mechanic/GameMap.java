@@ -27,7 +27,7 @@ public class GameMap {
 	int spawnY;
 	int gWidth; //GRID WIDTH
 	int gHeight; //GRID HEIGHT
-	float fps;
+	float frametime;
 	boolean[][] pathGrid;
 	ArrayList<GameElement> elementList = new ArrayList<GameElement>();
 	ArrayList<GameElement> elementBuffer = new ArrayList<GameElement>();
@@ -50,7 +50,7 @@ public class GameMap {
 		//Updates everything (positions)
 		for(int i = 0; i < elementList.size(); i++) {
 			elementList.get(i).update(); 
-			elementList.get(i).passFPS(fps);
+			elementList.get(i).passFrameTime(frametime);
 			if(elementList.get(i).getRemove()){
 				elementList.remove(i);
 			}
@@ -58,7 +58,7 @@ public class GameMap {
 		}
 		for(int i = 0; i < particleList.size(); i++) {
 			particleList.get(i).move();
-			particleList.get(i).passFPS(fps);
+			particleList.get(i).passFrameTime(frametime);
 			if(particleList.get(i).getRemove()){
 				particleList.remove(i);
 			}
@@ -103,10 +103,7 @@ public class GameMap {
 	public void addParticleEmitter(ParticleEmitter e) {
 		elementBuffer.add(e);
 	}
-	public void passFPS(float d){
-		this.fps = d;
-		if(this.fps == 0){
-			this.fps = 1;
-		}
+	public void passFrameTime(float d){
+		this.frametime = d;
 	}
 }

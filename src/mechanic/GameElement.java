@@ -23,7 +23,7 @@ public class GameElement {
 	private double cost;
 	private Image pic;
 	private boolean remove;
-	private float fps = 300;
+	private float frametime = 0;
 	
 	public GameElement() {
 		this(new Point());
@@ -216,10 +216,10 @@ public class GameElement {
 			g.drawImage(pic, (float) loc.x - width/2, (float) loc.y - height/2);
 		}
 	}
-	public double getFPS() {
-		return fps;
+	public double getFrameTime() {
+		return frametime;
 	}
-	public void passFPS(float fps) {
-		this.fps = fps;
+	public void passFrameTime(float frametime) {
+		this.frametime = frametime;
 	}
 }
