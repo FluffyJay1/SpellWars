@@ -28,8 +28,11 @@ public class GameMap {
 	
 	int spawnX;
 	int spawnY;
+	int windowWidth; //WINDOW WIDTH
+	int windowHeight; //WINOW HEIGHT
 	int gWidth; //GRID WIDTH
 	int gHeight; //GRID HEIGHT
+	Point mouseLoc;
 	float frametime;
 	boolean[][] pathGrid;
 	ArrayList<GameElement> elementList = new ArrayList<GameElement>();
@@ -43,6 +46,9 @@ public class GameMap {
 		this.spawnX = spawnX;
 		this.spawnY = spawnY;
 		pathGrid = new boolean[gWidth][gHeight];
+		this.mouseLoc = new Point();
+		this.windowWidth = 800; //MAGIC NUMBERSSSSS
+		this.windowHeight = 800; 
 	}
 	
 	public GameMap(int height, int width){
@@ -85,19 +91,54 @@ public class GameMap {
 					g.setColor(Color.white);
 				}
 				g.drawOval((float)temp.getLoc().getX() - ((Tower) temp).getAttackRange(), (float)temp.getLoc().getY() - ((Tower) temp).getAttackRange(), ((Tower) temp).getAttackRange() * 2, ((Tower) temp).getAttackRange() * 2);
-			}
 			//ABOVE IS FOR DEBUGGING PURPOSES
+			}
+			g.setColor(Color.red);
+			g.drawRect((float)temp.getLoc().getX() - 50, (float)temp.getLoc().getY() - 50, (float)temp.getHP() / 5, 10);
 		}
 		for(int i = 0; i < particleList.size(); i++)
 		{
 			particleList.get(i).draw(g);
 		}
+		this.drawGridHighlight(g);
+	}
+	//draws highlights on the map about which grid box the mouse is in
+	public void drawGridHighlight(Graphics g) {
+		Point loc = gridToPosition(positionToGrid(this.mouseLoc));
+		float boxWidth = this.windowWidth / this.gWidth;
+		float boxHeight = this.windowHeight / this.gHeight;
+		g.setColor(Color.cyan);
+		g.drawRect((float)loc.getX() - boxWidth / 2, (float)loc.getY() - boxHeight / 2, boxWidth, boxHeight);
+	}
+	//Takes a position on the map and converts it into grid coordinates
+	public Point positionToGrid(Point loc) {
+		int gridposX = (int)((this.gWidth * (loc.getX() / this.windowWidth)) + 0.5);
+		int gridposY = (int)((this.gHeight * (loc.getY() / this.windowHeight)) + 0.5);
+		if(gridposX > this.gWidth - 1)
+			gridposX = this.gWidth - 1;
+		if(gridposX < 0)
+			gridposX = 0;
+		if(gridposY > this.gHeight - 1)
+			gridposY = this.gHeight - 1;
+		if(gridposY < 0)
+			gridposY = 0;
+		return new Point(gridposX, gridposY);
+	}
+	//Takes a position on the grid and converts it into map coordinates
+	public Point gridToPosition(Point loc) {
+		float x = (float) loc.getX() * this.windowWidth / this.gWidth;
+		float y = (float) loc.getY() * this.windowHeight / this.gHeight;
+		return new Point(x, y);
 	}
 	
 	public void placeTower(Tower theTower) { //Will snap the tower to the grid and also change the boolean pathfinding array so that that square is blocked
 		Tower tempTower = theTower;  //TODO: Convert loc position to grid position
+		Point gridPos = positionToGrid(theTower.getLoc());
+		Point loc = gridToPosition(gridPos);
+		tempTower.getLoc().changeX(loc.getX());
+		tempTower.getLoc().changeY(loc.getY());
 		elementBuffer.add(theTower);
-		//pathGrid[(int) tempTower.getLoc().x][(int) tempTower.getLoc().y] = true;  DECOMMENT THIS SECTION ASAP (only used for demos)
+		pathGrid[(int) gridPos.getX()][(int) gridPos.getY()] = true;
 	}
 	
 	public void spawnCreep(Monster creep) {
@@ -119,5 +160,9 @@ public class GameMap {
 	}
 	public void passFrameTime(float d){
 		this.frametime = d;
+	}
+	public void passMousePosition(int x, int y) {
+		this.mouseLoc.changeX(x);
+		this.mouseLoc.changeY(y);
 	}
 }

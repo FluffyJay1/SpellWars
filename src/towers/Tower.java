@@ -15,12 +15,14 @@ public class Tower extends GameElement {
 	
 	ArrayList<GameElement> elementsInRange = new ArrayList<GameElement>();
 	
+	private float attackDamage;
+	
 	private float attackRange;		//in pixels
 	private float baseAttackTime;	//in seconds
 	private float baseAttackSpeed;		//in percent, the tower's base attack speed (usually 100)
 	private float finalAttackSpeed;		//in percent, after all the bonuses from buffs
 	private float attackInterval;	//for internal use, in seconds, calculated each time attack speed changes
-	private float attackCooldown = 0 ;	//for internal use, decremented each frame and checks if cooldown < 0
+	private float attackCooldown;	//for internal use, decremented each frame and checks if cooldown < 0
 	private GameElement attackTarget;		//its target
 	/*
 	 * Explanation of base attack time and attack speed:
@@ -37,13 +39,15 @@ public class Tower extends GameElement {
 	 * 
 	 * This way we gain an easy way to stack attack speed bonuses while also gaining leverage over their properties (i.e. a cannon that attacks once every 20 seconds won't suddenly become OP if we give it attack speed since we can just set its base attack time really high)
 	 */
-	public Tower(double x, double y, GameMap map, float attackRange, float baseAttackTime, float baseAttackSpeed){
+	public Tower(double x, double y, GameMap map, float attackRange, float baseAttackTime, float baseAttackSpeed, float attackDamage){
 		super();
 		this.changeLoc(new Point(x,y));
 		this.map = map;
 		this.attackRange = attackRange;
 		this.baseAttackTime = baseAttackTime;
 		this.baseAttackSpeed = baseAttackSpeed;
+		this.attackCooldown = 0;
+		this.attackDamage = attackDamage;
 	}
 	
 	/*
@@ -97,23 +101,31 @@ public class Tower extends GameElement {
 			this.acquireTarget();
 		}
 		if(this.attackTarget != null && map.getElements().contains(this.attackTarget)) { //if there is a target
-			map.addProjectile(new Laser(this, this.attackTarget)); //TODO this should be changed to be more modifiable in terms of damage
-			
-			/*THINGS BELOW ARE COMPLETELY UNNECESSARY*/
-			String i = "res/explosion.png";
-			ParticleEmitter pe = new ParticleEmitter(this.getLoc(), emitterTypes.LINE_RADIAL, i, true, /*point, emitter type, image path, alphaDecay*/
-					0.1f, 0.1f, /*particle start scale*/
-					0.1f, 0.1f, /*particle end scale*/
-					1.5f, /*drag*/
-					0, 0, /*rotational velocity*/
-					0.6f, 0.9f, /*min and max lifetime*/
-					20, 30, /*min and max launch speed*/
-					0, 10, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
-					(float)attackTarget.getLoc().getX(), (float)attackTarget.getLoc().getY(), 0, 0, map); /*keyvalues and map*/
-			map.addParticleEmitter(pe);
-			/*THINGS ABOVE ARE COMPLETELY UNNECESSARY*/
+			this.onAttackTarget();
+			this.attackCooldown = this.attackInterval; //If the attack is successful, it will set the cooldown
 		}
-		this.attackCooldown = this.attackInterval;
+		//if there is no target, then nothing happens
+	}
+	/*
+	 * AN OVERRIDABLE FUNCTION (SHOULD BE OVERRIDED FOR SPECIAL TOWERS)
+	 * What to do when the tower executes an attack
+	 */
+	public void onAttackTarget() {
+		map.addProjectile(new Laser(this, this.attackTarget, this.attackDamage));
+		
+		/*THINGS BELOW ARE COMPLETELY UNNECESSARY*/
+		String i = "res/explosion.png";
+		ParticleEmitter pe = new ParticleEmitter(this.getLoc(), emitterTypes.LINE_RADIAL, i, true, /*point, emitter type, image path, alphaDecay*/
+				0.1f, 0.1f, /*particle start scale*/
+				0, 0, /*particle end scale*/
+				1.5f, /*drag*/
+				0, 0, /*rotational velocity*/
+				0.6f, 0.9f, /*min and max lifetime*/
+				0, 30, /*min and max launch speed*/
+				0, 20, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
+				(float)attackTarget.getLoc().getX(), (float)attackTarget.getLoc().getY(), 0, 0, map); /*keyvalues and map*/
+		map.addParticleEmitter(pe);
+		/*THINGS ABOVE ARE COMPLETELY UNNECESSARY*/
 	}
 	
 	public void updateAttackSpeed() {
@@ -137,17 +149,16 @@ public class Tower extends GameElement {
 	/*
 	 * This is the basic loop that each tower should go through
 	 * 
-	 * 1. Update its attack speed
-	 * 2. If it's time to attack, then it will try to attack a target, else it will decrement its attack cooldown
-	 * 3. Go to step 1
+	 * 1. If it's time to attack, then it will update its attack speed and try to attack a target, else it will decrement its attack cooldown
+	 * 2. Go to step 1
 	 */
 	
 	@Override
 	public void update() {
-		this.updateAttackSpeed();
 		if(this.attackCooldown > 0) {
 			this.attackCooldown -= this.getFrameTime();
 		} else {
+			this.updateAttackSpeed();
 			this.attack();
 		}
 	}

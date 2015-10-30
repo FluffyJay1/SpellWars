@@ -8,23 +8,24 @@ import mechanic.GameElement;
 
 public class Laser extends Projectile {
 	
-	public static double LASER_DAMAGE = 125;
+	float damage;
 	
 	GameElement tower;
 	GameElement monster;
 	int delay;
 	
-	public Laser(GameElement tower, GameElement monster){
+	public Laser(GameElement tower, GameElement monster, float damage){
 		this.tower = tower;
 		this.monster = monster;
-		this.delay = 250;
+		this.delay = 150;
+		this.damage = damage;
+		monster.doDamage(this.damage);
 	}
 	
 	@Override
 	public void update(){
 		if(this.delay < 0){
 			this.setRemove(true);
-			monster.doDamage(LASER_DAMAGE);
 		}
 		else{
 			this.delay--;

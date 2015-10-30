@@ -13,11 +13,11 @@ import projectiles.Laser;
 public class DefaultTower extends Tower{
 	
 	public DefaultTower(double x, double y, GameMap map) {
-		this(x, y, map, 300, 1, 100);
+		this(x, y, map, 300, 1, 100, 125);
 	}
-	public DefaultTower(double x, double y, GameMap map, float attackRange, float baseAttackTime, float baseAttackSpeed){
-		super(x, y, map, attackRange, baseAttackTime, baseAttackSpeed);
-		this.setImage("res/fatbarrelturret.JPG");
+	public DefaultTower(double x, double y, GameMap map, float attackRange, float baseAttackTime, float baseAttackSpeed, float damage){
+		super(x, y, map, attackRange, baseAttackTime, baseAttackSpeed, damage);
+		this.setImage("res/idgaf.png");
 	}
 	
 	/*

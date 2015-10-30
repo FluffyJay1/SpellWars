@@ -35,8 +35,12 @@ public class StateGame extends BasicGameState{
 	public void enter(GameContainer container, StateBasedGame arg1){
 		container.setClearEachFrame(true);
 		System.out.println("THis isn't called");
-		map = new GameMap(125, 125);
-		map.placeTower(new DefaultTower(400, 400, map)); //MAGIC NUMBER ALERT
+		map = new GameMap(20, 20);
+		/*
+		map.placeTower(new DefaultTower(200, 400, map, 300, 1, 100, 150)); //MAGIC NUMBER ALERT
+		map.placeTower(new DefaultTower(400, 400, map, 300, 1, 250, 125));
+		map.placeTower(new DefaultTower(600, 400, map, 300, 1, 450, 100));
+		*/
 		map.spawnCreep(new DefaultMonster(0, 0, map));
 		
 	}
@@ -55,9 +59,21 @@ public class StateGame extends BasicGameState{
 		delay--;
 		if(delay <= 0)
 		{
-			map.spawnCreep(new DefaultMonster(/*Math.random() * 800*/0, Math.random() * 800 /*400*/, map)); // MAGIC NUMBER
-			delay = 3000;
+			for(int i = 0; i < (int)(Math.random() * 8); i++) {
+				map.spawnCreep(new DefaultMonster(/*Math.random() * 800*/0, Math.random() * 400 + 200 /*400*/, map)); // MAGIC NUMBER
+			}
+			delay = (int) (1000 + Math.random() * 500);
 		}
+	}
+	@Override
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		//PLACE A TOWER
+		Tower theTower = new DefaultTower(x, y, map, 150, 1, 150, 50);
+		map.placeTower(theTower);
+	}
+	@Override
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		map.passMousePosition(newx, newy);
 	}
 
 	@Override
