@@ -84,15 +84,13 @@ public class Projectile extends GameElement {
 		this.flashPanel = flashPanel;
 	}
 	public void flash() {
-		this.getMap().getPanelAt(this.getGridLoc()).panelFlash();
+		if(this.flashPanel && this.getMap().getPanelAt(this.getGridLoc()) != null) {
+			this.getMap().getPanelAt(this.getGridLoc()).panelFlash();
+		}
 	}
 	@Override
 	public void update() {
-		if(this.flashPanel && this.getMap().getPanelAt(this.getGridLoc()) != null) {
-			this.flash();
-		}
-		
-		
+		this.flash();
 		this.changeLoc(this.getMap().gridToPosition(Point.interpolate(this.gridLoc, this.futureLoc, 1 - (this.thinkTimer/this.thinkInterval))));
 		//Point targetLoc = this.getGridLoc();
 		for(Point targetLoc : Point.getPointsBetween(this.pastFrameGridLoc, this.getGridLoc())) {
@@ -178,9 +176,7 @@ public class Projectile extends GameElement {
 	}
 	@Override
 	public void draw(Graphics g){
-		if(this.flashPanel && this.getMap().getPanelAt(this.getGridLoc()) != null) {
-			this.flash();
-		}
+		this.flash();
 		Point loc = Point.subtract(this.getMap().gridToPosition(this.getGridLoc()), Point.scale(this.getMap().getSizeOfPanel(), 0.4));
 		/*
 		g.setColor(Color.yellow);

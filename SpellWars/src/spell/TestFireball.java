@@ -26,7 +26,7 @@ public class TestFireball extends Spell {
 			projectile = new Projectile(15 + (int)(Math.random() * 3.99) * 5, 16 - 4 * Math.abs(i), GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), Point.add(this.owner.gridLoc, new Point(0, i)), "res/particle_explosion.png", this.owner.teamID, false, true, true);
 			this.map.addGameElement(projectile);
 			if(i == 0) {
-				Panel p = this.map.getPanelAt(Point.add(Point.add(this.owner.gridLoc, Point.scale(GameMap.getFuturePoint(new Point(), GameMap.getOppositeDirection((char)this.owner.teamID)), 3)), new Point(0, i)));
+				Panel p = this.map.getPanelAt(Point.add(Point.add(this.owner.gridLoc, Point.scale(GameMap.getFuturePoint(new Point(), GameMap.getOppositeDirection((char)this.owner.teamID)), 4)), new Point(0, i)));
 				if(p != null && p.getPanelState() != PanelState.HOLE) {
 					p.setPanelState(PanelState.CRACKED);
 				}
@@ -52,6 +52,9 @@ public class TestFireball extends Spell {
 		*/
 		this.spellTimer -= this.getFrameTime();
 		if(this.spellTimer <= 0) {
+			this.finishSpell();
+		}
+		if(this.owner.getRemove()) {
 			this.finishSpell();
 		}
 	}

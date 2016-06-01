@@ -84,7 +84,7 @@ public class Unit extends GameElement {
 	@Override
 	public void setRemove(boolean state){
 		this.remove = state;
-		if(!this.isPaused()) {
+		if(!this.isPaused() && this.panelStandingOn != null) {
 			this.panelStandingOn.unitStandingOnPanel = null;
 		}
 	}
@@ -168,6 +168,7 @@ public class Unit extends GameElement {
 	public void draw(Graphics g){
 		if(this.getImage() != null){
 			Image endPic = this.getImage().getFlippedCopy(this.direction == GameMap.ID_LEFT, false);
+			endPic = endPic.getScaledCopy((float) this.getSize());
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
 			float shadowRatio = (float) (this.getMap().getSizeOfPanel().x / this.getMap().getSizeOfPanel().y);
@@ -262,7 +263,7 @@ public class Unit extends GameElement {
 				}
 			}
 			if(availablePoints.size() > 0) {
-				int randomIndex = (int)(Math.random() * availablePoints.size());
+				int randomIndex = (int)(Math.random() * availablePoints.size() - 0.000000001);
 				if(randomIndex == availablePoints.size()) {
 					randomIndex--;
 				}

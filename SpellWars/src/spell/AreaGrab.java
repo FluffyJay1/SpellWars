@@ -18,12 +18,13 @@ public class AreaGrab extends Spell {
 	public static final float ANIMATION_TIME = 1.0f;
 	float timer;
 	public static final float DAMAGE = 10;
+	public static final float STUN_DURATION = 1;
 	ArrayList<Panel> affectedPanels;
 	static Image redOrb;
 	static Image blueOrb;
 	boolean areaStolen;
 	public AreaGrab(Unit owner) {
-		super(owner, 0, 0, "Area Grab", "Steals a column of area from the enemy", "res/particle_genericRed.png", true);
+		super(owner, 0, 0, "Area Grab", "Steals a column of area from the enemy, and stunning units that get in the way", "res/particle_genericRed.png", true);
 		this.timer = ANIMATION_TIME;
 		this.affectedPanels = new ArrayList<Panel>();
 		if(redOrb == null) {
@@ -101,11 +102,11 @@ public class AreaGrab extends Spell {
 		if(this.timer <= 0.5) {
 			if(!this.areaStolen) {
 				for(Panel p : this.affectedPanels) {
-					if(p.unitStandingOnPanel == null) {
+					if(p.unitStandingOnPanel == null || p.unitStandingOnPanel.teamID == this.owner.teamID) {
 						p.setTeamID(this.owner.teamID);
 					} else {
 						p.unitStandingOnPanel.doDamage(DAMAGE);
-						p.unitStandingOnPanel.stun(3);
+						p.unitStandingOnPanel.stun(STUN_DURATION);
 					}
 				}
 				this.areaStolen = true;

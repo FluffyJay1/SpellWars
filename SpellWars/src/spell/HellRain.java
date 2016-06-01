@@ -13,9 +13,9 @@ import unit.Unit;
 
 public class HellRain extends Spell {
 	public static final float DURATION = 4.5f;
-	public static final int NUM_STRIKES = 40;
+	public static final int NUM_STRIKES = 32;
 	public static final int DAMAGE = 10;
-	public static final float CHANCE_TO_CRACK = 0.075f;
+	public static final float CHANCE_TO_CRACK = 0.05f;
 	float timer;
 	int shotsFired;
 	ArrayList<Panel> affectedPanels;
@@ -47,5 +47,8 @@ public class HellRain extends Spell {
 	@Override
 	public void onSpellUpdate() {
 		this.timer -= this.getFrameTime();
+		if(this.owner.getRemove()) {
+			this.finishSpell();
+		}
 	}
 }

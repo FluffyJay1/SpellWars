@@ -6,6 +6,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.fills.GradientFill;
 import org.newdawn.slick.geom.Rectangle;
@@ -15,6 +16,7 @@ import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import ui.PlayerTypeSelector;
 import ui.StartButton;
 import ui.Text;
 import ui.TextFormat;
@@ -33,6 +35,8 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 	private UI ui;
 	private StartButton button;
 	String string;
+	PlayerTypeSelector leftSelector;
+	PlayerTypeSelector rightSelector;
 	
 	public StateMenu(){
 
@@ -48,6 +52,10 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 		ui = new UI();
 		button = new StartButton(ui, new Point(Game.WINDOW_WIDTH/2, Game.WINDOW_HEIGHT/2));
 		ui.addUIElement(button);
+		leftSelector = new PlayerTypeSelector(ui, new Point(400,800));
+		ui.addUIElement(leftSelector);
+		rightSelector = new PlayerTypeSelector(ui, new Point(1520,800));
+		ui.addUIElement(rightSelector);
 	}
 	
 
@@ -61,7 +69,7 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
 		//start.render(container, g);
-		g.drawRect(Game.WINDOW_WIDTH/2, Game.WINDOW_HEIGHT/2, 400, 300);
+		//g.drawRect(Game.WINDOW_WIDTH/2, Game.WINDOW_HEIGHT/2, 400, 300);
 		ui.draw(g);
 	}
 
@@ -72,7 +80,40 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 		ui.passFrameTime((float)arg2 / 1000);
 		ui.update();
 		if(button.isPressed) {
+			Game.leftPlayer = leftSelector.getPlayerType();
+			Game.leftLevel = leftSelector.level;
+			Game.rightPlayer = rightSelector.getPlayerType();
+			Game.rightLevel = rightSelector.level;
 			game.enterState(Game.STATE_GAME);
+		}
+	}
+	@Override
+	public void keyPressed(int key, char c) {
+		switch(key) {
+		case Input.KEY_W:
+			leftSelector.changeIndex(-1);
+			break;
+		case Input.KEY_S:
+			leftSelector.changeIndex(1);
+			break;
+		case Input.KEY_A:
+			leftSelector.changeLevel(-1);
+			break;
+		case Input.KEY_D:
+			leftSelector.changeLevel(1);
+			break;
+		case Input.KEY_UP:
+			rightSelector.changeIndex(-1);
+			break;
+		case Input.KEY_DOWN:
+			rightSelector.changeIndex(1);
+			break;
+		case Input.KEY_LEFT:
+			rightSelector.changeLevel(-1);
+			break;
+		case Input.KEY_RIGHT:
+			rightSelector.changeLevel(1);
+			break;
 		}
 	}
 	@Override

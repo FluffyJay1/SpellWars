@@ -19,6 +19,7 @@ public class ForgeSpiritFire extends Spell {
 	@Override
 	public void onActivate() {
 		//String i = "res/particle_genericRed.png";
+		/*
 		float direction = 50;
 		if(this.owner.direction == GameMap.ID_LEFT) {
 			direction = 130;
@@ -33,15 +34,17 @@ public class ForgeSpiritFire extends Spell {
 				0, 5, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
 				direction, 40, 0, 0); //keyvalues
 		this.getMap().addParticleEmitter(pe);
-		Projectile projectile;
-		//Projectile projectile = new Projectile(15, 6, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), this.owner.gridLoc, "res/particle_explosion.png", this.owner.teamID, true, true, true);
-		//this.map.addGameElement(projectile);
+		*/
+		Projectile projectile = new Projectile(20, 8, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), this.owner.gridLoc, "res/particle_explosion.png", this.owner.teamID, true, true, true);
+		this.map.addGameElement(projectile);
 		//projectile = new Grenade(50, 3, 4, 80, this.owner.direction, this.owner.gridLoc, "res/particle_genericRed.png", this.owner.teamID);
 		//this.map.addGameElement(projectile);
 		
 		//Projectile projectilep;
 		//projectilep = new Grenade(20, 0.8 * Point.getDistance(new Point(), Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.direction), 4)), Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.direction), 4), 80, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
 		//this.map.addGameElement(projectilep);
+		
+		/*
 		//Point randomPoint = Point.proximity8(Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.direction), 4)).get(Point.roundToNearestInteger(Math.random() * 7.99 - 0.5));
 		for(Point p : Point.proximity4(Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.direction), 4))) {
 		//for(Point p : Point.proximity4(randomPoint)) {
@@ -49,6 +52,7 @@ public class ForgeSpiritFire extends Spell {
 			projectile.setImageScale(2);
 			this.map.addGameElement(projectile);
 		}
+		*/
 		this.finishSpell();
 	}
 }

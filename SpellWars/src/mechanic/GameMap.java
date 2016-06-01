@@ -152,6 +152,12 @@ public class GameMap {
 			e.setPause(true);
 		}
 		//*/
+		for(ParticleBase p : this.particleList) {
+			p.setPause(true);
+		}
+		for(ParticleBase p : this.particleBuffer) {
+			p.setPause(true);
+		}
 		this.isPaused = true;
 	}
 	public void unpauseAll() {
@@ -160,6 +166,12 @@ public class GameMap {
 		}
 		for(GameElement e : this.elementBuffer) {
 			e.setPause(false);
+		}
+		for(ParticleBase p : this.particleList) {
+			p.setPause(false);
+		}
+		for(ParticleBase p : this.particleBuffer) {
+			p.setPause(false);
 		}
 		this.isPaused = false;
 	}
@@ -189,9 +201,22 @@ public class GameMap {
 			}
 		}
 		*/
+		for(int i = 0; i < elementList.size(); i++) { //draw elements
+			GameElement temp = elementList.get(i);
+			temp.hasBeenDrawn = false;
+		}
 		for(int x = 0; x < this.panelGrid.length; x++) {
 			for(int y = 0; y < this.panelGrid[0].length; y++) {
 				this.panelGrid[x][y].draw(g);
+			}
+		}
+		for(int x = 0; x < this.panelGrid.length; x++) {
+			for(int y = 0; y < this.panelGrid[0].length; y++) {
+				GameElement temp = this.panelGrid[x][y].unitStandingOnPanel;
+				if(temp != null) {
+					temp.draw(g);
+					temp.hasBeenDrawn = true;
+				}
 			}
 		}
 		if(this.isPaused) {
@@ -201,8 +226,11 @@ public class GameMap {
 		}
 		for(int i = 0; i < elementList.size(); i++) { //draw elements
 			GameElement temp = elementList.get(i);
-			temp.draw(g);
-			g.resetTransform();
+			if(!temp.hasBeenDrawn) {
+				temp.draw(g);
+				temp.hasBeenDrawn = true;
+				g.resetTransform();
+			}
 		}
 		for(int i = 0; i < particleList.size(); i++) //draw particles
 		{

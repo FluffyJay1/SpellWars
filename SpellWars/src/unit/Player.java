@@ -35,7 +35,7 @@ public class Player extends Unit {
 	@Override 
 	public void onDeath() {
 		this.interruptCast();
-		this.castSpell(new TimeBombDetonate(this), true, true);
+		this.castSpell(new ForgeSpirit(this, 8), true, true);
 	}
 	/*
 	@Override

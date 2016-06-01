@@ -10,7 +10,7 @@ public class ForgeSpirit extends Spell {
 	int numSpawned;
 	int numToSpawn;
 	public ForgeSpirit(Unit owner) {
-		super(owner, 0, 0, "Summon Forge Spirit", "Summon a unit that launches artillery at the enemy", "res/plane.png", true);
+		super(owner, 0, 0, "Summon Forge Spirit", "Summon a unit that shoots at the enemy", "res/plane.png", true);
 		this.timer = DELAY;
 		this.numSpawned = 0;
 		this.numToSpawn = 1;

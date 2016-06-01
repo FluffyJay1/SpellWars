@@ -6,6 +6,7 @@ import mechanic.PanelState;
 import mechanic.Point;
 import particlesystem.EmitterTypes;
 import particlesystem.ParticleEmitter;
+import unit.Unit;
 
 public class CrackGrenade extends Grenade {
 	float crackChance;
@@ -13,6 +14,7 @@ public class CrackGrenade extends Grenade {
 		super(damage, duration, endDisplacement, initialHeight, endHeight, gridLoc, imagePath, teamID);
 		this.crackChance = crackChance;
 	}
+	@Override
 	public void onGrenadeLanded() {
 		//String i = "res/particle_genericYellow.png";
 		if(Math.random() < this.crackChance) {

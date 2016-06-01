@@ -58,21 +58,20 @@ public class Grenade extends Projectile {
 	}
 	@Override
 	public void flash() {
-		this.getMap().getPanelAt(endLoc).panelFlash();
+		if(this.flashDestinationPanel && this.getMap().pointIsInGrid(this.endLoc) && (this.duration - this.timeElapsed <= CONSTANT_FLASH_DURATION || this.timeElapsed % (FLASH_INTERVAL * (1 - this.timeElapsed/this.duration/2)) < (1 - this.timeElapsed/this.duration/2) * FLASH_INTERVAL/2)) {
+			this.getMap().getPanelAt(endLoc).panelFlash();
+		}
+		if(this.duration - this.timeElapsed <= IMPORTANT_FLASH_DURATION) {
+			if(this.getMap().pointIsInGrid(endLoc)) {
+				this.getMap().getPanelAt(endLoc).panelFlashImportant();
+			}
+		}
 	}
 	@Override
 	public void onProjectileUpdate() {
 		this.timeElapsed += this.getFrameTime();
 		this.setDrawHeight(this.getHeightAt(this.timeElapsed));
 		//if(this.distance * (1 - this.timeElapsed/this.duration) < 0.5) { //if it is on the last panel
-		if(this.duration - this.timeElapsed <= IMPORTANT_FLASH_DURATION) {
-			if(this.getMap().pointIsInGrid(endLoc)) {
-				this.getMap().getPanelAt(endLoc).panelFlashImportant();
-			}
-		}
-		if(this.flashDestinationPanel && this.getMap().pointIsInGrid(this.endLoc) && (this.duration - this.timeElapsed <= CONSTANT_FLASH_DURATION || this.timeElapsed % (FLASH_INTERVAL * (1 - this.timeElapsed/this.duration/2)) < (1 - this.timeElapsed/this.duration/2) * FLASH_INTERVAL/2)) {
-			this.flash();
-		}
 		if(this.timeElapsed >= this.duration) {
 			if(this.getMap().pointIsInGrid(this.endLoc)) {
 				Unit target = this.getMap().getPanelAt(this.endLoc).unitStandingOnPanel;

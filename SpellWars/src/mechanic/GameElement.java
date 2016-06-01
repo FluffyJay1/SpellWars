@@ -56,6 +56,7 @@ public abstract class GameElement {
 	private float frametime;
 	boolean isPaused;
 	GameElement parent;
+	public boolean hasBeenDrawn; //IF THE ELEMENT IS A UNIT AND IT HAS BEEN DRAWN SINCE IT WAS ON A LOWER GRID LOC
 	
 	public GameElement() {
 		this(new Point());
@@ -77,6 +78,7 @@ public abstract class GameElement {
 		this.finalSpeedModifier = 1;
 		this.frametime = 0;
 		this.drawHeight = 0;
+		this.hasBeenDrawn = false;
 	}
 	public GameElement(double hp, double maxHP, double speed, double orientation, Point loc, double size, float collisionRadius, Image image) {
 		this.changeMaxHP(maxHP);
@@ -90,6 +92,7 @@ public abstract class GameElement {
 		this.finalSpeedModifier = 1;
 		this.frametime = 0;
 		this.drawHeight = 0;
+		this.hasBeenDrawn = false;
 	}
 	
 	/**

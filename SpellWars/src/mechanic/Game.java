@@ -19,6 +19,10 @@ public class Game extends StateBasedGame {
 	public static final int WINDOW_WIDTH = 1920;
 	public static final int WINDOW_HEIGHT = 1080;
 	StateGame stategame = new StateGame();
+	public static PlayerType leftPlayer;
+	public static int leftLevel;
+	public static PlayerType rightPlayer;
+	public static int rightLevel;
 	
 	Map<String, Image> images = new HashMap<String, Image>();
 	

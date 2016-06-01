@@ -5,6 +5,7 @@ import mechanic.Game;
 import mechanic.GameElement;
 import mechanic.GameMap;
 import mechanic.Panel;
+import mechanic.PlayerType;
 import mechanic.Point;
 
 import org.newdawn.slick.Color;
@@ -27,7 +28,7 @@ import ui.Text;
 import ui.TextFormat;
 import ui.UI;
 import ui.UIElement;
-
+import unit.Boss;
 import unit.Player;
 import unit.Unit;
 
@@ -67,13 +68,31 @@ public class StateGame extends BasicGameState{
 		ui = new UI();
 		map.setUI(ui);
 		leftPlayer = new Player(250, 5, GameMap.ID_LEFT, new Point(0,0));
-		this.map.getPanelAt(leftPlayer.gridLoc).unitStandingOnPanel = leftPlayer;
+		//this.map.getPanelAt(leftPlayer.gridLoc).unitStandingOnPanel = leftPlayer;
 		leftSelect = new SpellSelector(ui, new Point(0, 0), GameMap.ID_LEFT, leftPlayer);
 		rightPlayer = new Player(250, 5, GameMap.ID_RIGHT, new Point(7,3));
-		this.map.getPanelAt(rightPlayer.gridLoc).unitStandingOnPanel = rightPlayer;
+		//this.map.getPanelAt(rightPlayer.gridLoc).unitStandingOnPanel = rightPlayer;
 		rightSelect = new SpellSelector(ui, new Point(1920, 0), GameMap.ID_RIGHT, rightPlayer);
-		map.addGameElement(leftPlayer);
-		map.addGameElement(rightPlayer);
+		if(Game.leftPlayer.equals(PlayerType.PLAYER)) {
+			map.addUnit(leftPlayer);
+		} else {
+			leftPlayer.setRemove(true);
+		}
+		if(Game.rightPlayer.equals(PlayerType.PLAYER)) {
+			map.addUnit(rightPlayer);
+		} else {
+			rightPlayer.setRemove(true);
+		}
+		
+		if(Game.leftPlayer.equals(PlayerType.COMPUTER)) {
+			Unit boss = new Boss(new Point(0,0), (int)GameMap.ID_LEFT, Game.leftLevel);
+			map.addUnit(boss);
+		}
+		if(Game.rightPlayer.equals(PlayerType.COMPUTER)) {
+			Unit boss = new Boss(new Point(7,3), (int)GameMap.ID_RIGHT, Game.rightLevel);
+			map.addUnit(boss);
+		}
+		
 		
 		battlePhaseText = new Text(ui, new Point(760, 24), 400, 16, 24, 18, 26, Color.white, "time until next spell selection: ", TextFormat.CENTER_JUSTIFIED);
 		battlePhaseText.setUseOutline(true);
@@ -108,7 +127,9 @@ public class StateGame extends BasicGameState{
 		if(!pickingPhase && this.readyTimer <= 0 && !devPause) {
 			map.update();
 			if(!this.map.isPaused()) {
-				this.battlePhaseTimer -= frametime;
+				if(Game.leftPlayer.equals(PlayerType.PLAYER) || Game.rightPlayer.equals(PlayerType.PLAYER)) {
+					this.battlePhaseTimer -= frametime;
+				}
 			}
 		}
 		if(battlePhaseTimer <= 0){
@@ -123,7 +144,9 @@ public class StateGame extends BasicGameState{
 		}
 		if(!pickingPhase && this.readyTimer >= 0) {
 			if(this.battlePhaseText.getRemove()) {
-				ui.addUIElement(battlePhaseText);
+				if(Game.leftPlayer.equals(PlayerType.PLAYER) || Game.rightPlayer.equals(PlayerType.PLAYER)) {
+					ui.addUIElement(battlePhaseText);
+				}
 			}
 			this.readyTimer -= frametime;
 			float ratio = readyTimer/READY_TIME;

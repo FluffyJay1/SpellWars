@@ -19,7 +19,9 @@ import spell.Spell;
 import spell.Stun;
 import spell.TestFireball;
 import spell.TimeBomb;
+import spell.TrumpWall;
 import unit.Player;
+import unit.Unit;
 
 public class SpellSelector extends UIElement {
 	public static final float WIDTH = 800;
@@ -105,8 +107,8 @@ public class SpellSelector extends UIElement {
 		this.updateText();
 	}
 	public void setPickingPhase(boolean pickingPhase) {
-		this.pickingPhase = pickingPhase;
-		if(!pickingPhase){
+		this.pickingPhase = !(!pickingPhase || this.player.getRemove());
+		if(!pickingPhase || this.player.getRemove()){
 			this.box.setImage("res/blank.png");
 			this.box.setEdgeColor(new Color(0, 0, 0, 0));
 			this.spellName.setText("");
@@ -162,29 +164,31 @@ public class SpellSelector extends UIElement {
 	}
 	public void refillSpells() {
 		for(int i = this.availableSpells.size(); i < SPELL_SELECTOR_DIMENSIONS.x * SPELL_SELECTOR_DIMENSIONS.y; i++) {
-			this.availableSpells.add(this.getRandomSpell());
+			this.availableSpells.add(getRandomSpell(this.player));
 		}
 	}
-	public Spell getRandomSpell() {
-		int numSpells = 7;
+	public static Spell getRandomSpell(Unit unit) {
+		int numSpells = 8;
 		int num = (int)(Math.pow(Math.random(), 0.8) * numSpells); //weighted so that spells under a bigger num get picked more
 		switch(num) {
 		case 0:
-			return new AreaGrab(this.player);
+			return new TrumpWall(unit);
 		case 1:
-			return new TimeBomb(this.player);
+			return new AreaGrab(unit);
 		case 2:
-			return new ForgeSpirit(this.player);
+			return new TimeBomb(unit);
 		case 3:
-			return new Stun(this.player);
+			return new ForgeSpirit(unit);
 		case 4:
-			return new HellRain(this.player);
+			return new Stun(unit);
 		case 5:
-			return new BouncingOrb(this.player);
+			return new HellRain(unit);
 		case 6:
-			return new TestFireball(this.player);
+			return new BouncingOrb(unit);
+		case 7:
+			return new TestFireball(unit);
 		default:
-			return new TestFireball(this.player);
+			return new TestFireball(unit);
 		}
 	}
 	@Override
