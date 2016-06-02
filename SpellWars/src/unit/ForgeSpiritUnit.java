@@ -24,7 +24,7 @@ public class ForgeSpiritUnit extends Unit {
 			this.castSpell(new ForgeSpiritFire(this));
 			this.moves += MOVES_PER_FIRE;
 		} else {
-			this.moveRandom4(false, true, false, true);
+			this.moveRandom4(false, true, false, true, true);
 		}
 	}
 	/*

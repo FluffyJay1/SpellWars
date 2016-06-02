@@ -46,6 +46,7 @@ public class GameMap {
 	ArrayList<GameElement> elementList = new ArrayList<GameElement>();
 	ArrayList<GameElement> elementBuffer = new ArrayList<GameElement>();
 	ArrayList<GameElement> elementRemoveBuffer = new ArrayList<GameElement>();
+	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	ArrayList<ParticleBase> particleList = new ArrayList<ParticleBase>();
 	ArrayList<ParticleBase> particleBuffer = new ArrayList<ParticleBase>();
 	ArrayList<ParticleBase> particleRemoveBuffer = new ArrayList<ParticleBase>();
@@ -136,6 +137,7 @@ public class GameMap {
 		}
 		elementList.addAll(elementBuffer);
 		elementList.removeAll(elementRemoveBuffer);
+		projectiles.removeAll(elementRemoveBuffer);
 		elementBuffer.clear();
 		elementRemoveBuffer.clear();
 		particleList.addAll(particleBuffer);
@@ -217,6 +219,12 @@ public class GameMap {
 					temp.draw(g);
 					temp.hasBeenDrawn = true;
 				}
+				for(Projectile p : this.projectiles) {
+					if(Point.equals(p.getGridLoc(), new Point(x,y))) {
+						p.draw(g);
+						p.hasBeenDrawn = true;
+					}
+				}
 			}
 		}
 		if(this.isPaused) {
@@ -252,6 +260,9 @@ public class GameMap {
 			e.setMap(this);
 			e.passFrameTime(this.frametime);
 			elementBuffer.add(e);
+			if(e instanceof Projectile) {
+				this.projectiles.add((Projectile) e);
+			}
 		}
 	}
 	public void addUnit(Unit u, boolean respectPanelTeam) {

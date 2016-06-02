@@ -30,6 +30,7 @@ import ui.UI;
 import ui.UIElement;
 import unit.Boss;
 import unit.Player;
+import unit.Trump;
 import unit.Unit;
 
 public class StateGame extends BasicGameState{
@@ -90,6 +91,15 @@ public class StateGame extends BasicGameState{
 		}
 		if(Game.rightPlayer.equals(PlayerType.COMPUTER)) {
 			Unit boss = new Boss(new Point(7,3), (int)GameMap.ID_RIGHT, Game.rightLevel);
+			map.addUnit(boss);
+		}
+		
+		if(Game.leftPlayer.equals(PlayerType.TRUMP)) {
+			Unit boss = new Trump(new Point(0,0), (int)GameMap.ID_LEFT, Game.leftLevel);
+			map.addUnit(boss);
+		}
+		if(Game.rightPlayer.equals(PlayerType.TRUMP)) {
+			Unit boss = new Trump(new Point(7,3), (int)GameMap.ID_RIGHT, Game.rightLevel);
 			map.addUnit(boss);
 		}
 		
@@ -264,28 +274,28 @@ public class StateGame extends BasicGameState{
 				rightPlayer.castNextAvailableSpell();
 				break;
 			case Input.KEY_W:
-				leftPlayer.move(GameMap.ID_UP, true, true, true, true);
+				leftPlayer.move(GameMap.ID_UP, true, true, true, true, true);
 				break;
 			case Input.KEY_S:
-				leftPlayer.move(GameMap.ID_DOWN, true, true, true, true);
+				leftPlayer.move(GameMap.ID_DOWN, true, true, true, true, true);
 				break;
 			case Input.KEY_A:
-				leftPlayer.move(GameMap.ID_LEFT, true, true, true, true);
+				leftPlayer.move(GameMap.ID_LEFT, true, true, true, true, true);
 				break;
 			case Input.KEY_D:
-				leftPlayer.move(GameMap.ID_RIGHT, true, true, true, true);
+				leftPlayer.move(GameMap.ID_RIGHT, true, true, true, true, true);
 				break;
 			case Input.KEY_UP:
-				rightPlayer.move(GameMap.ID_UP, true, true, true, true);
+				rightPlayer.move(GameMap.ID_UP, true, true, true, true, true);
 				break;
 			case Input.KEY_DOWN:
-				rightPlayer.move(GameMap.ID_DOWN, true, true, true, true);
+				rightPlayer.move(GameMap.ID_DOWN, true, true, true, true, true);
 				break;
 			case Input.KEY_LEFT:
-				rightPlayer.move(GameMap.ID_LEFT, true, true, true, true);
+				rightPlayer.move(GameMap.ID_LEFT, true, true, true, true, true);
 				break;
 			case Input.KEY_RIGHT:
-				rightPlayer.move(GameMap.ID_RIGHT, true, true, true, true);
+				rightPlayer.move(GameMap.ID_RIGHT, true, true, true, true, true);
 				break;
 			default:
 				break;

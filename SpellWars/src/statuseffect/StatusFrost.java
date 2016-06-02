@@ -2,14 +2,14 @@ package statuseffect;
 
 import particlesystem.ParticleEmitter;
 import particlesystem.EmitterTypes;
-import projectiles.Projectile;
+import projectile.Projectile;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import mechanic.DamageType;
+
 import mechanic.GameElement;
-import monsters.Monster;
+
 
 public class StatusFrost extends StatusEffect {
 	/*----
@@ -32,7 +32,7 @@ public class StatusFrost extends StatusEffect {
 	 * duration
 	 */
 	public static final String ID = "frost"; //for stacking
-	public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
+	//public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
 	static Image icon;
 	static boolean imageLoaded = false;
 	public StatusFrost(GameElement owner, float speedModifier, float damagePerSecond, float duration, int level) {
@@ -49,7 +49,7 @@ public class StatusFrost extends StatusEffect {
 		this.damagePerInterval = damagePerSecond;
 		this.interval = 1;
 		this.setMoveSpeedModifier(speedModifier);
-		this.setDamageType(DAMAGE_TYPE);
+		//this.setDamageType(DAMAGE_TYPE);
 	}
 	
 	@Override

@@ -3,7 +3,6 @@ package statuseffect;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import mechanic.DamageType;
 import mechanic.GameElement;
 
 public class StatusShock extends StatusEffect {
@@ -12,7 +11,7 @@ public class StatusShock extends StatusEffect {
 	static boolean imageLoaded = false;
 	public StatusShock(GameElement owner, float duration, float impactResistanceModifier, int level) {
 		super(owner, StackingProperty.UNSTACKABLE_REPLACE, ID, duration, level);
-		this.setResistanceModifier(DamageType.IMPACT, impactResistanceModifier);
+		//this.setResistanceModifier(DamageType.IMPACT, impactResistanceModifier);
 		if(imageLoaded == false) {
 			try {
 				icon = new Image("res/statuseffect/icon_shock.png");

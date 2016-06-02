@@ -20,7 +20,7 @@ public class CrackGrenade extends Grenade {
 		if(Math.random() < this.crackChance) {
 			Panel panel = this.getMap().getPanelAt(this.endLoc);
 			if(panel.unitStandingOnPanel == null) {
-				panel.setPanelState(PanelState.HOLE);
+				panel.setPanelState(PanelState.CRACKED);
 			} else {
 				panel.setPanelState(PanelState.CRACKED);
 			}

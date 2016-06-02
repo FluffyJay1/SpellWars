@@ -17,7 +17,7 @@ public class Spell extends GameElement {
 	Unit owner;
 	String name;
 	String description;
-	boolean pauseWhenActivated;
+	public boolean pauseWhenActivated;
 	float textTimer;
 	boolean activated;
 	boolean spellExecuted;

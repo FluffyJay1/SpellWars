@@ -28,7 +28,7 @@ public class Boss extends Unit {
 	@Override
 	public void onThink() {
 		this.moves--;
-		this.moveRandom4(false, false, true, true);
+		this.moveRandom4(false, false, true, true, true);
 		if(this.moves <= 0) {
 			this.castSpell(SpellSelector.getRandomSpell(this));
 			this.refreshMoves();

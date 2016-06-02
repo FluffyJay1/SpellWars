@@ -37,7 +37,6 @@ public class PlayerTypeSelector extends UIBox {
 		} else if(this.index < 0) {
 			this.index = PlayerType.values().length + index % PlayerType.values().length;
 		}
-		System.out.println(index);
 	}
 	public PlayerType getPlayerType() {
 		return PlayerType.values()[index];

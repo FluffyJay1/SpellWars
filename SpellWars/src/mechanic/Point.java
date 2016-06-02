@@ -418,8 +418,8 @@ public class Point {
 	public static ArrayList<Point> proximity8(Point p) {
 		ArrayList<Point> adjacents = new ArrayList<Point>();
 		adjacents.add(new Point(p.x + 1, p.y));
-		adjacents.add(new Point(p.x, p.y + 1));
 		adjacents.add(new Point(p.x - 1, p.y));
+		adjacents.add(new Point(p.x, p.y + 1));
 		adjacents.add(new Point(p.x, p.y - 1));
 		adjacents.add(new Point(p.x + 1, p.y + 1));
 		adjacents.add(new Point(p.x - 1, p.y + 1));

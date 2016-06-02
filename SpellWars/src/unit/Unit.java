@@ -117,19 +117,19 @@ public class Unit extends GameElement {
 			 * FLOW:
 			 * Start cast-> CastTime -> Activate Spell -> Backswing time -> End cast
 			 */
-			if(this.isCasting) {
+			if(this.isCasting && !this.isPaused()) {
 				if(this.spellCastTimer <= 0) {
 					if(!this.isPaused() && !this.getRemove() && this.spellBeingCast != null) {
 						this.spellBeingCast.setOwner(this);
 						this.getMap().addGameElement(this.spellBeingCast);
 						this.spellBeingCast.activate();
-						this.spellCastTimer = this.spellBeingCast.backswingTime;
+						this.spellCastTimer = this.spellBeingCast.backswingTime; //NOW COOLING DOWN
 						this.spellCastMaxTime = this.spellBeingCast.backswingTime;
 						if(this.spellBeingCast.backswingTime == 0) {
 							this.isCasting = false;
 						}
 						this.spellBeingCast = null;
-					} else if(this.spellBeingCast == null) {
+					} else if(this.spellBeingCast == null) { //IF IT HAS COOLED DOWN
 						this.isCasting = false;
 					}
 				} else {
@@ -213,9 +213,9 @@ public class Unit extends GameElement {
 	public void drawSpecialEffects(Graphics g) {
 		
 	}
-	public void move(int direction, boolean respectCooldown, boolean putCooldown, boolean respectCasting, boolean respectStun) {
+	public void move(int direction, boolean respectCooldown, boolean putCooldown, boolean respectCasting, boolean respectStun, boolean respectPause) {
 		if(((respectCooldown && this.moveCooldown <= 0) || !respectCooldown) && ((respectCasting && !this.isCasting) || !respectCasting)
-				&& !this.isPaused() && !this.getRemove() && ((respectStun && this.stunTimer <= 0) || !respectStun)) {
+				&& (!this.isPaused() || !respectPause) && !this.getRemove() && ((respectStun && this.stunTimer <= 0) || !respectStun)) {
 			Point moveVec = new Point();
 			switch(direction) {
 			case GameMap.ID_UP:
@@ -253,9 +253,9 @@ public class Unit extends GameElement {
 			this.moveTo(futurepoint, putCooldown);
 		}
 	}
-	public void moveRandom4(boolean respectCooldown, boolean putCooldown, boolean respectCasting, boolean respectStun) {
+	public void moveRandom4(boolean respectCooldown, boolean putCooldown, boolean respectCasting, boolean respectStun, boolean respectPause) {
 		if(((respectCooldown && this.moveCooldown <= 0) || !respectCooldown) && ((respectCasting && !this.isCasting) || !respectCasting)
-				&& !this.isPaused() && !this.getRemove() && ((respectStun && this.stunTimer <= 0) || !respectStun)) {
+				&& (!this.isPaused() || !respectPause) && !this.getRemove() && ((respectStun && this.stunTimer <= 0) || !respectStun)) {
 			ArrayList<Point> availablePoints = new ArrayList<Point>();
 			for(Point p : Point.proximity4(this.gridLoc)) {
 				if(this.canMoveToLoc(p)) {
@@ -288,7 +288,7 @@ public class Unit extends GameElement {
 		return this.getMap().pointIsInGrid(loc) && this.getMap().getPanelAt(loc).teamID == this.teamID && this.getMap().getPanelAt(loc).unitStandingOnPanel == null
 				&& !(!this.ignoreHoles && this.getMap().getPanelAt(loc).getPanelState() == PanelState.HOLE);
 	}
-	public void castSpell(Spell spell, boolean ignoreStun, boolean ignoreCast) {
+	public boolean castSpell(Spell spell, boolean ignoreStun, boolean ignoreCast) {
 		if((!this.isCasting || ignoreCast) && ((!ignoreStun && this.stunTimer <= 0) || ignoreStun)) {
 			if(this.isCasting && ignoreCast) {
 				this.interruptCast();
@@ -301,7 +301,7 @@ public class Unit extends GameElement {
 				this.spellCastTimer = spell.backswingTime;
 				this.spellCastMaxTime = spell.backswingTime;
 				this.spellBeingCast = null;
-				if(spell.backswingTime == 0) {
+				if(spell.backswingTime == 0 && !spell.pauseWhenActivated) {
 					this.isCasting = false;
 				}
 			} else {
@@ -310,10 +310,12 @@ public class Unit extends GameElement {
 				this.spellCastMaxTime = spell.castTime;
 				this.isCasting = true;
 			}
+			return true;
 		}
+		return false;
 	}
-	public void castSpell(Spell spell) {
-		this.castSpell(spell, false, false);
+	public boolean castSpell(Spell spell) {
+		return this.castSpell(spell, false, false);
 	}
 	public void interruptCast() {
 		this.isCasting = false;
