@@ -37,6 +37,7 @@ public class GameMap {
 	public static final char ID_UPRIGHT = 1;//0001
 	public static final char ID_DOWNLEFT = 5;//0101
 	public static final char ID_DOWNRIGHT = 7;//0111
+	public static final Color SHADOW_COLOR = new Color(120, 120, 120, 120);
 	public static Image particle_genericRed;
 	public static Image particle_genericYellow;
 	public static Image particle_genericBlue;
@@ -203,16 +204,21 @@ public class GameMap {
 			}
 		}
 		*/
-		for(int i = 0; i < elementList.size(); i++) { //draw elements
+		for(int i = 0; i < elementList.size(); i++) { //resets hasbeendrawn
 			GameElement temp = elementList.get(i);
 			temp.hasBeenDrawn = false;
 		}
-		for(int x = 0; x < this.panelGrid.length; x++) {
+		for(int x = 0; x < this.panelGrid.length; x++) { //draws panels
 			for(int y = 0; y < this.panelGrid[0].length; y++) {
 				this.panelGrid[x][y].draw(g);
 			}
 		}
-		for(int x = 0; x < this.panelGrid.length; x++) {
+		for(int i = 0; i < elementList.size(); i++) { //draw elements
+			GameElement temp = elementList.get(i);
+			temp.drawShadow(g);
+			g.resetTransform();
+		}
+		for(int x = 0; x < this.panelGrid.length; x++) { //draws units on panels, and projectiles on those panels
 			for(int y = 0; y < this.panelGrid[0].length; y++) {
 				GameElement temp = this.panelGrid[x][y].unitStandingOnPanel;
 				if(temp != null) {

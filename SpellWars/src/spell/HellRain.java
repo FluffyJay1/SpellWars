@@ -32,7 +32,7 @@ public class HellRain extends Spell {
 	@Override
 	public void onThink(){
 		while(this.shotsFired < (1 - (this.timer/DURATION)) * NUM_STRIKES) {
-			int randomIndex = (int)(Math.random()*this.affectedPanels.size() - 0.00001);
+			int randomIndex = (int)(Math.random()*this.affectedPanels.size() - 0.0000001);
 			Point loc = this.affectedPanels.get(randomIndex).getLoc();
 			Projectile projectile = new CrackGrenade(DAMAGE, CHANCE_TO_CRACK, 1.75, Point.subtract(loc, this.owner.gridLoc), 80, 10, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
 			projectile.setImageScale(2);

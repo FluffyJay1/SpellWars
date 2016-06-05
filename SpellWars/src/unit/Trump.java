@@ -11,7 +11,7 @@ import spell.TrumpWall;
 import ui.SpellSelector;
 
 public class Trump extends Unit {
-	public static final double HP = 325;
+	public static final double HP = 300;
 	public static final double HP_PER_LEVEL = 25;
 	public static final double SPEED = 1.4;
 	public static final double SPEED_PER_LEVEL = 0.15;
@@ -19,7 +19,8 @@ public class Trump extends Unit {
 	public static final double SPEED_SPECIAL_PER_LEVEL = 0.75;
 	public static final int MOVES_PER_FIRE = 9;
 	public static final int MOVES_VARIATION = 3;
-	public static final float TRUMP_WALL_COOLDOWN = 20;
+	public static final float TRUMP_WALL_COOLDOWN = 25;
+	public static final double TRUMP_WALL_MULTIPLIER_PER_LEVEL = 0.99;
 	boolean isFirstMove;
 	int moves;
 	int level;
@@ -34,7 +35,7 @@ public class Trump extends Unit {
 		this.setThinkIntervalWithMove(true);
 		this.state = 0;
 		this.isFirstMove = true;
-		this.trumpWallCooldown = TRUMP_WALL_COOLDOWN;
+		this.trumpWallCooldown = (float) (TRUMP_WALL_COOLDOWN * Math.pow(TRUMP_WALL_MULTIPLIER_PER_LEVEL, level));
 	}
 	@Override
 	public void onThink() {
@@ -66,13 +67,13 @@ public class Trump extends Unit {
 		if(Math.random() < 0.15 && this.state == 0 && this.trumpWallCooldown <= 0) { //TRUMPS WALL
 			this.castSpell(new AreaGrab(this));
 			this.state = 1;
-			this.trumpWallCooldown = TRUMP_WALL_COOLDOWN;
+			this.trumpWallCooldown = (float) (TRUMP_WALL_COOLDOWN * Math.pow(TRUMP_WALL_MULTIPLIER_PER_LEVEL, level));
 		} 
-		if(Math.random() < 0.09 && this.state == 0 && !this.isCasting) { //BOMB
+		if(Math.random() < 0.08 && this.state == 0 && !this.isCasting) { //BOMB
 			this.state = 2;
 			this.setSpeed(SPEED_SPECIAL + SPEED_SPECIAL_PER_LEVEL * this.level);
 		} 
-		if(Math.random() < 0.08 && this.state == 0 && !this.isCasting) { //HELL RAIN
+		if(Math.random() < 0.07 && this.state == 0 && !this.isCasting) { //HELL RAIN
 			this.state = 3;
 			this.setSpeed(SPEED_SPECIAL + SPEED_SPECIAL_PER_LEVEL * this.level);
 		} 

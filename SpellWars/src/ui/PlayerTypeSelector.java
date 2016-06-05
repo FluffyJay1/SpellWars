@@ -20,7 +20,7 @@ public class PlayerTypeSelector extends UIBox {
 		this.text.setIsFront(true);
 		this.addChild(text);
 		ui.addUIElement(text);
-		this.setImage("res/blank.png");
+		//this.setImage("res/blank.png");
 	}
 	public void changeLevel(int i) {
 		if(this.index != 0) {

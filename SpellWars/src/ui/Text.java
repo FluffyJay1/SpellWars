@@ -343,7 +343,7 @@ public class Text extends UIElement {
 		case '/':
 			return getImage("res/ui/text/text_slash.png");
 		default:
-		return getImage("res/ui/text/text_" + c + ".png");
+		return getImage("res/ui/text/text_" + Character.toUpperCase(c) + ".png");
 		}
 	}
 	public void setUseOutline(boolean state) {

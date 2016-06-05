@@ -33,8 +33,8 @@ public class Projectile extends GameElement {
 	boolean useMoveVec;
 	ArrayList<Unit> unitsHit;
 	float imageScale;
-	boolean flashPanel;
-	boolean drawShadow;
+	public boolean flashPanel;
+	public boolean drawShadow;
 	public Projectile(double damage, double speed, int direction, Point gridLoc, String imagePath, int teamID, boolean destroyOnImpact, boolean simpleProjectile, boolean ignoreHoles) {
 		super(damage, damage, speed, 0, new Point(), 1, 0, imagePath);
 		this.useMoveVec = false;
@@ -187,11 +187,6 @@ public class Projectile extends GameElement {
 			Image endPic = this.getImage().getFlippedCopy(this.direction == GameMap.ID_LEFT, false).getScaledCopy(this.imageScale);
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
-			float shadowRatio = (float) (this.getMap().getSizeOfPanel().x / this.getMap().getSizeOfPanel().y);
-			if(this.drawShadow) {
-				g.setColor(new Color(120, 120, 120, 120));
-				g.fillOval((float) (this.getLoc().x - SHADOW_SCALE * width/2), (float) (this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio)), (float)(width * SHADOW_SCALE), (float)(SHADOW_SCALE * width/shadowRatio));
-			}
 			g.drawImage(endPic, (float) this.getLoc().x - width/2, (float) this.getLoc().y - height/2 - this.getDrawHeight());
 		}
 		/*
@@ -204,6 +199,17 @@ public class Projectile extends GameElement {
 		g.setColor(Color.yellow);
 		g.drawRect((float)loc.x, (float)loc.y, 10, 10);
 		*/
+	}
+	@Override
+	public void drawShadow(Graphics g) {
+		if(this.drawShadow) {
+			Image endPic = this.getImage().getFlippedCopy(this.direction == GameMap.ID_LEFT, false);
+			endPic = endPic.getScaledCopy((float) this.imageScale);
+			float width = endPic.getWidth();
+			float shadowRatio = (float) (this.getMap().getSizeOfPanel().x / this.getMap().getSizeOfPanel().y);
+			g.setColor(GameMap.SHADOW_COLOR);
+			g.fillOval((float) (this.getLoc().x - SHADOW_SCALE * width/2), (float) (this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio)), (float)(width * SHADOW_SCALE), (float)(SHADOW_SCALE * width/shadowRatio));
+		}
 	}
 	public void move(int direction, boolean respectCooldown, boolean putCooldown) {
 		if(((respectCooldown && this.moveCooldown <= 0) || !respectCooldown) && !this.isPaused() && !this.getRemove()) {

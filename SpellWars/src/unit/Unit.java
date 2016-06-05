@@ -35,6 +35,7 @@ public class Unit extends GameElement {
 	public float spellCastTimer;
 	float spellCastMaxTime;
 	public boolean isCasting;
+	public boolean isCoolingDown;
 	public Spell spellBeingCast;
 	
 	public Point gridLoc;
@@ -71,6 +72,7 @@ public class Unit extends GameElement {
 		this.drawShadow = true;
 		this.stunTimer = 0;
 		this.drawColor = Color.white;
+		this.isCoolingDown = false;
 	}
 	public void setDrawColor(Color drawColor) {
 		this.drawColor = drawColor;
@@ -119,7 +121,7 @@ public class Unit extends GameElement {
 			 */
 			if(this.isCasting && !this.isPaused()) {
 				if(this.spellCastTimer <= 0) {
-					if(!this.isPaused() && !this.getRemove() && this.spellBeingCast != null) {
+					if(!this.isPaused() && !this.getRemove() && this.spellBeingCast != null && !this.isCoolingDown) {
 						this.spellBeingCast.setOwner(this);
 						this.getMap().addGameElement(this.spellBeingCast);
 						this.spellBeingCast.activate();
@@ -128,9 +130,11 @@ public class Unit extends GameElement {
 						if(this.spellBeingCast.backswingTime == 0) {
 							this.isCasting = false;
 						}
-						this.spellBeingCast = null;
-					} else if(this.spellBeingCast == null) { //IF IT HAS COOLED DOWN
+						//this.spellBeingCast = null;
+						this.isCoolingDown = true;
+					} else if(this.isCoolingDown) { //IF IT HAS COOLED DOWN
 						this.isCasting = false;
+						this.isCoolingDown = false;
 					}
 				} else {
 					this.spellCastTimer -= this.getFrameTime();
@@ -171,11 +175,6 @@ public class Unit extends GameElement {
 			endPic = endPic.getScaledCopy((float) this.getSize());
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
-			float shadowRatio = (float) (this.getMap().getSizeOfPanel().x / this.getMap().getSizeOfPanel().y);
-			if(this.drawShadow) {
-				g.setColor(new Color(120, 120, 120, 120));
-				g.fillOval((float) (this.getLoc().x - SHADOW_SCALE * width/2), (float) (this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio)), (float)(width * SHADOW_SCALE), (float)(SHADOW_SCALE * width/shadowRatio));
-			}
 			Color col = Color.white;
 			if(this.drawMoveCooldown && this.moveCooldown > 0) {
 				col = new Color(205, 205, 235);
@@ -183,7 +182,7 @@ public class Unit extends GameElement {
 			if(this.drawSpellCasting && this.isCasting) {
 				col = new Color(220, 180, 90);
 				float barwidth = 0;
-				if(this.spellBeingCast != null){
+				if(!this.isCoolingDown){
 					g.setColor(new Color((int)((double)255 * (1-this.spellCastTimer/this.spellCastMaxTime)), 30, 30));
 					barwidth = CAST_BAR_WIDTH * (1-this.spellCastTimer/this.spellCastMaxTime);
 				} else {
@@ -209,6 +208,17 @@ public class Unit extends GameElement {
 		text.setOutlineColor(this.HPTextColor);
 		text.setRemoveNextFrame(true);
 		this.getMap().getUI().addUIElement(text);
+	}
+	@Override
+	public void drawShadow(Graphics g) {
+		if(this.drawShadow) {
+			Image endPic = this.getImage().getFlippedCopy(this.direction == GameMap.ID_LEFT, false);
+			endPic = endPic.getScaledCopy((float) this.getSize());
+			float width = endPic.getWidth();
+			float shadowRatio = (float) (this.getMap().getSizeOfPanel().x / this.getMap().getSizeOfPanel().y);
+			g.setColor(GameMap.SHADOW_COLOR);
+			g.fillOval((float) (this.getLoc().x - SHADOW_SCALE * width/2), (float) (this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio)), (float)(width * SHADOW_SCALE), (float)(SHADOW_SCALE * width/shadowRatio));
+		}
 	}
 	public void drawSpecialEffects(Graphics g) {
 		
@@ -294,15 +304,17 @@ public class Unit extends GameElement {
 				this.interruptCast();
 			}
 			if(spell.castTime == 0) {
+				this.spellBeingCast = spell;
 				spell.setOwner(this);
 				this.getMap().addGameElement(spell);
 				spell.activate();
 				this.isCasting = true;
 				this.spellCastTimer = spell.backswingTime;
 				this.spellCastMaxTime = spell.backswingTime;
-				this.spellBeingCast = null;
+				this.isCoolingDown = true;
 				if(spell.backswingTime == 0 && !spell.pauseWhenActivated) {
 					this.isCasting = false;
+					this.isCoolingDown = false;
 				}
 			} else {
 				this.spellBeingCast = spell;
@@ -318,8 +330,14 @@ public class Unit extends GameElement {
 		return this.castSpell(spell, false, false);
 	}
 	public void interruptCast() {
-		this.isCasting = false;
-		this.spellCastTimer = 0;
-		this.spellBeingCast = null;
+		if(!this.getRemove()) {
+			if(this.spellBeingCast != null && this.isCoolingDown) {
+				this.spellBeingCast.finishSpell();
+			}
+			this.isCasting = false;
+			this.spellCastTimer = 0;
+			this.spellBeingCast = null;
+			this.isCoolingDown = false;
+		}
 	}
 }

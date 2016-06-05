@@ -375,6 +375,9 @@ public abstract class GameElement {
 			g.drawImage(endPic, (float) this.loc.x - width/2, (float) this.loc.y - height/2 - this.getDrawHeight());
 		}
 	}
+	public void drawShadow(Graphics g) {
+		
+	}
 	public void drawStatusIcons(Graphics g) {
 		Point drawLoc = Point.add(this.getLoc(), new Point(-HEALTH_BAR_WIDTH/2, -HEALTH_BAR_OFFSET - 16));
 		int iconsPerRow = (int)(HEALTH_BAR_WIDTH / STATUS_EFFECT_ICON_SPACING);

@@ -10,7 +10,7 @@ import ui.Text;
 import ui.TextFormat;
 
 public class TimeBombUnit extends Unit {
-	public static final int HP = 20;
+	public static final int HP = 25;
 	public static final double SPEED = 1;
 	public static final int DETONATION_TIME = 5;
 	int ticksLeft;
