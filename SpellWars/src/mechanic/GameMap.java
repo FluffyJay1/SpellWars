@@ -219,12 +219,16 @@ public class GameMap {
 			temp.drawShadow(g);
 			g.resetTransform();
 		}
-		for(int x = 0; x < this.panelGrid.length; x++) { //draws units on panels, and projectiles on those panels
+		for(int x = 0; x < this.panelGrid.length; x++) { //draws units on panels + their shields, and projectiles on those panels
 			for(int y = 0; y < this.panelGrid[0].length; y++) {
 				GameElement temp = this.panelGrid[x][y].unitStandingOnPanel;
 				if(temp != null) {
 					temp.draw(g);
 					temp.hasBeenDrawn = true;
+					for(Shield s : ((Unit) temp).getShields()) {
+						s.draw(g);
+						s.hasBeenDrawn = true;
+					}
 				}
 				for(Projectile p : this.projectiles) {
 					if(Point.equals(p.getGridLoc(), new Point(x,y))) {

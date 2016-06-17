@@ -28,7 +28,7 @@ public class Unit extends GameElement {
 	public static final int CAST_BAR_HEIGHT = 10;
 	public static final double SHADOW_SCALE = 0.9;
 	public static final float EXTRA_SHIELDS_Y_OFFSET = -16;
-	public static final float EXTRA_SHIELDS_SCALE_BONUS = 0.5f;
+	public static final float EXTRA_SHIELDS_SCALE_BONUS = 0.2f;
 	//public static final Font HP_FONT = new UnicodeFont();
 	public int direction;
 	float moveCooldown;
@@ -89,6 +89,9 @@ public class Unit extends GameElement {
 		if(!this.shields.contains(shield)) {
 			this.shields.add(shield);
 		}
+	}
+	public ArrayList<Shield> getShields() {
+		return this.shields;
 	}
 	@Override
 	public boolean doDamage(double damage){
@@ -163,6 +166,7 @@ public class Unit extends GameElement {
 			}
 		}
 		this.shields.removeAll(shieldsRemoveBuffer);
+		
 		this.changeLoc(this.getMap().gridToPosition(this.gridLoc));
 		if(this.stunTimer > 0) {
 			this.stunTimer -= this.getFrameTime();
@@ -237,6 +241,16 @@ public class Unit extends GameElement {
 	}
 	@Override
 	public void draw(Graphics g){
+		int shieldsDrawn = 0;
+		for(Shield s : this.shields) {
+			s.setDrawOffset(EXTRA_SHIELDS_Y_OFFSET * shieldsDrawn);
+			s.setSize(1 + ((float)(shieldsDrawn) * EXTRA_SHIELDS_SCALE_BONUS));
+			shieldsDrawn++;
+			if(s.getRemove()) {
+				this.shieldsRemoveBuffer.add(s);
+			}
+		}
+		this.shields.removeAll(shieldsRemoveBuffer);
 		if(this.getImage() != null){
 			Image endPic = this.getImage().getFlippedCopy(this.direction == GameMap.ID_LEFT, false);
 			endPic = endPic.getScaledCopy((float) this.getSize());

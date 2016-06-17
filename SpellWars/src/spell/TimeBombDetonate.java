@@ -39,7 +39,7 @@ public class TimeBombDetonate extends Spell {
 	public void onSpellUpdate() {
 		this.timer -= this.getFrameTime();
 		if(timer <= 0.75){
-			this.owner.doDamage(9999);
+			this.owner.changeHP(0);
 		}
 		if(timer <= 0) {
 			this.finishSpell();
