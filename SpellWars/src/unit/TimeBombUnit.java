@@ -24,6 +24,7 @@ public class TimeBombUnit extends Unit {
 		this.ticksLeft = DETONATION_TIME;
 		this.setDrawHeight(40);
 		this.setThinkIntervalWithMove(true);
+		this.ignoreTeam = true;
 	}
 	@Override
 	public void onThink() {

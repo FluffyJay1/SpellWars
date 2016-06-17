@@ -14,8 +14,10 @@ import projectile.StunGrenade;
 import spell.AreaGrab;
 import spell.BouncingOrb;
 import spell.ForgeSpirit;
+import spell.ForgeSpiritFire;
 import spell.HellRain;
 import spell.PistolShot;
+import spell.ReflectBarrier;
 import spell.Spell;
 import spell.Stun;
 import spell.TestFireball;
@@ -186,7 +188,7 @@ public class SpellSelector extends UIElement {
 		}
 	}
 	public static Spell getRandomSpell(Unit unit) {
-		int numSpells = 10;
+		int numSpells = 11;
 		int num = (int)(Math.pow(Math.random(), 0.7) * numSpells); //weighted so that spells under a bigger num get picked more
 		switch(num) {
 		case 0:
@@ -196,18 +198,20 @@ public class SpellSelector extends UIElement {
 		case 2:
 			return new TimeBomb(unit);
 		case 3:
-			return new ForgeSpirit(unit);
+			return new ReflectBarrier(unit);
 		case 4:
-			return new HellRain(unit);
+			return new ForgeSpirit(unit);
 		case 5:
-			return new Stun(unit);
+			return new HellRain(unit);
 		case 6:
-			return new BouncingOrb(unit);
+			return new Stun(unit);
 		case 7:
-			return new WindCannon(unit);
+			return new BouncingOrb(unit);
 		case 8:
-			return new TestFireball(unit);
+			return new WindCannon(unit);
 		case 9:
+			return new TestFireball(unit);
+		case 10:
 			return new PistolShot(unit);
 		default:
 			return new TestFireball(unit);

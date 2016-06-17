@@ -13,6 +13,8 @@ import mechanic.GameMap;
 import mechanic.Panel;
 import mechanic.PanelState;
 import mechanic.Point;
+import projectile.Projectile;
+import shield.Shield;
 import spell.Spell;
 import ui.Text;
 import ui.TextFormat;
@@ -25,6 +27,8 @@ public class Unit extends GameElement {
 	public static final int CAST_BAR_WIDTH = 60;
 	public static final int CAST_BAR_HEIGHT = 10;
 	public static final double SHADOW_SCALE = 0.9;
+	public static final float EXTRA_SHIELDS_Y_OFFSET = -16;
+	public static final float EXTRA_SHIELDS_SCALE_BONUS = 0.5f;
 	//public static final Font HP_FONT = new UnicodeFont();
 	public int direction;
 	float moveCooldown;
@@ -42,6 +46,7 @@ public class Unit extends GameElement {
 	public int teamID;
 	public Panel panelStandingOn;
 	public boolean ignoreHoles;
+	public boolean ignoreTeam;
 	boolean thinkWithMove;
 	boolean drawShadow;
 	
@@ -50,6 +55,9 @@ public class Unit extends GameElement {
 	Color drawColor;
 	
 	float stunTimer;
+	
+	ArrayList<Shield> shields;
+	ArrayList<Shield> shieldsRemoveBuffer;
 	
 	Color HPTextColor;
 	public Unit(double hp, double maxHP, double speed, int direction, Point gridLoc, String imagePath, int teamID) {
@@ -73,6 +81,54 @@ public class Unit extends GameElement {
 		this.stunTimer = 0;
 		this.drawColor = Color.white;
 		this.isCoolingDown = false;
+		this.ignoreTeam = false;
+		this.shields = new ArrayList<Shield>();
+		this.shieldsRemoveBuffer = new ArrayList<Shield>();
+	}
+	public void addShield(Shield shield) {
+		if(!this.shields.contains(shield)) {
+			this.shields.add(shield);
+		}
+	}
+	@Override
+	public boolean doDamage(double damage){
+		boolean isKillingBlow = false;
+		if(damage > 0) {
+			if(this.shields.size() > 0) { //if there is at least one shield, blocks the whole instance of damage
+				this.shields.get(this.shields.size() - 1).doDamage(damage); //damages the most recent shield
+			} else {
+				isKillingBlow = this.changeHP(this.getHP() - damage);
+			}
+		} else {
+			this.changeHP(this.getHP() - damage); //heal
+		}
+		return isKillingBlow;
+	}
+	
+	public boolean doDamage(double damage, Projectile source){ //now with damage source
+		boolean isKillingBlow = false;
+		if(damage > 0) {
+			boolean damageBlocked = false;
+			for(int index = this.shields.size() - 1; index >= 0; index--) {
+				if(this.shields.get(index).getHP() > 0) { //if there is at least one shield, blocks the whole instance of damage
+					this.shields.get(this.shields.size() - 1).doDamage(damage); //damages the most recent shield
+					this.shields.get(this.shields.size() - 1).onHitByProjectile(source);
+					damageBlocked = true;
+					break;
+				}
+			}
+			if(!damageBlocked) {
+				isKillingBlow = this.changeHP(this.getHP() - damage);
+				this.onHitByProjectile(source);
+			}
+		} else {
+			this.changeHP(this.getHP() - damage); //heal
+		}
+		return isKillingBlow;
+	}
+	public void onHitByProjectile(Projectile source) {
+		
+		
 	}
 	public void setDrawColor(Color drawColor) {
 		this.drawColor = drawColor;
@@ -97,6 +153,16 @@ public class Unit extends GameElement {
 	}
 	@Override
 	public void update() {
+		int shieldsDrawn = 0;
+		for(Shield s : this.shields) {
+			s.setDrawOffset(EXTRA_SHIELDS_Y_OFFSET * shieldsDrawn);
+			s.setSize(1 + ((float)(shieldsDrawn) * EXTRA_SHIELDS_SCALE_BONUS));
+			shieldsDrawn++;
+			if(s.getRemove()) {
+				this.shieldsRemoveBuffer.add(s);
+			}
+		}
+		this.shields.removeAll(shieldsRemoveBuffer);
 		this.changeLoc(this.getMap().gridToPosition(this.gridLoc));
 		if(this.stunTimer > 0) {
 			this.stunTimer -= this.getFrameTime();
@@ -127,11 +193,12 @@ public class Unit extends GameElement {
 						this.spellBeingCast.activate();
 						this.spellCastTimer = this.spellBeingCast.backswingTime; //NOW COOLING DOWN
 						this.spellCastMaxTime = this.spellBeingCast.backswingTime;
+						this.isCoolingDown = true;
 						if(this.spellBeingCast.backswingTime == 0) {
 							this.isCasting = false;
+							this.isCoolingDown = false;
 						}
 						//this.spellBeingCast = null;
-						this.isCoolingDown = true;
 					} else if(this.isCoolingDown) { //IF IT HAS COOLED DOWN
 						this.isCasting = false;
 						this.isCoolingDown = false;
@@ -295,7 +362,7 @@ public class Unit extends GameElement {
 		}
 	}
 	public boolean canMoveToLoc(Point loc) {
-		return this.getMap().pointIsInGrid(loc) && this.getMap().getPanelAt(loc).teamID == this.teamID && this.getMap().getPanelAt(loc).unitStandingOnPanel == null
+		return this.getMap().pointIsInGrid(loc) && (this.getMap().getPanelAt(loc).teamID == this.teamID || this.ignoreTeam) && this.getMap().getPanelAt(loc).unitStandingOnPanel == null
 				&& !(!this.ignoreHoles && this.getMap().getPanelAt(loc).getPanelState() == PanelState.HOLE);
 	}
 	public boolean castSpell(Spell spell, boolean ignoreStun, boolean ignoreCast) {

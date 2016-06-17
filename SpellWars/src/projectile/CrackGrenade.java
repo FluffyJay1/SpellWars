@@ -19,9 +19,7 @@ public class CrackGrenade extends Grenade {
 		//String i = "res/particle_genericYellow.png";
 		if(Math.random() < this.crackChance) {
 			Panel panel = this.getMap().getPanelAt(this.endLoc);
-			if(panel.unitStandingOnPanel == null) {
-				panel.setPanelState(PanelState.CRACKED);
-			} else {
+			if(panel.getPanelState() != PanelState.HOLE) {
 				panel.setPanelState(PanelState.CRACKED);
 			}
 			ParticleEmitter pe = new ParticleEmitter(this.getLoc(), EmitterTypes.POINT_DIRECTION, GameMap.particle_genericWhite, false, //point/parent, emitter type, image path, alphaDecay

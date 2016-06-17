@@ -14,6 +14,7 @@ import particlesystem.ParticleEmitter;
 import particlesystem.Trail;
 import projectile.Grenade;
 import projectile.Projectile;
+import shield.Shield;
 import ui.UI;
 import unit.Player;
 import unit.Unit;
@@ -116,7 +117,7 @@ public class GameMap {
 						((Unit)element).panelStandingOn = null;
 					}
 				} else {
-					if(element.getHP() <= 0 && element instanceof Unit) {
+					if(element.getHP() <= 0 && (element instanceof Unit || element instanceof Shield)) {
 						element.onDeath();
 						element.setRemove(true);
 					}
@@ -238,9 +239,9 @@ public class GameMap {
 			g.setColor(new Color(0, 0, 0, 100));
 			g.fill(rect);
 		}
-		for(int i = 0; i < elementList.size(); i++) { //draw elements
+		for(int i = 0; i < elementList.size(); i++) { //draw elements that haven't been drawn before, excluding projectiles (since they should've been drawn before)
 			GameElement temp = elementList.get(i);
-			if(!temp.hasBeenDrawn) {
+			if(!temp.hasBeenDrawn && !(temp instanceof Projectile)) {
 				temp.draw(g);
 				temp.hasBeenDrawn = true;
 				g.resetTransform();
@@ -316,6 +317,15 @@ public class GameMap {
 		} else {
 			return null;
 		}
+	}
+	public ArrayList<Panel> getPanels() {
+		ArrayList<Panel> panels = new ArrayList<Panel>();
+		for(int x = 0; x < this.panelGrid.length; x++) {
+			for(int y = 0; y < this.panelGrid[0].length; y++) {
+				panels.add(this.panelGrid[x][y]);
+			}
+		}
+		return panels;
 	}
 	public ArrayList<Panel> getPanelsOfTeam(int teamID){
 		ArrayList<Panel> panels = new ArrayList<Panel>();

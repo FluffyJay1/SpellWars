@@ -15,6 +15,6 @@ public class TrumpWallUnit extends Unit {
 	}
 	@Override
 	public void onThink() {
-		this.doDamage(DAMAGE_PER_TICK);
+		this.changeHP(this.getHP() - DAMAGE_PER_TICK);
 	}
 }

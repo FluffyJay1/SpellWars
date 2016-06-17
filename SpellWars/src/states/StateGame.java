@@ -19,6 +19,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import particlesystem.ParticleEmitter;
 import projectile.Projectile;
+import shield.ReflectShield;
 import spell.Spell;
 import spell.TestFireball;
 import particlesystem.EmitterTypes;
@@ -215,8 +216,8 @@ public class StateGame extends BasicGameState{
 			this.devPause = !devPause;
 		}
 		if(key == Input.KEY_H) {
-			leftPlayer.doDamage(250);
-			rightPlayer.doDamage(250);
+			leftPlayer.doDamage(2500);
+			rightPlayer.doDamage(2500);
 		}
 		if(this.pickingPhase) {
 			switch(key) {

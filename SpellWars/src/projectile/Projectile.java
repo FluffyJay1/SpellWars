@@ -17,7 +17,7 @@ import unit.Unit;
 public class Projectile extends GameElement {
 	//public static final Font HP_FONT = new UnicodeFont();
 	public static final double SHADOW_SCALE = 0.8;
-	int direction;
+	public int direction;
 	public Point vel;
 	float moveCooldown;
 	boolean think;
@@ -73,6 +73,10 @@ public class Projectile extends GameElement {
 	@Override
 	public void onSetMap() {
 		this.changeLoc(this.getMap().gridToPosition(this.gridLoc));
+		if(!this.getMap().pointIsInGrid(this.getGridLoc())) {
+			this.setRemove(true);
+			this.unitsHit.clear();
+		}
 	}
 	@Override
 	public void setSpeed(double speed) {
@@ -97,13 +101,17 @@ public class Projectile extends GameElement {
 			if(this.getMap().pointIsInGrid(targetLoc)) {
 				Unit target = this.getMap().getPanelAt(targetLoc).unitStandingOnPanel;
 				if(target != null && target.teamID != this.teamID && !this.unitsHit.contains(target) && !this.getRemove()){
-					target.doDamage(this.getHP());
-					this.onTargetHit(target);
 					if(this.destroyOnImpact) {
 						this.setRemove(true);
 						this.unitsHit.clear();
+						target.doDamage(this.getHP(), this);
+						if(this.teamID != target.teamID) {
+							this.onTargetHit(target);
+						}
 						break;
 					} else {
+						target.doDamage(this.getHP(), this);
+						this.onTargetHit(target);
 						this.unitsHit.add(target);
 					}
 				}

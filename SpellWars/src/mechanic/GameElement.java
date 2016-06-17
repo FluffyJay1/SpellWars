@@ -343,10 +343,7 @@ public abstract class GameElement {
 		if(damage > 0) {
 			this.onDamaged(damage);
 		}
-		if(isKillingBlow) {
-			return true;
-		}
-		return false;
+		return isKillingBlow;
 	}
 	/**
 	 * Called when damage is dealt
