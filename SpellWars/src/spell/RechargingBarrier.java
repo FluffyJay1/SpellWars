@@ -10,7 +10,7 @@ public class RechargingBarrier extends Spell {
 	public static final int BLOCK_AMOUNT = 50;
 	public static final float DELAY = 0.4f;
 	public static final float REGEN_PER_SEC = 6;
-	public static final float DAMAGE_COOLDOWN_TIME = 7f;
+	public static final float DAMAGE_COOLDOWN_TIME = 4.5f;
 	float timer;
 	public RechargingBarrier(Unit owner) {
 		super(owner, 0, 0, "Recharging Barrier", "Gives all of your units a barrier that recharges after not taking damage for a while", "res/spell/rechargingbarrier.png", true);

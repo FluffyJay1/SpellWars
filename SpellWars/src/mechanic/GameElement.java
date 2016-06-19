@@ -376,7 +376,7 @@ public abstract class GameElement {
 		
 	}
 	public void drawStatusIcons(Graphics g) {
-		Point drawLoc = Point.add(this.getLoc(), new Point(-HEALTH_BAR_WIDTH/2, -HEALTH_BAR_OFFSET - 16));
+		Point drawLoc = Point.add(this.getLoc(), new Point(-HEALTH_BAR_WIDTH/2, -HEALTH_BAR_OFFSET - 16 - this.drawHeight));
 		int iconsPerRow = (int)(HEALTH_BAR_WIDTH / STATUS_EFFECT_ICON_SPACING);
 		int iconNum = 0;
 		ArrayList<String> alreadyDrawnStatusTypes = new ArrayList<String>(); //ONLY FOR STACKABLES

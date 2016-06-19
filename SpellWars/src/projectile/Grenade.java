@@ -69,7 +69,7 @@ public class Grenade extends Projectile {
 	}
 	@Override
 	public void onProjectileUpdate() {
-		this.timeElapsed += this.getFrameTime();
+		this.timeElapsed += this.getFrameTime() * this.getFinalSpeed() / this.getSpeed();
 		this.setDrawHeight(this.getHeightAt(this.timeElapsed));
 		//if(this.distance * (1 - this.timeElapsed/this.duration) < 0.5) { //if it is on the last panel
 		if(this.timeElapsed >= this.duration) {

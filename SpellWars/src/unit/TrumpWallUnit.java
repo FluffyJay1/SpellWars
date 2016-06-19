@@ -11,7 +11,7 @@ public class TrumpWallUnit extends Unit {
 		super(HP, HP, SPEED, GameMap.getOppositeDirection((char)teamID), gridLoc, "res/spell/trumpwall.png", teamID);
 		this.setDrawHeight(32);
 		this.setSize(0.75);
-		this.setThinkIntervalWithMove(true);
+		this.setThinkInterval((float)(1/SPEED));
 	}
 	@Override
 	public void onThink() {

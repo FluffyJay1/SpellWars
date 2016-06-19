@@ -6,7 +6,7 @@ import particlesystem.EmitterTypes;
 import particlesystem.ParticleEmitter;
 
 public class StunGrenade extends Grenade {
-	public static final float AIR_DURATION = 0.8f;
+	public static final float AIR_DURATION = 0.7f;
 	public static final Point[] AFFECTED_POINTS = {new Point(), new Point(1, 0), new Point(0, 1), new Point(0, -1), new Point(-1, 0)};
 	float maxStunDuration;
 	float minStunDuration;

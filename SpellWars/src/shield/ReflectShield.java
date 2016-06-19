@@ -32,11 +32,12 @@ public class ReflectShield extends Shield {
 			Point temploc = Point.clone(((Grenade)p).startLoc);
 			((Grenade)p).startLoc = Point.clone(((Grenade)p).endLoc);
 			((Grenade)p).endLoc = temploc;
-			if(p.useMoveVec) {
-				p.move(p.vel, false, false);
-			} else {
-				p.move(p.direction, false, false);
-			}
+			
+		}
+		if(p.useMoveVec) {
+			p.move(p.vel, false, false);
+		} else {
+			p.move(p.direction, false, false);
 		}
 	}
 }

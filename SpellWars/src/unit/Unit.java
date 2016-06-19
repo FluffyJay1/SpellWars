@@ -174,11 +174,15 @@ public class Unit extends GameElement {
 				this.moveCooldown -= this.getFrameTime();
 			}
 			if(this.think) {
-				this.thinkTimer -= this.getFrameTime();
+				if(this.thinkWithMove) {
+					this.thinkTimer -= this.getFrameTime() * this.getFinalSpeed();
+				} else {
+					this.thinkTimer -= this.getFrameTime();
+				}
 				while(this.thinkTimer <= 0) {
 					this.onThink();
 					if(this.thinkWithMove) {
-						this.thinkTimer += (float) (1/this.getFinalSpeed());
+						this.thinkTimer += 1;
 					} else {
 						this.thinkTimer += this.thinkInterval;
 					}

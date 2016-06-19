@@ -334,6 +334,9 @@ public class GameMap {
 		}
 		return panels;
 	}
+	public ArrayList<Projectile> getProjectiles() {
+		return this.projectiles;
+	}
 	public ArrayList<Panel> getPanelsOfTeam(int teamID){
 		ArrayList<Panel> panels = new ArrayList<Panel>();
 		for(int x = 0; x < this.panelGrid.length; x++) {

@@ -21,8 +21,10 @@ import particlesystem.ParticleEmitter;
 import projectile.Projectile;
 import shield.RechargingShield;
 import shield.ReflectShield;
+import spell.PlayerFire;
 import spell.Spell;
 import spell.TestFireball;
+import statuseffect.StatusFrost;
 import particlesystem.EmitterTypes;
 import ui.SpellSelector;
 import ui.StartButton;
@@ -272,8 +274,14 @@ public class StateGame extends BasicGameState{
 			case Input.KEY_E:
 				leftPlayer.castNextAvailableSpell();
 				break;
+			case Input.KEY_Q:
+				leftPlayer.castSpell(new PlayerFire(leftPlayer));
+				break;
 			case Input.KEY_PERIOD:
 				rightPlayer.castNextAvailableSpell();
+				break;
+			case Input.KEY_SLASH:
+				rightPlayer.castSpell(new PlayerFire(rightPlayer));
 				break;
 			case Input.KEY_W:
 				leftPlayer.move(GameMap.ID_UP, true, true, true, true, true);

@@ -23,6 +23,7 @@ public class Projectile extends GameElement {
 	boolean think;
 	float thinkInterval;
 	float thinkTimer;
+	boolean thinkWithMove;
 	Point gridLoc;
 	Point futureLoc;
 	Point pastFrameGridLoc;
@@ -46,10 +47,12 @@ public class Projectile extends GameElement {
 		this.think = false;
 		this.thinkInterval = -1;
 		this.thinkTimer = 0;
+		this.thinkWithMove = false;
 		this.teamID = teamID;
 		this.simpleProjectile = simpleProjectile;
 		if(speed != 0) {
-			this.setThinkInterval((float)(1/this.getFinalSpeed()));
+			//this.setThinkInterval((float)(1/this.getFinalSpeed()));
+			this.setThinkIntervalWithMove(true);
 		}
 		this.destroyOnImpact = destroyOnImpact;
 		this.ignoreHoles = ignoreHoles;
@@ -95,7 +98,7 @@ public class Projectile extends GameElement {
 	@Override
 	public void update() {
 		this.flash();
-		this.changeLoc(this.getMap().gridToPosition(Point.interpolate(this.gridLoc, this.futureLoc, 1 - (this.thinkTimer/this.thinkInterval))));
+		this.changeLoc(this.getMap().gridToPosition(Point.interpolate(this.gridLoc, this.futureLoc, 1 - (this.thinkTimer))));
 		//Point targetLoc = this.getGridLoc();
 		for(Point targetLoc : Point.getPointsBetween(this.pastFrameGridLoc, this.getGridLoc())) {
 			if(this.getMap().pointIsInGrid(targetLoc)) {
@@ -122,7 +125,11 @@ public class Projectile extends GameElement {
 			}
 		}
 		if(this.think) {
-			this.thinkTimer -= this.getFrameTime();
+			if(this.thinkWithMove) {
+				this.thinkTimer -= this.getFrameTime() * this.getFinalSpeed();
+			} else {
+				this.thinkTimer -= this.getFrameTime();
+			}
 			while(this.thinkTimer <= 0) {
 				this.onThink();
 				this.gridLoc = this.futureLoc;
@@ -133,7 +140,11 @@ public class Projectile extends GameElement {
 						this.move(this.direction, false, true);
 					}
 				}
-				this.thinkTimer += this.thinkInterval;
+				if(this.thinkWithMove) {
+					this.thinkTimer += 1;
+				} else {
+					this.thinkTimer += this.thinkInterval;
+				}
 				//System.out.println("gridLoc: " + this.gridLoc.toString());
 				//System.out.println("futureloc: " + this.futureLoc.toString());
 				//System.out.println("getGridLoc: " + this.getGridLoc().toString());
@@ -169,7 +180,7 @@ public class Projectile extends GameElement {
 		} else if(1 - this.thinkTimer/this.thinkInterval > 1) {
 			return this.futureLoc;
 		} else {
-			return Point.roundToNearestInteger(Point.interpolate(this.gridLoc, this.futureLoc, 1 - this.thinkTimer/this.thinkInterval));
+			return Point.roundToNearestInteger(Point.interpolate(this.gridLoc, this.futureLoc, 1 - this.thinkTimer));
 		}
 	}
 	public void setThinkInterval(float interval) {
@@ -178,6 +189,12 @@ public class Projectile extends GameElement {
 		}
 		this.think = true;
 		this.thinkInterval = interval;
+	}
+	public void setThinkIntervalWithMove(boolean thinkWithMove){
+		this.thinkWithMove = thinkWithMove;
+		if(thinkWithMove) {
+			this.setThinkInterval((float) (1/this.getFinalSpeed()));
+		}
 	}
 	public void setImageScale(float imageScale){
 		this.imageScale = imageScale;

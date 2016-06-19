@@ -12,6 +12,7 @@ import mechanic.GameMap;
 import mechanic.Point;
 import projectile.StunGrenade;
 import spell.AreaGrab;
+import spell.Blizzard;
 import spell.BouncingOrb;
 import spell.ForgeSpirit;
 import spell.ForgeSpiritFire;
@@ -201,19 +202,21 @@ public class SpellSelector extends UIElement {
 				new WindCannon(unit),
 				new TestFireball(unit),
 				new PistolShot(unit),
+				new Blizzard(unit)
 		};
-		double[] weights = {0.4, //TRUMP WALL
-				0.6, //reflect barrier
+		double[] weights = {0.45, //TRUMP WALL
+				110.6, //reflect barrier
 				0.5, //area grab
 				0.7, //recharging barrier
 				0.7, //time bomb
 				1.2, //forge spirit
-				0.8, //hell rain
+				110.8, //hell rain
 				1.0, //stun
-				1.5, //bouncing orb
-				1.1, //wind cannon
-				2.1, //firebreath
-				2.2, //pistol shot
+				1.3, //bouncing orb
+				1.0, //wind cannon
+				1.6, //firebreath
+				1.9, //pistol shot
+				0.6 //blizzard
 		};
 		double totalWeight = 0;
 		for(int i = 0; i < weights.length; i++) {
