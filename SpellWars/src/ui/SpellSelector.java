@@ -205,12 +205,12 @@ public class SpellSelector extends UIElement {
 				new Blizzard(unit)
 		};
 		double[] weights = {0.45, //TRUMP WALL
-				110.6, //reflect barrier
+				0.6, //reflect barrier
 				0.5, //area grab
 				0.7, //recharging barrier
 				0.7, //time bomb
 				1.2, //forge spirit
-				110.8, //hell rain
+				0.8, //hell rain
 				1.0, //stun
 				1.3, //bouncing orb
 				1.0, //wind cannon
