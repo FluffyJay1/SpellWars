@@ -175,9 +175,9 @@ public class Projectile extends GameElement {
 		
 	}
 	public Point getGridLoc() {
-		if(1 - this.thinkTimer/this.thinkInterval < 0) {
+		if(1 - this.thinkTimer < 0) {
 			return this.gridLoc;
-		} else if(1 - this.thinkTimer/this.thinkInterval > 1) {
+		} else if(1 - this.thinkTimer > 1) {
 			return this.futureLoc;
 		} else {
 			return Point.roundToNearestInteger(Point.interpolate(this.gridLoc, this.futureLoc, 1 - this.thinkTimer));
