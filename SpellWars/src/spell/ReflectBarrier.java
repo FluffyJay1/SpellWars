@@ -10,7 +10,7 @@ public class ReflectBarrier extends Spell {
 	public static final float DELAY = 0.4f;
 	float timer;
 	public ReflectBarrier(Unit owner) {
-		super(owner, 0, 0, "Reflect Barrier", "Gives all of your units a temporary barrier that blocks some damage and reflects ground projectiles back to the enemy", "res/spell/reflectbarrier.png", true);
+		super(owner, 0, 0, "Reflect Barrier", "Gives all of your units a temporary barrier that blocks some damage and reflects projectiles back to the enemy", "res/spell/reflectbarrier.png", true);
 		this.timer = DELAY;
 	}
 	@Override

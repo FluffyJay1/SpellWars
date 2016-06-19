@@ -18,9 +18,9 @@ public class Grenade extends Projectile {
 	float b;
 	float c;
 	float duration; //set upon construction, used to calculate how high the grenade is
-	float timeElapsed; //time elapsed since start
-	Point startLoc;
-	Point endLoc;
+	public float timeElapsed; //time elapsed since start
+	public Point startLoc;
+	public Point endLoc;
 	
 	int damage;
 	boolean hasHitApex;
@@ -76,11 +76,13 @@ public class Grenade extends Projectile {
 			if(this.getMap().pointIsInGrid(this.endLoc)) {
 				Unit target = this.getMap().getPanelAt(this.endLoc).unitStandingOnPanel;
 				if(target != null && target.teamID != this.teamID && !this.getRemove()){
-					target.doDamage(this.damage);
+					target.doDamage(this.damage, false, this);
 					this.onGrenadeHitTarget(target);
 				}
-				this.onGrenadeLanded();
-				this.setRemove(true);
+				if(this.timeElapsed >= this.duration) {
+					this.onGrenadeLanded();
+					this.setRemove(true);
+				}
 			}
 		}
 		if(!this.hasHitApex && this.timeElapsed >= ACCELERATION/b/2) {

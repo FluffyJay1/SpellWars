@@ -2,6 +2,7 @@ package shield;
 
 import mechanic.GameMap;
 import mechanic.Point;
+import projectile.Grenade;
 import projectile.Projectile;
 import unit.Unit;
 
@@ -26,5 +27,16 @@ public class ReflectShield extends Shield {
 		p.direction = GameMap.getOppositeDirection((char)p.direction);
 		p.vel = Point.scale(p.vel, -1);
 		p.setRemove(false);
+		if(p instanceof Grenade) {
+			((Grenade)p).timeElapsed = 0;
+			Point temploc = Point.clone(((Grenade)p).startLoc);
+			((Grenade)p).startLoc = Point.clone(((Grenade)p).endLoc);
+			((Grenade)p).endLoc = temploc;
+			if(p.useMoveVec) {
+				p.move(p.vel, false, false);
+			} else {
+				p.move(p.direction, false, false);
+			}
+		}
 	}
 }

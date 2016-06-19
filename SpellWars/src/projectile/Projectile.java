@@ -30,7 +30,7 @@ public class Projectile extends GameElement {
 	boolean simpleProjectile;
 	boolean destroyOnImpact;
 	boolean ignoreHoles;
-	boolean useMoveVec;
+	public boolean useMoveVec;
 	ArrayList<Unit> unitsHit;
 	float imageScale;
 	public boolean flashPanel;
