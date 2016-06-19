@@ -27,8 +27,8 @@ public abstract class GameElement {
 	public GameMap map;
 	private int level;
 	private int maxLevel;
-	private double hp;
-	private double maxHP;
+	public double hp;
+	public double maxHP;
 	private double speed;
 	
 	public float finalSpeedModifier;

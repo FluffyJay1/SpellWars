@@ -117,8 +117,11 @@ public class GameMap {
 						((Unit)element).panelStandingOn = null;
 					}
 				} else {
-					if(element.getHP() <= 0 && (element instanceof Unit || element instanceof Shield)) {
+					if(element.getHP() <= 0 && (element instanceof Unit || (element instanceof Shield && ((Shield)element).removeOnKill && !((Shield)element).isDead))) { 
 						element.onDeath();
+						if(element instanceof Shield) {
+							((Shield)element).isDead = true;
+						}
 						element.setRemove(true);
 					}
 					element.update(); 

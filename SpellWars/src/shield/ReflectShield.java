@@ -7,9 +7,9 @@ import unit.Unit;
 
 public class ReflectShield extends Shield {
 	float timer;
-	public ReflectShield(Unit owner, float duration) {
-		super(owner, 1, 1, "res/shield/reflectshield.png");
-		this.drawHP = false;
+	public ReflectShield(Unit owner, float duration, int blockAmount) {
+		super(owner, blockAmount, blockAmount, "res/shield/reflectshield.png");
+		this.drawHP = true;
 		this.setDrawHeight(owner.getDrawHeight());
 		this.timer = duration;
 	}
@@ -17,7 +17,7 @@ public class ReflectShield extends Shield {
 	public void onUpdate() {
 		this.timer -= this.getFrameTime();
 		if(this.timer <= 0) {
-			this.setRemove(true);
+			this.isDead = true;
 		}
 	}
 	@Override

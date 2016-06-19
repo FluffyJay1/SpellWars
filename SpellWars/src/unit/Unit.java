@@ -27,8 +27,8 @@ public class Unit extends GameElement {
 	public static final int CAST_BAR_WIDTH = 60;
 	public static final int CAST_BAR_HEIGHT = 10;
 	public static final double SHADOW_SCALE = 0.9;
-	public static final float EXTRA_SHIELDS_Y_OFFSET = -16;
-	public static final float EXTRA_SHIELDS_SCALE_BONUS = 0.2f;
+	public static final float EXTRA_SHIELDS_Y_OFFSET = -18;
+	public static final float EXTRA_SHIELDS_SCALE_BONUS = 0.28f;
 	//public static final Font HP_FONT = new UnicodeFont();
 	public int direction;
 	float moveCooldown;
@@ -95,34 +95,33 @@ public class Unit extends GameElement {
 	}
 	@Override
 	public boolean doDamage(double damage){
-		boolean isKillingBlow = false;
-		if(damage > 0) {
-			if(this.shields.size() > 0) { //if there is at least one shield, blocks the whole instance of damage
-				this.shields.get(this.shields.size() - 1).doDamage(damage); //damages the most recent shield
-			} else {
-				isKillingBlow = this.changeHP(this.getHP() - damage);
-			}
-		} else {
-			this.changeHP(this.getHP() - damage); //heal
-		}
-		return isKillingBlow;
+		return this.doDamage(damage, false, null);
 	}
 	
-	public boolean doDamage(double damage, Projectile source){ //now with damage source
+	public boolean doDamage(double damage, boolean ignoreShields, Projectile source){ //now with damage source
 		boolean isKillingBlow = false;
 		if(damage > 0) {
 			boolean damageBlocked = false;
-			for(int index = this.shields.size() - 1; index >= 0; index--) {
-				if(this.shields.get(index).getHP() > 0) { //if there is at least one shield, blocks the whole instance of damage
-					this.shields.get(this.shields.size() - 1).doDamage(damage); //damages the most recent shield
-					this.shields.get(this.shields.size() - 1).onHitByProjectile(source);
-					damageBlocked = true;
-					break;
+			if(!ignoreShields) {
+				for(int index = this.shields.size() - 1; index >= 0; index--) {
+					if(this.shields.get(index).blockDamage && this.shields.get(index).getHP() > 0) { //if there is at least one shield, blocks the whole instance of damage
+						this.shields.get(index).doDamage(damage); //damages the most recent shield
+						if(source != null) {
+							this.shields.get(index).onHitByProjectile(source);
+						}
+						damageBlocked = true;
+						break;
+					}
 				}
 			}
 			if(!damageBlocked) {
 				isKillingBlow = this.changeHP(this.getHP() - damage);
-				this.onHitByProjectile(source);
+				if(source != null) {
+					this.onHitByProjectile(source);
+				}
+				for(Shield s : this.shields) {
+					s.onOwnerDamaged(damage);
+				}
 			}
 		} else {
 			this.changeHP(this.getHP() - damage); //heal

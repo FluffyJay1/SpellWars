@@ -17,6 +17,7 @@ import spell.ForgeSpirit;
 import spell.ForgeSpiritFire;
 import spell.HellRain;
 import spell.PistolShot;
+import spell.RechargingBarrier;
 import spell.ReflectBarrier;
 import spell.Spell;
 import spell.Stun;
@@ -188,34 +189,77 @@ public class SpellSelector extends UIElement {
 		}
 	}
 	public static Spell getRandomSpell(Unit unit) {
-		int numSpells = 11;
+		Spell[] spells = {new TrumpWall(unit),
+				new ReflectBarrier(unit),
+				new AreaGrab(unit),
+				new RechargingBarrier(unit),
+				new TimeBomb(unit),
+				new ForgeSpirit(unit),
+				new HellRain(unit),
+				new Stun(unit),
+				new BouncingOrb(unit),
+				new WindCannon(unit),
+				new TestFireball(unit),
+				new PistolShot(unit),
+		};
+		double[] weights = {0.4, //TRUMP WALL
+				0.6, //reflect barrier
+				0.5, //area grab
+				0.7, //recharging barrier
+				0.7, //time bomb
+				1.2, //forge spirit
+				0.8, //hell rain
+				1.0, //stun
+				1.5, //bouncing orb
+				1.1, //wind cannon
+				2.1, //firebreath
+				2.2, //pistol shot
+		};
+		double totalWeight = 0;
+		for(int i = 0; i < weights.length; i++) {
+			totalWeight += weights[i];
+		}
+		double random = Math.random() * totalWeight;
+		double runningTotal = 0;
+		for(int i = 0; i < weights.length; i++) {
+			if(random < weights[i] + runningTotal) {
+				return spells[i];
+			} else {
+				runningTotal += weights[i];
+			}
+		}
+		return new TestFireball(unit);
+		/* OLD SYSTEM
 		int num = (int)(Math.pow(Math.random(), 0.7) * numSpells); //weighted so that spells under a bigger num get picked more
 		switch(num) {
 		case 0:
 			return new TrumpWall(unit);
 		case 1:
-			return new AreaGrab(unit);
-		case 2:
-			return new TimeBomb(unit);
-		case 3:
 			return new ReflectBarrier(unit);
+		case 2:
+			return new AreaGrab(unit);
+		case 3:
+			return new RechargingBarrier(unit);
 		case 4:
-			return new ForgeSpirit(unit);
+			return new TimeBomb(unit);
 		case 5:
-			return new HellRain(unit);
+			return new ForgeSpirit(unit);
 		case 6:
-			return new Stun(unit);
+			return new HellRain(unit);
 		case 7:
-			return new BouncingOrb(unit);
+			return new Stun(unit);
 		case 8:
-			return new WindCannon(unit);
+			return new BouncingOrb(unit);
 		case 9:
-			return new TestFireball(unit);
+			return new WindCannon(unit);
 		case 10:
+			return new TestFireball(unit);
+		case 11:
 			return new PistolShot(unit);
 		default:
 			return new TestFireball(unit);
 		}
+		*/
 	}
 	@Override
 	public void draw(Graphics g) {

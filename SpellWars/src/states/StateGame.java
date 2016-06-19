@@ -19,6 +19,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import particlesystem.ParticleEmitter;
 import projectile.Projectile;
+import shield.RechargingShield;
 import shield.ReflectShield;
 import spell.Spell;
 import spell.TestFireball;

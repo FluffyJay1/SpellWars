@@ -19,7 +19,7 @@ public class Trump extends Unit {
 	public static final double SPEED_SPECIAL_PER_LEVEL = 0.75;
 	public static final int MOVES_PER_FIRE = 9;
 	public static final int MOVES_VARIATION = 3;
-	public static final float TRUMP_WALL_COOLDOWN = 30;
+	public static final float TRUMP_WALL_COOLDOWN = 40;
 	public static final float SPECIAL_COOLDOWN = 9;
 	public static final double TRUMP_WALL_MULTIPLIER_PER_LEVEL = 0.98;
 	public static final double SPECIAL_COOLDOWN_MULTIPLIER_PER_LEVEL = 0.97;

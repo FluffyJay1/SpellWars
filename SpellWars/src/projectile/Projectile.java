@@ -104,13 +104,13 @@ public class Projectile extends GameElement {
 					if(this.destroyOnImpact) {
 						this.setRemove(true);
 						this.unitsHit.clear();
-						target.doDamage(this.getHP(), this);
+						target.doDamage(this.getHP(), false, this);
 						if(this.teamID != target.teamID) {
 							this.onTargetHit(target);
 						}
 						break;
 					} else {
-						target.doDamage(this.getHP(), this);
+						target.doDamage(this.getHP(), false, this);
 						this.onTargetHit(target);
 						this.unitsHit.add(target);
 					}
