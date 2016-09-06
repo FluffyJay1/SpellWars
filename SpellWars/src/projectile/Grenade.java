@@ -22,7 +22,7 @@ public class Grenade extends Projectile {
 	public Point startLoc;
 	public Point endLoc;
 	
-	int damage;
+	double grenadeDamage;
 	boolean hasHitApex;
 	public boolean flashDestinationPanel;
 	public Grenade(int damage, double duration, int distance, float initialHeight, float endHeight, int direction, Point gridLoc, String imagePath, int teamID) {
@@ -38,8 +38,9 @@ public class Grenade extends Projectile {
 		this.flashPanel = false;
 		this.flashDestinationPanel = true;
 		this.drawShadow = true;
-		this.damage = damage;
+		this.grenadeDamage = damage;
 		this.hasHitApex = false;
+		this.canDoDamage = false;
 	}
 	public Grenade(int damage, double duration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
 		super(0, 1/duration, endDisplacement, gridLoc, imagePath, teamID, false, true, true);
@@ -53,8 +54,25 @@ public class Grenade extends Projectile {
 		this.flashPanel = false;
 		this.flashDestinationPanel = true;
 		this.drawShadow = true;
-		this.damage = damage;
+		this.grenadeDamage = damage;
 		this.hasHitApex = false;
+		this.canDoDamage = false;
+	}
+	@Override
+	public void setDamage(double damage) {
+		this.grenadeDamage = damage;
+	}
+	@Override
+	public void changeDamage(double damage) {
+		this.grenadeDamage += damage;
+	}
+	@Override
+	public double getDamage() {
+		return this.grenadeDamage;
+	}
+	@Override
+	public double getFinalDamage() {
+		return this.grenadeDamage * this.finalDamageModifier;
 	}
 	@Override
 	public void flash() {
@@ -76,7 +94,7 @@ public class Grenade extends Projectile {
 			if(this.getMap().pointIsInGrid(this.endLoc)) {
 				Unit target = this.getMap().getPanelAt(this.endLoc).unitStandingOnPanel;
 				if(target != null && target.teamID != this.teamID && !this.getRemove()){
-					target.doDamage(this.damage, false, this);
+					target.doDamage(this.getFinalDamage(), false, this);
 					this.onGrenadeHitTarget(target);
 				}
 				if(this.timeElapsed >= this.duration) {
@@ -88,10 +106,14 @@ public class Grenade extends Projectile {
 		if(!this.hasHitApex && this.timeElapsed >= ACCELERATION/b/2) {
 			this.hasHitApex = true;
 		}
+		this.onGrenadeUpdate();
 		/*
 		System.out.println("frametime IS: " + this.getFrameTime());
 		System.out.println(this.getHeightAt(this.timeElapsed));
 		*/
+	}
+	public void onGrenadeUpdate() {
+		
 	}
 	public void onGrenadeLanded() {
 		//String i = "res/particle_genericYellow.png";

@@ -17,7 +17,7 @@ public class BouncingOrb extends Spell {
 	}
 	@Override
 	public void onActivate() {
-		Projectile projectile = new BouncingOrbProjectile(DAMAGE, SPEED, GameMap.getFuturePoint(this.owner.gridLoc, GameMap.getOppositeDirection((char)this.owner.teamID)), this.owner.teamID, NUM_SQUARES);
+		Projectile projectile = new BouncingOrbProjectile(DAMAGE * this.owner.finalDamageModifier, SPEED, GameMap.getFuturePoint(this.owner.gridLoc, GameMap.getOppositeDirection((char)this.owner.teamID)), this.owner.teamID, NUM_SQUARES);
 		this.getMap().addGameElement(projectile);
 		/*
 		projectile = new BouncingOrbProjectile(DAMAGE, SPEED, this.owner.gridLoc, this.owner.teamID, NUM_SQUARES);

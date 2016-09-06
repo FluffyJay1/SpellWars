@@ -25,6 +25,8 @@ public class Spell extends GameElement {
 	public float backswingTime;
 	boolean pausedByStuns;
 	static final float TEXT_DURATION = 1.2f;
+	static final float TEXT_Y_OFFSET = 200;
+	Text spellText;
 	public Spell(Unit owner, float castTime, float backswingTime, String name, String description, String imagepath, boolean pauseWhenActivated) {
 		super();
 		this.owner = owner;
@@ -41,6 +43,7 @@ public class Spell extends GameElement {
 		this.castTime = castTime;
 		this.backswingTime = backswingTime;
 		this.pausedByStuns = false;
+		this.spellText = new Text(null, Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 18, 30, 22, 30, Color.white, "", TextFormat.CENTER_JUSTIFIED);
 	}
 	public Spell(String name, float castTime, float backswingTime, String description, String imagepath, boolean pauseWhenActivated) {
 		this(null, castTime, backswingTime, name, description, imagepath, pauseWhenActivated);
@@ -48,6 +51,12 @@ public class Spell extends GameElement {
 	public Spell(Unit owner, float castTime, float backswingTime, String name, String description, String imagepath, boolean pauseWhenActivated, boolean pausedByStuns) {
 		this(owner, castTime, backswingTime, name, description, imagepath, pauseWhenActivated);
 		this.pausedByStuns = pausedByStuns;
+	}
+	@Override
+	public void onSetMap() {
+		this.spellText.setUI(this.getMap().getUI());
+		this.spellText.setUseOutline(true);
+		this.spellText.setElementToRemoveWith(this);
 	}
 	public void setOwner(Unit owner) {
 		this.owner = owner;
@@ -57,6 +66,7 @@ public class Spell extends GameElement {
 		if(this.pauseWhenActivated) {
 			this.getMap().pauseAll();
 			this.setPause(false);
+			this.getMap().getUI().addUIElement(this.spellText);
 		}
 		if(!this.pauseWhenActivated) {
 			this.onActivate();
@@ -87,6 +97,9 @@ public class Spell extends GameElement {
 				}
 			}
 		}
+		if(this.activated && this.textTimer >= 0 && this.pauseWhenActivated) {
+			this.textTimer -= this.getFrameTime();
+		}
 	}
 	public void onSpellUpdate() {
 		
@@ -102,9 +115,13 @@ public class Spell extends GameElement {
 	public void onActivate() {
 		
 	}
+	public void onStartCast() {
+		
+	}
 	@Override
 	public void draw(Graphics g) {
 		if(this.activated && this.textTimer >= 0 && this.pauseWhenActivated){
+			this.spellText.setText(this.name.toUpperCase());
 			/*
 			Point loc = new Point();
 			if(this.owner != null) {
@@ -116,9 +133,16 @@ public class Spell extends GameElement {
 			loc.add(new Point(0, -150 * ((this.textTimer/TEXT_DURATION) - (this.textTimer/TEXT_DURATION) * (this.textTimer/TEXT_DURATION))));
 			g.drawString(this.name, (float)loc.x - g.getFont().getWidth(this.name)/2, (float)loc.y);
 			*/
-			this.textTimer -= this.getFrameTime();
 			float ratio = this.textTimer/TEXT_DURATION;
-			Text text = new Text(this.getMap().getUI(), Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 18, 30, 22, 30, Color.white, this.name.toUpperCase(), TextFormat.CENTER_JUSTIFIED);
+			if(ratio > 0.8) {
+				spellText.setLetterHeight((int)((1 - ratio) * 150));
+				spellText.changeLoc(Point.add(this.owner.getLoc(), new Point(-200, -200 - (1 - ratio) * 75)));
+			} else if(ratio < 0.2) {
+				spellText.setLetterHeight((int)(ratio * 150));
+				spellText.changeLoc(Point.add(this.owner.getLoc(), new Point(-200, -200 - ratio * 75)));
+			} 
+			/*
+			Text text = new Text(this.getMap().getUI(), Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 18, 30, 22, 30, Color.white, this.name.toUpperCase(), TextFormat.CENTER_JUSTIFIED);;
 			if(ratio > 0.8) {
 				text.setLetterHeight((int)((1 - ratio) * 150));
 				text.changeLoc(Point.add(this.owner.getLoc(), new Point(-200, -200 - (1 - ratio) * 75)));
@@ -129,6 +153,7 @@ public class Spell extends GameElement {
 			text.setUseOutline(true);
 			text.setRemoveNextFrame(true);
 			this.getMap().getUI().addUIElement(text);
+			*/
 		} else {
 			this.drawSpecialEffects(g);
 		}

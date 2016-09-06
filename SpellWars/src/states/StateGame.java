@@ -21,7 +21,14 @@ import particlesystem.ParticleEmitter;
 import projectile.Projectile;
 import shield.RechargingShield;
 import shield.ReflectShield;
+import spell.CryoFreeze;
+import spell.EndothermicBlasterPrimary;
+import spell.EndothermicBlasterSecondary;
+import spell.IceWall;
+import spell.MeiBlizzard;
+import spell.Omnislash;
 import spell.PlayerFire;
+import spell.Slash;
 import spell.Spell;
 import spell.TestFireball;
 import statuseffect.StatusFrost;
@@ -33,6 +40,7 @@ import ui.TextFormat;
 import ui.UI;
 import ui.UIElement;
 import unit.Boss;
+import unit.Mei;
 import unit.Player;
 import unit.Trump;
 import unit.Unit;
@@ -68,16 +76,18 @@ public class StateGame extends BasicGameState{
 		container.setClearEachFrame(true);
 		this.setBackgroundImage("res/trail_lightning.png");
 		map = new GameMap(8, 4, //dimensions of game grid
-				1600, 500, //dimensions of map
-				new Point(160, 500)); //top left corner of map (map coordinates)
+				Game.WINDOW_WIDTH * 5/6 /*1600 on 1920x1080 monitors*/, Game.WINDOW_HEIGHT * 540/1080 /*540 on 1920x1080 monitors*/, //dimensions of map
+				new Point(Game.WINDOW_WIDTH/12, Game.WINDOW_HEIGHT * 500/1080)); //top left corner of map (map coordinates)
 		ui = new UI();
 		map.setUI(ui);
-		leftPlayer = new Player(300, 5, GameMap.ID_LEFT, new Point(0,0));
+		Point leftStartLoc = new Point(0, 0);
+		Point rightStartLoc = new Point(7, 3);
+		leftPlayer = new Player(400, 5, GameMap.ID_LEFT, leftStartLoc);
 		//this.map.getPanelAt(leftPlayer.gridLoc).unitStandingOnPanel = leftPlayer;
 		leftSelect = new SpellSelector(ui, new Point(0, 0), GameMap.ID_LEFT, leftPlayer);
-		rightPlayer = new Player(300, 5, GameMap.ID_RIGHT, new Point(7,3));
+		rightPlayer = new Player(400, 5, GameMap.ID_RIGHT, rightStartLoc);
 		//this.map.getPanelAt(rightPlayer.gridLoc).unitStandingOnPanel = rightPlayer;
-		rightSelect = new SpellSelector(ui, new Point(1920, 0), GameMap.ID_RIGHT, rightPlayer);
+		rightSelect = new SpellSelector(ui, new Point(Game.WINDOW_WIDTH, 0), GameMap.ID_RIGHT, rightPlayer);
 		if(Game.leftPlayer.equals(PlayerType.PLAYER)) {
 			map.addUnit(leftPlayer);
 		} else {
@@ -90,25 +100,36 @@ public class StateGame extends BasicGameState{
 		}
 		
 		if(Game.leftPlayer.equals(PlayerType.COMPUTER)) {
-			Unit boss = new Boss(new Point(0,0), (int)GameMap.ID_LEFT, Game.leftLevel);
+			Unit boss = new Boss(leftStartLoc, (int)GameMap.ID_LEFT, Game.leftLevel);
 			map.addUnit(boss);
 		}
 		if(Game.rightPlayer.equals(PlayerType.COMPUTER)) {
-			Unit boss = new Boss(new Point(7,3), (int)GameMap.ID_RIGHT, Game.rightLevel);
+			Unit boss = new Boss(rightStartLoc, (int)GameMap.ID_RIGHT, Game.rightLevel);
 			map.addUnit(boss);
 		}
 		
 		if(Game.leftPlayer.equals(PlayerType.TRUMP)) {
-			Unit boss = new Trump(new Point(0,0), (int)GameMap.ID_LEFT, Game.leftLevel);
+			Unit boss = new Trump(leftStartLoc, (int)GameMap.ID_LEFT, Game.leftLevel);
 			map.addUnit(boss);
 		}
 		if(Game.rightPlayer.equals(PlayerType.TRUMP)) {
-			Unit boss = new Trump(new Point(7,3), (int)GameMap.ID_RIGHT, Game.rightLevel);
+			Unit boss = new Trump(rightStartLoc, (int)GameMap.ID_RIGHT, Game.rightLevel);
 			map.addUnit(boss);
 		}
 		
+		if(Game.leftPlayer.equals(PlayerType.MEI)) {
+			Unit boss = new Mei(leftStartLoc, (int)GameMap.ID_LEFT, Game.leftLevel);
+			map.addUnit(boss);
+			//this.setBackgroundImage("res/0074.png");
+		}
+		if(Game.rightPlayer.equals(PlayerType.MEI)) {
+			Unit boss = new Mei(rightStartLoc, (int)GameMap.ID_RIGHT, Game.rightLevel);
+			map.addUnit(boss);
+			//this.setBackgroundImage("res/0074.png");
+		}
 		
-		battlePhaseText = new Text(ui, new Point(760, 24), 400, 16, 24, 18, 26, Color.white, "time until next spell selection: ", TextFormat.CENTER_JUSTIFIED);
+		
+		battlePhaseText = new Text(ui, new Point(Game.WINDOW_WIDTH/2 - 200, 24), 400, 16, 24, 18, 26, Color.white, "time until next spell selection: ", TextFormat.CENTER_JUSTIFIED);
 		battlePhaseText.setUseOutline(true);
 		//ui.addUIElement(battlePhaseText);
 		
@@ -117,7 +138,7 @@ public class StateGame extends BasicGameState{
 		pickingPhase = false;
 		readyTimer = 0;
 		battlePhaseTimer = 0;
-		readyText = new Text(ui, new Point(760, 540), 400, 24, 0, 28, 24, Color.white, "GET READY!", TextFormat.CENTER_JUSTIFIED);
+		readyText = new Text(ui, new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2), 400, 24, 0, 28, 24, Color.white, "GET READY!", TextFormat.CENTER_JUSTIFIED);
 		readyText.setUseOutline(true);
 		ui.addUIElement(readyText);
 	}
@@ -125,7 +146,7 @@ public class StateGame extends BasicGameState{
 	@Override
 	public void render(GameContainer container, StateBasedGame arg1, Graphics g) throws SlickException {
 		//g.clear();
-		backgroundImage.drawWarped(1920, 0, 1920, 1080, 0, 1080, 0, 0); //start with topright, then clockwise
+		backgroundImage.drawWarped(Game.WINDOW_WIDTH, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT, 0, Game.WINDOW_HEIGHT, 0, 0); //start with topright, then clockwise
 		map.draw(g);
 		ui.draw(g);
 		//map.drawGridHighlight(g, map.getMousePosition());
@@ -166,10 +187,10 @@ public class StateGame extends BasicGameState{
 			float ratio = readyTimer/READY_TIME;
 			if(ratio > 0.8) {
 				this.readyText.setLetterHeight((int)((1 - ratio) * 200));
-				this.readyText.changeLoc(new Point(760, 540 - (1 - ratio) * 100));
+				this.readyText.changeLoc(new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - (1 - ratio) * 100));
 			} else if(ratio < 0.2) {
 				this.readyText.setLetterHeight((int)(ratio * 200));
-				this.readyText.changeLoc(new Point(760, 540 - ratio * 100));
+				this.readyText.changeLoc(new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - ratio * 100));
 			} 
 		} else {
 			this.readyText.setLetterHeight(0);
@@ -221,6 +242,9 @@ public class StateGame extends BasicGameState{
 		if(key == Input.KEY_H) {
 			leftPlayer.doDamage(2500);
 			rightPlayer.doDamage(2500);
+		}
+		if(key == Input.KEY_J) {
+			System.out.println("map.isPaused() is " + this.map.isPaused());
 		}
 		if(this.pickingPhase) {
 			switch(key) {

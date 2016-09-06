@@ -16,14 +16,14 @@ public class WindCannon extends Spell {
 	}
 	@Override
 	public void onSetMap() {
-		WindProjectile projectile = new WindProjectile(DAMAGE, SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+		WindProjectile projectile = new WindProjectile((int)(DAMAGE * this.owner.finalDamageModifier), SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 		this.getMap().addGameElement(projectile);
 		this.shotsFired = 1;
 	}
 	@Override
 	public void onThink() {
 		int random = (int)(Math.random() * 3) - 1;
-		WindProjectile projectile = new WindProjectile(DAMAGE, SPEED, this.owner.direction, Point.add(this.owner.gridLoc, new Point(0, random)), this.owner.teamID);
+		WindProjectile projectile = new WindProjectile((int)(DAMAGE * this.owner.finalDamageModifier), SPEED, this.owner.direction, Point.add(this.owner.gridLoc, new Point(0, random)), this.owner.teamID);
 		this.getMap().addGameElement(projectile);
 		this.shotsFired++;
 		if(this.shotsFired >= NUM_SHOTS) {

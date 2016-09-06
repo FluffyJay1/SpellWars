@@ -44,6 +44,9 @@ public class GameMap {
 	public static Image particle_genericBlue;
 	public static Image particle_genericWhite;
 	public static Image particle_explosion;
+	public static Image particle_heal;
+	public static Image particle_timedilationgood;
+	public static Image particle_timedilationbad;
 	static boolean imagesLoaded = false;
 	ArrayList<GameElement> elementList = new ArrayList<GameElement>();
 	ArrayList<GameElement> elementBuffer = new ArrayList<GameElement>();
@@ -84,6 +87,9 @@ public class GameMap {
 				particle_genericBlue = new Image("res/particle_genericBlue.png");
 				particle_genericWhite = new Image("res/particle_genericWhite.png");
 				particle_explosion = new Image("res/particle_explosion.png");
+				particle_heal = new Image("res/particle_heal.png");
+				particle_timedilationgood = new Image("res/particle_timedilationgood.png");
+				particle_timedilationbad = new Image("res/particle_timedilationbad.png");
 				imagesLoaded = true;
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
@@ -116,6 +122,7 @@ public class GameMap {
 						((Unit)element).panelStandingOn.unitStandingOnPanel = null;
 						((Unit)element).panelStandingOn = null;
 					}
+					element.setMap(null);
 				} else {
 					if(element.getHP() <= 0 && (element instanceof Unit || (element instanceof Shield && ((Shield)element).removeOnKill && !((Shield)element).isDead))) { 
 						element.onDeath();
@@ -128,6 +135,9 @@ public class GameMap {
 					element.updateStatusEffects();
 					element.updateRegardsToParent();
 				}
+			}
+			if(element instanceof Unit && ((Unit)element).spellCastIgnorePause) {
+				((Unit)element).updateSpellTimers();
 			}
 		}
 		for(int i = 0; i < particleList.size(); i++) {
@@ -280,22 +290,22 @@ public class GameMap {
 		}
 	}
 	public void addUnit(Unit u, boolean respectPanelTeam) {
-		u.setMap(this);
 		if(this.pointIsInGrid(u.gridLoc) && this.getPanelAt(u.gridLoc).unitStandingOnPanel == null && !(!u.ignoreHoles && this.getPanelAt(u.gridLoc).getPanelState() == PanelState.HOLE)
-				&& (u.canMoveToLoc(u.gridLoc) || !respectPanelTeam)) {
+				&& (u.canMoveToLoc(u.gridLoc, this) || !respectPanelTeam)) {
 			this.addGameElement(u);
 			this.getPanelAt(u.gridLoc).unitStandingOnPanel = u;
 			u.panelStandingOn = this.getPanelAt(u.gridLoc);
 			u.changeLoc(this.gridToPosition(u.gridLoc)); 
+			
 		} else {
 			for(Point p : Point.proximity8(u.gridLoc)) {
 				if(this.pointIsInGrid(p) && this.getPanelAt(p).unitStandingOnPanel == null && !(!u.ignoreHoles && this.getPanelAt(p).getPanelState() == PanelState.HOLE)
-						&& (u.canMoveToLoc(p) || !respectPanelTeam)) {
+						&& (u.canMoveToLoc(p, this) || !respectPanelTeam)) {
 					this.addGameElement(u);
 					u.gridLoc = p;
 					this.getPanelAt(p).unitStandingOnPanel = u;
 					u.panelStandingOn = this.getPanelAt(p);
-					u.changeLoc(this.gridToPosition(p)); 
+					u.changeLoc(this.gridToPosition(p));
 					break;
 				}
 			}
@@ -434,6 +444,32 @@ public class GameMap {
 	public Point getSizeOfPanel() {
 		return new Point(this.mWidth/this.gWidth, this.mHeight/this.gHeight);
 	}
+	public Point[] getCornerPositionsOfGridPoints(Point p1, Point p2) {
+		double leftx, rightx;
+		double topy, bottomy;
+		Point p1p = this.gridToPosition(p1);
+		Point p2p = this.gridToPosition(p2);
+		if(p1p.x < p2p.x) {
+			leftx = p1p.x;
+			rightx = p2p.x;
+		} else {
+			leftx = p2p.x;
+			rightx = p1p.x;
+		}
+		leftx -= this.getSizeOfPanel().x/2;
+		rightx += this.getSizeOfPanel().x/2;
+		if(p1p.y < p2p.y) {
+			topy = p1p.y;
+			bottomy = p2p.y;
+		} else {
+			topy = p2p.y;
+			bottomy = p1p.y;
+		}
+		topy -= this.getSizeOfPanel().y/2;
+		bottomy += this.getSizeOfPanel().y/2;
+		Point[] points = {new Point(leftx, topy), new Point(rightx, bottomy)};
+		return points;
+	}
 	public static char getOppositeDirection(char dir) {
 		char tempDir = (char) (dir + 4);
 		if(tempDir >= 8){
@@ -489,5 +525,13 @@ public class GameMap {
 			break;
 		}
 		return Point.add(p, moveVec);
+	}
+	public void printPanels() {
+		for(int row = 0; row < this.getGridDimensions().y; row++) {
+			for(int column = 0; column < this.getGridDimensions().x; column++) {
+				System.out.print(new Point(column, row).toString() + " hasUnit " + this.panelGrid[column][row].unitStandingOnPanel != null + " ");
+			}
+			System.out.print("\n");
+		}
 	}
 }

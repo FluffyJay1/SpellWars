@@ -15,7 +15,7 @@ public class PistolShot extends Spell {
 	}
 	@Override
 	public void onActivate() {
-		Projectile projectile = new Projectile(DAMAGE, SPEED, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), this.owner.gridLoc, "res/particle_genericRed.png", this.owner.teamID, true, true, true);
+		Projectile projectile = new Projectile(DAMAGE * this.owner.finalDamageModifier, SPEED, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), this.owner.gridLoc, "res/particle_genericRed.png", this.owner.teamID, true, true, true);
 		this.map.addGameElement(projectile);
 		projectile.setDrawHeight(28);
 		projectile.setImageScale(5);

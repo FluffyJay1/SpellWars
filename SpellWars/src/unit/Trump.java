@@ -40,6 +40,7 @@ public class Trump extends Unit {
 		this.isFirstMove = true;
 		this.trumpWallCooldown = (float) (TRUMP_WALL_COOLDOWN * Math.pow(TRUMP_WALL_MULTIPLIER_PER_LEVEL, level));
 		this.specialCooldown = (float)(SPECIAL_COOLDOWN * Math.pow(SPECIAL_COOLDOWN_MULTIPLIER_PER_LEVEL, level));
+		this.isImportant = true;
 	}
 	@Override
 	public void onThink() {

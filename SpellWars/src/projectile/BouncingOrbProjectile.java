@@ -20,7 +20,7 @@ public class BouncingOrbProjectile extends Projectile {
 	}
 	@Override
 	public void onProjectileUpdate() {
-		if(this.clearUnitsHitNextTime && this.thinkTimer/this.thinkInterval < 0.5) {
+		if(this.clearUnitsHitNextTime && this.thinkTimer < 0.5) {
 			this.unitsHit.clear();
 			this.clearUnitsHitNextTime = false;
 		}

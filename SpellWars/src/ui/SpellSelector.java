@@ -14,17 +14,23 @@ import projectile.StunGrenade;
 import spell.AreaGrab;
 import spell.Blizzard;
 import spell.BouncingOrb;
+import spell.DamageAmp;
 import spell.ForgeSpirit;
 import spell.ForgeSpiritFire;
 import spell.HellRain;
+import spell.MysteryBox;
+import spell.Omnislash;
 import spell.PistolShot;
 import spell.RechargingBarrier;
 import spell.ReflectBarrier;
+import spell.Regenerate;
 import spell.Spell;
 import spell.Stun;
 import spell.TestFireball;
 import spell.TimeBomb;
+import spell.TimeDilation;
 import spell.TrumpWall;
+import spell.VacuumCannon;
 import spell.WindCannon;
 import unit.Player;
 import unit.Unit;
@@ -40,13 +46,14 @@ public class SpellSelector extends UIElement {
 	public static final Point HIGHLIGHTED_SPELL_DIMENSIONS = new Point(200, 200);
 	public static final Point SPELLS_SELECTED_DRAWLOC_TOP = new Point(352, 94);
 	public static final Point SPELLS_SELECTED_DRAWLOC_TOP_BATTLE = new Point(64, 94);
-	public static final float SPELLS_SELECTED_DRAW_HEIGHT = 198;
+	public static final float SPELLS_SELECTED_DRAW_HEIGHT = 250; //originally 198
 	public static final Point SPELL_ICON_DIMENSIONS = new Point(48, 48);
 	public static final Point SPELL_NAME_LOC = new Point(400, 36);
 	public static final Point SPELL_DESCRIPTION_LOC = new Point(412, 128);
 	public static final Point SPELL_SELECT_HELP_LOC = new Point(400, 350);
 	public static final int MAX_SELECTED_SPELLS = 4;
 	public static final String SELECTOR_IMAGEPATH = "res/ui/gridSelect.png";
+	public static final float SPELL_CAST_HELP_OFFSET = 10;
 	char style;
 	UIBox box;
 	Point selectorLoc;
@@ -55,9 +62,14 @@ public class SpellSelector extends UIElement {
 	ArrayList<Spell> selectedSpells; 
 	Player player;
 	boolean pickingPhase;
+	
+	boolean hasCastFirstSpell;
+	int prevNumSelectedSpells;
+	
 	Text spellName;
 	Text spellDescription;
 	Text spellSelectHelp;
+	Text spellCastHelp;
 	public SpellSelector(UI ui, Point loc, char style, Player player) {
 		super(ui, loc);
 		this.setIsFront(true);
@@ -92,10 +104,23 @@ public class SpellSelector extends UIElement {
 		this.spellSelectHelp = new Text(ui, Point.add(SPELL_SELECT_HELP_LOC, this.box.getTopLeftLoc()), 386, 12, 14, 13, 15, new Color(230, 230, 240), "", TextFormat.LEFT_JUSTIFIED);
 		this.spellSelectHelp.setUseOutline(true);
 		this.addChild(spellSelectHelp);
+		this.spellCastHelp = new Text(ui, new Point(SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.x + SPELL_CAST_HELP_OFFSET, SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.y), 386, 12, 14, 13, 15, new Color(230, 230, 240), "", TextFormat.LEFT_JUSTIFIED);
+		this.addChild(spellCastHelp);
 		if(style == GameMap.ID_LEFT) {
 			this.spellSelectHelp.setText("WASD to move, E to select, Q to deselect, T to finish selecting");
 		} else if(style == GameMap.ID_RIGHT) {
 			this.spellSelectHelp.setText("arrows to move, (.) to select, (/) to deselect, L to finish selecting");
+		}
+		
+		this.hasCastFirstSpell = false;
+		this.prevNumSelectedSpells = 0;
+	}
+	@Override
+	public void update() {
+		if(!this.hasCastFirstSpell && this.prevNumSelectedSpells > this.selectedSpells.size() && this.prevNumSelectedSpells != 0) {
+			this.spellCastHelp.setRemove(true);
+		} else {
+			this.prevNumSelectedSpells = this.selectedSpells.size();
 		}
 	}
 	public void updateText() {
@@ -132,6 +157,15 @@ public class SpellSelector extends UIElement {
 			this.spellName.setText("");
 			this.spellDescription.setText("");
 			this.spellSelectHelp.setRemove(true);
+			if(!this.player.getRemove() && this.selectedSpells.size() > 0) {
+				if(this.style == GameMap.ID_LEFT) {
+					this.spellCastHelp.setText("press (E) to cast!");
+				} else {
+					this.spellCastHelp.changeLoc(new Point(-SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.x - 384 -SPELL_CAST_HELP_OFFSET, SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.y));
+					this.spellCastHelp.format = TextFormat.RIGHT_JUSTIFIED;
+					this.spellCastHelp.setText("press (.) to cast!");
+				}
+			}
 		} else {
 			this.box.setImage("res/ui/uibox_texture.png");
 			this.box.setEdgeColor(new Color(125, 125, 200, 200));
@@ -159,6 +193,7 @@ public class SpellSelector extends UIElement {
 				this.availableSpells.add(this.selectedSpells.get(index));
 				this.selectedSpells.remove(index);
 			}
+			this.updateText();
 		}
 	}
 	public void removeSelectedSpells() {
@@ -202,12 +237,18 @@ public class SpellSelector extends UIElement {
 				new WindCannon(unit),
 				new TestFireball(unit),
 				new PistolShot(unit),
-				new Blizzard(unit)
+				new Blizzard(unit),
+				new Regenerate(unit),
+				new DamageAmp(unit),
+				new Omnislash(unit),
+				new TimeDilation(unit),
+				new VacuumCannon(unit),
+				new MysteryBox(unit)
 		};
 		double[] weights = {0.45, //TRUMP WALL
-				0.6, //reflect barrier
-				0.5, //area grab
-				0.7, //recharging barrier
+				0.45, //reflect barrier
+				0.55, //area grab
+				0.5, //recharging barrier
 				0.7, //time bomb
 				1.2, //forge spirit
 				0.8, //hell rain
@@ -215,9 +256,19 @@ public class SpellSelector extends UIElement {
 				1.3, //bouncing orb
 				1.0, //wind cannon
 				1.6, //firebreath
-				1.9, //pistol shot
-				0.6 //blizzard
+				1.8, //pistol shot
+				0.45, //blizzard
+				0.6, //regenerate
+				0.5, //damage amp
+				0.4, //omnislash
+				0.45, //time dilation
+				0.75, //vacuum cannon
+				0.4 //mystery box
 		};
+		if(spells.length != weights.length) {
+			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");
+			System.out.println("size of spells: " + spells.length + ". size of weights: " + weights.length);
+		}
 		double totalWeight = 0;
 		for(int i = 0; i < weights.length; i++) {
 			totalWeight += weights[i];
@@ -299,7 +350,7 @@ public class SpellSelector extends UIElement {
 			} else {
 				localDrawLoc = Point.clone(SPELLS_SELECTED_DRAWLOC_TOP_BATTLE);
 				if(this.style == GameMap.ID_RIGHT) {
-					localDrawLoc.x = -localDrawLoc.x;
+					localDrawLoc.x = -localDrawLoc.x + SPELL_ICON_DIMENSIONS.x;
 				}
 			}
 			Point spellDrawLoc = Point.add(Point.add(localDrawLoc, Point.add(this.getLoc(), this.box.getTopLeftLoc())), new Point(0, SPELLS_SELECTED_DRAW_HEIGHT * i/(MAX_SELECTED_SPELLS-1)));
@@ -312,6 +363,9 @@ public class SpellSelector extends UIElement {
 			if(i < this.selectedSpells.size()) {
 				//draws a spell icon if there is a spell
 				g.drawImage(this.selectedSpells.get(i).getImage().getScaledCopy((int)SPELL_ICON_DIMENSIONS.x, (int)SPELL_ICON_DIMENSIONS.y), (float)(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y));
+				if(i == 0 && !this.pickingPhase) {
+					g.drawImage(selectorImage.getScaledCopy((int)SPELL_ICON_DIMENSIONS.x, (int)SPELL_ICON_DIMENSIONS.y), (float)(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y));
+				}
 			}
 		}
 		if(this.pickingPhase) {

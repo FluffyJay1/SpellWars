@@ -54,7 +54,7 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 		ui.addUIElement(button);
 		leftSelector = new PlayerTypeSelector(ui, new Point(400,800));
 		ui.addUIElement(leftSelector);
-		rightSelector = new PlayerTypeSelector(ui, new Point(1520,800));
+		rightSelector = new PlayerTypeSelector(ui, new Point(Game.WINDOW_WIDTH - 400,800));
 		ui.addUIElement(rightSelector);
 	}
 	

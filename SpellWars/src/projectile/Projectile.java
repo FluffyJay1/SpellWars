@@ -36,8 +36,12 @@ public class Projectile extends GameElement {
 	float imageScale;
 	public boolean flashPanel;
 	public boolean drawShadow;
+	
+	double damage;
+	public boolean canDoDamage;
+	
 	public Projectile(double damage, double speed, int direction, Point gridLoc, String imagePath, int teamID, boolean destroyOnImpact, boolean simpleProjectile, boolean ignoreHoles) {
-		super(damage, damage, speed, 0, new Point(), 1, 0, imagePath);
+		super(0, 0, speed, 0, new Point(), 1, 0, imagePath);
 		this.useMoveVec = false;
 		this.gridLoc = gridLoc;
 		this.pastFrameGridLoc = gridLoc;
@@ -61,6 +65,8 @@ public class Projectile extends GameElement {
 		this.imageScale = 1;
 		this.flashPanel = true;
 		this.drawShadow = false;
+		this.damage = damage;
+		this.canDoDamage = true;
 	}
 	public Projectile(double damage, double speed, Point moveVec, Point gridLoc, String imagePath, int teamID, boolean destroyOnImpact, boolean simpleProjectile, boolean ignoreHoles) {
 		this(damage, speed, GameMap.ID_NEUTRAL, gridLoc, imagePath, teamID, destroyOnImpact, simpleProjectile, ignoreHoles);
@@ -80,6 +86,10 @@ public class Projectile extends GameElement {
 			this.setRemove(true);
 			this.unitsHit.clear();
 		}
+		this.onProjectileSetMap();
+	}
+	public void onProjectileSetMap() {
+		
 	}
 	@Override
 	public void setSpeed(double speed) {
@@ -107,15 +117,21 @@ public class Projectile extends GameElement {
 					if(this.destroyOnImpact) {
 						this.setRemove(true);
 						this.unitsHit.clear();
-						target.doDamage(this.getHP(), false, this);
+						if(this.canDoDamage) {
+							target.doDamage(this.getFinalDamage(), false, this);
+						}
 						if(this.teamID != target.teamID) {
 							this.onTargetHit(target);
 						}
 						break;
 					} else {
-						target.doDamage(this.getHP(), false, this);
-						this.onTargetHit(target);
-						this.unitsHit.add(target);
+						if(this.canDoDamage) {
+							target.doDamage(this.getFinalDamage(), false, this);
+						}
+						if(this.teamID != target.teamID) {
+							this.onTargetHit(target);
+							this.unitsHit.add(target);
+						}
 					}
 				}
 				if(!this.ignoreHoles && this.getMap().getPanelAt(targetLoc).getPanelState() == PanelState.HOLE) {
@@ -173,6 +189,24 @@ public class Projectile extends GameElement {
 	}
 	public void onTargetHit(Unit target) {
 		
+	}
+	public void setDamage(double damage) {
+		this.damage = damage;
+		if(this.damage < 0) {
+			this.damage = 0;
+		}
+	}
+	public void changeDamage(double damage) {
+		this.damage += damage;
+		if(this.damage < 0) {
+			this.damage = 0;
+		}
+	}
+	public double getDamage() {
+		return this.damage;
+	}
+	public double getFinalDamage() {
+		return this.damage * this.finalDamageModifier;
 	}
 	public Point getGridLoc() {
 		if(1 - this.thinkTimer < 0) {

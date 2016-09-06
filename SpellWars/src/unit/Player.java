@@ -13,6 +13,7 @@ import spell.ForgeSpirit;
 import spell.Spell;
 import spell.TestFireball;
 import spell.TimeBombDetonate;
+import ui.SpellSelector;
 
 public class Player extends Unit {
 	ArrayList<Spell> spells = new ArrayList<Spell>();
@@ -22,9 +23,18 @@ public class Player extends Unit {
 		this.drawMoveCooldown = true;
 		this.drawSpellCasting = true;
 		this.HPTextColor = Color.black;
+		this.isImportant = true;
 	}
 	public void setSpells(ArrayList<Spell> spells) {
 		this.spells = spells;
+	}
+	public void addSpell(Spell spell) {
+		if(this.spells.size() < SpellSelector.MAX_SELECTED_SPELLS) {
+			this.spells.add(spell);
+		}
+	}
+	public int getNumSpells() {
+		return this.spells.size();
 	}
 	public void castNextAvailableSpell() {
 		if(!this.isCasting && this.stunTimer <= 0 && this.spells.size() > 0 && !this.isPaused() && !this.getRemove()) {
@@ -35,7 +45,7 @@ public class Player extends Unit {
 	@Override 
 	public void onDeath() {
 		this.interruptCast();
-		this.castSpell(new ForgeSpirit(this, 8), true, true);
+		this.castSpell(new ForgeSpirit(this, 8), true, true, true);
 	}
 	/*
 	@Override

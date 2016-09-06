@@ -54,7 +54,7 @@ public class StunGrenade extends Grenade {
 				} else {
 					if(this.getMap().getPanelAt(f).unitStandingOnPanel != null && this.getMap().getPanelAt(f).unitStandingOnPanel.teamID != this.teamID) {
 						this.getMap().getPanelAt(f).unitStandingOnPanel.stun(minStunDuration);
-						this.getMap().getPanelAt(f).unitStandingOnPanel.doDamage(this.damage);
+						this.getMap().getPanelAt(f).unitStandingOnPanel.doDamage(this.grenadeDamage);
 					}
 					ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(f), EmitterTypes.POINT_DIRECTION, GameMap.particle_genericBlue, false, //point/parent, emitter type, image path, alphaDecay
 							2.5f, 1.5f, //particle start scale

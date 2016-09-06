@@ -35,6 +35,9 @@ public class UI {
 			if(u.getRemoveNextFrame()) {
 				u.setRemove(true);
 			}
+			if(u.elementToRemoveWith != null && u.elementToRemoveWith.isDisconnected()) {
+				u.setRemove(true);
+			}
 		}
 		for(UIElement u : this.elementList) {
 			u.updateRelationships();

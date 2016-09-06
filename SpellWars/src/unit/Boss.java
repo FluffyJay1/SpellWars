@@ -24,6 +24,7 @@ public class Boss extends Unit {
 		this.setSize(1.4);
 		this.setDrawHeight(60);
 		this.setThinkIntervalWithMove(true);
+		this.isImportant = true;
 	}
 	@Override
 	public void onThink() {

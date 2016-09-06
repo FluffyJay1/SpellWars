@@ -13,7 +13,7 @@ public class Stun extends Spell {
 	}
 	@Override
 	public void onActivate() {
-		StunGrenade snade = new StunGrenade(DAMAGE, MAX_STUN_DURATION, MIN_STUN_DURATION, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+		StunGrenade snade = new StunGrenade((int)(DAMAGE * this.owner.finalDamageModifier), MAX_STUN_DURATION, MIN_STUN_DURATION, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 		this.getMap().addGameElement(snade);
 		this.finishSpell();
 	}

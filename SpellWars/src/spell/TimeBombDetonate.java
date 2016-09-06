@@ -30,7 +30,7 @@ public class TimeBombDetonate extends Spell {
 	public void onActivate() {
 		for(Point p : AFFECTED_POINTS) {
 			//Point f = Point.add(p, this.owner.gridLoc);
-			Projectile projectile = new Grenade(DAMAGE, 1.25, p, 10, 10, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
+			Projectile projectile = new Grenade((int)(DAMAGE * this.owner.finalDamageModifier), 1.25, p, 10, 10, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
 			projectile.setImageScale(2);
 			this.map.addGameElement(projectile);
 		}

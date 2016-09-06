@@ -238,6 +238,8 @@ public class Text extends UIElement {
 		}
 	}
 	public void drawCharacter(Point loc, int index, Graphics g, boolean isUppercase) {
+		Image characterImage = characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight);
+		characterImage.setAlpha(this.getAlpha());
 		if(useOutline && !isUppercase) {
 			/* OBLITERATES FRAMERATE
 			ArrayList<Point> points = getOutlinePoints(loc, this.letterWidth * 0.0833, this.letterHeight * 0.0633, this.outlineWidth);
@@ -246,10 +248,10 @@ public class Text extends UIElement {
 			}
 			*/
 			
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY()), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX()), (float)(loc.getY() + this.letterHeight * 0.0633), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY()), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY()), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() + this.letterHeight * 0.0633), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY()), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
 			
 		}
 		if(useOutline && isUppercase) {
@@ -260,24 +262,24 @@ public class Text extends UIElement {
 			}
 			*/
 			
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() + this.letterWidth * 0.1667), (float)(loc.getY()), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY() + this.letterHeight * 0.0633), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX()), (float)(loc.getY() + this.letterHeight * 0.1266), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY() + this.letterHeight * 0.0633), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() - this.letterWidth * 0.1667), (float)(loc.getY()), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.1266), outlineColor);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX() + this.letterWidth * 0.1667), (float)(loc.getY()), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY() + this.letterHeight * 0.0633), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() + this.letterHeight * 0.1266), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY() + this.letterHeight * 0.0633), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX() - this.letterWidth * 0.1667), (float)(loc.getY()), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.1266), outlineColor);
+			g.drawImage(characterImage, (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
 			
 			
 		}
-		g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)loc.getX(), (float)loc.getY(), color);
+		g.drawImage(characterImage, (float)loc.getX(), (float)loc.getY(), color);
 		if(isUppercase) {
 			//boldens the text
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY()), color);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX()), (float)(loc.getY() + this.letterHeight * 0.0633), color);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY()), color);
-			g.drawImage(characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight), (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.0633), color);
+			g.drawImage(characterImage, (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY()), color);
+			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() + this.letterHeight * 0.0633), color);
+			g.drawImage(characterImage, (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY()), color);
+			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.0633), color);
 		}
 	}
 	/*

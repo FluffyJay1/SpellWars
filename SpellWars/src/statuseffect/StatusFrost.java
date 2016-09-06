@@ -9,34 +9,18 @@ import org.newdawn.slick.SlickException;
 
 
 import mechanic.GameElement;
+import mechanic.GameMap;
+import mechanic.Point;
 
 
 public class StatusFrost extends StatusEffect {
-	/*----
-	 * STATUS EFFECT: Frost
-	 * ---
-	 * AFFECTS: Monsters
-	 * DAMAGETYPE: Magic
-	 * STACKING: No
-	 * ID: frost
-	 * 
-	 * --DESCRIPTION--
-	 * Slows and deals damage, once per sec starting on creation
-	 * 
-	 * --FIXED ATTRIBUTES--
-	 * Damage interval: 1
-	 * 
-	 * --MODIFIED ATTRIBUTES--
-	 * speedModifier
-	 * damagePerSecond
-	 * duration
-	 */
 	public static final String ID = "frost"; //for stacking
 	//public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
 	static Image icon;
 	static boolean imageLoaded = false;
-	public StatusFrost(GameElement owner, float speedModifier, float damagePerSecond, float duration, int level) {
-		super(owner, StackingProperty.UNSTACKABLE_REPLACE, ID, duration, level);
+	//float damageChange;
+	public StatusFrost(GameElement owner, float speedModifier, float damagePerSecond, float duration, float damageChange, int level) {
+		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, duration, level);
 		if(imageLoaded == false) {
 			try {
 				icon = new Image("res/statuseffect/icon_frost.png");
@@ -49,13 +33,16 @@ public class StatusFrost extends StatusEffect {
 		this.damagePerInterval = damagePerSecond;
 		this.interval = 1;
 		this.setMoveSpeedModifier(speedModifier);
+		//this.damageChange = damageReduction;
+		if(this.getOwner() instanceof Projectile) {
+			this.setAttackDamageModifier(damageChange);
+		}
 		//this.setDamageType(DAMAGE_TYPE);
 	}
 	
 	@Override
 	public void onInterval() {
-		String i = "res/particle_genericBlue.png";
-		ParticleEmitter pe = new ParticleEmitter(this.getOwner().getLoc(), EmitterTypes.POINT_RADIAL, i, true, /*point, emitter type, image path, alphaDecay*/
+		ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, GameMap.particle_genericBlue, true, /*point, emitter type, image path, alphaDecay*/
 				1.0f, 1.0f, /*particle start scale*/
 				2.5f, 2.5f, /*particle end scale*/
 				2.0f, /*drag*/
@@ -77,15 +64,14 @@ public class StatusFrost extends StatusEffect {
 	@Override
 	public void onCreate() {
 		if(this.getOwner() != null) {
-			String i = "res/particle_genericBlue.png";
-			ParticleEmitter pe = new ParticleEmitter(this.getOwner().getLoc(), EmitterTypes.POINT_RADIAL, i, true, /*point, emitter type, image path, alphaDecay*/
+			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, GameMap.particle_genericBlue, true, /*point, emitter type, image path, alphaDecay*/
 					1.5f, 1.5f, /*particle start scale*/
 					4.0f, 8.0f, /*particle end scale*/
 					3.5f, /*drag*/
 					0, 0, /*rotational velocity*/
 					0.4f, 0.8f, /*min and max lifetime*/
-					0, 150, /*min and max launch speed*/
-					0, 4, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
+					0, 350, /*min and max launch speed*/
+					0, 6, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
 					0, 0, 0, 0); /*keyvalues*/
 			getOwner().getMap().addParticleEmitter(pe);
 		}

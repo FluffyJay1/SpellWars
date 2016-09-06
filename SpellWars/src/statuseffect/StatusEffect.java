@@ -32,6 +32,8 @@ public class StatusEffect {
 	float damagetimer; //internal use only
 	int numSources; //how many auras are applying this same effect
 	
+	private Color ownerColorModifier;
+	
 	public StatusEffect(GameElement owner, StackingProperty stackingProperty, String id, float duration, int level) {
 		super();
 		this.setOwner(owner);
@@ -56,6 +58,7 @@ public class StatusEffect {
 		this.level = level;
 		this.muteEffect = false;
 		this.drawIcon = true;
+		this.ownerColorModifier = Color.white;
 	}
 	public int getLevel() {
 		return this.level;
@@ -262,5 +265,11 @@ public class StatusEffect {
 	}
 	public void setOwner(GameElement owner) {
 		this.owner = owner;
+	}
+	public void setColorModifier(Color color) {
+		this.ownerColorModifier = color;
+	}
+	public Color getColorModifier() {
+		return this.ownerColorModifier;
 	}
 }

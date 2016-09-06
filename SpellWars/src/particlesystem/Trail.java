@@ -52,6 +52,12 @@ public class Trail extends GameElement {
 		this(element.getLoc(), imagePath, startWidth, endWidth, trailLifeTime, nodeSpawnInterval, reverseAfter, randomSpeed);
 		this.setParent(element);
 	}
+	public void resetTrail() {
+		this.distanceTraveledSinceLastNode = 0;
+		this.directionOfTravel = 0;
+		this.directionOfTrail = 0;
+		this.prevLoc = Point.clone(this.getLoc());
+	}
 	@Override
 	public void update() {
 		float distanceTraveled = (float) Point.getDistance(this.prevLoc, this.getLoc());

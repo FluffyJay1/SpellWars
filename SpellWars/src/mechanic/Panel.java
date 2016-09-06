@@ -27,6 +27,8 @@ public class Panel {
 	public static boolean imagesLoaded = false;
 	boolean drawProjectileFlash;
 	boolean drawImportantFlash;
+	float projectileFlashTimer;
+	float importantFlashTimer;
 	public Panel(int x, int y, int teamID, PanelState state, GameMap map) {
 		this.loc = new Point(x,y);
 		this.teamID = teamID;
@@ -48,6 +50,8 @@ public class Panel {
 				e.printStackTrace();
 			}
 		}
+		this.projectileFlashTimer = 0;
+		this.importantFlashTimer = 0;
 	}
 	public void setTeamID(int id) {
 		this.teamID = id;
@@ -83,8 +87,20 @@ public class Panel {
 	public void panelFlash() {
 		this.drawProjectileFlash = true;
 	}
+	public void panelFlash(float duration) {
+		this.drawProjectileFlash = true;
+		if(this.projectileFlashTimer <= duration) {
+			this.projectileFlashTimer = duration;
+		}
+	}
 	public void panelFlashImportant() {
 		this.drawImportantFlash = true;
+	}
+	public void panelFlashImportant(float duration) {
+		this.drawImportantFlash = true;
+		if(this.importantFlashTimer <= duration) {
+			this.importantFlashTimer = duration;
+		}
 	}
 	public void draw(Graphics g) {
 		//INCLUDE DIFFERENT PANEL STATES LATER
@@ -134,19 +150,25 @@ public class Panel {
 		g.setColor(Color.black);
 		g.draw(rect);
 		*/
-		if(this.drawProjectileFlash) {
+		if(this.drawProjectileFlash || this.projectileFlashTimer > 0) {
 			Point loc = Point.subtract(this.map.gridToPosition(this.getLoc()), Point.scale(panelSize, 0.4));
 			g.setColor(Color.yellow);
 			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * 0.8f, (float)panelSize.y * 0.8f);
 			g.fill(rect);
 			this.drawProjectileFlash = false;
 		}
-		if(this.drawImportantFlash) {
+		if(this.drawImportantFlash || this.importantFlashTimer > 0) {
 			Point loc = Point.subtract(this.map.gridToPosition(this.getLoc()), Point.scale(panelSize, 0.3));
 			g.setColor(Color.red);
 			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * 0.6f, (float)panelSize.y * 0.6f);
 			g.fill(rect);
 			this.drawImportantFlash = false;
+		}
+		if(this.projectileFlashTimer > 0) {
+			this.projectileFlashTimer -= this.map.frametime;
+		}
+		if(this.importantFlashTimer > 0) {
+			this.importantFlashTimer -= this.map.frametime;
 		}
 	}
 }

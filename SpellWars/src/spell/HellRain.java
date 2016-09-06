@@ -12,7 +12,7 @@ import mechanic.GameMap;
 import unit.Unit;
 
 public class HellRain extends Spell {
-	public static final float DURATION = 4.5f;
+	public static final float DURATION = 4.0f;
 	public static final int NUM_STRIKES = 24;
 	public static final int DAMAGE = 15;
 	public static final float CHANCE_TO_CRACK = 0.07f;
@@ -47,7 +47,7 @@ public class HellRain extends Spell {
 	public void fire() {
 		int randomIndex = (int)(Math.random()*this.affectedPanels.size() - 0.0000001);
 		Point loc = this.affectedPanels.get(randomIndex).getLoc();
-		Projectile projectile = new CrackGrenade(DAMAGE, CHANCE_TO_CRACK, AIR_TIME, Point.subtract(loc, this.owner.gridLoc), 80, 10, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
+		Projectile projectile = new CrackGrenade((int)(DAMAGE * this.owner.finalDamageModifier), CHANCE_TO_CRACK, AIR_TIME, Point.subtract(loc, this.owner.gridLoc), 80, 10, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
 		projectile.setImageScale(2);
 		this.map.addGameElement(projectile);
 		this.shotsFired++;

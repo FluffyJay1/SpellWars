@@ -32,6 +32,7 @@ public abstract class GameElement {
 	private double speed;
 	
 	public float finalSpeedModifier;
+	public float finalDamageModifier;
 	
 	private double orientation; // in degrees
 	private Point loc;
@@ -53,10 +54,13 @@ public abstract class GameElement {
 	*/
 	private Image pic;
 	protected boolean remove;
+	protected boolean disconnected;
 	private float frametime;
 	boolean isPaused;
 	GameElement parent;
 	public boolean hasBeenDrawn; //IF THE ELEMENT IS A UNIT AND IT HAS BEEN DRAWN SINCE IT WAS ON A LOWER GRID LOC
+	
+	private Color drawColorMultiplier;
 	
 	public GameElement() {
 		this(new Point());
@@ -76,9 +80,12 @@ public abstract class GameElement {
 		this.setImage(imagePath);
 		this.remove = false;
 		this.finalSpeedModifier = 1;
+		this.finalDamageModifier = 1;
 		this.frametime = 0;
 		this.drawHeight = 0;
 		this.hasBeenDrawn = false;
+		this.drawColorMultiplier = Color.white;
+		this.disconnected = false;
 	}
 	public GameElement(double hp, double maxHP, double speed, double orientation, Point loc, double size, float collisionRadius, Image image) {
 		this.changeMaxHP(maxHP);
@@ -90,9 +97,12 @@ public abstract class GameElement {
 		this.pic = image;
 		this.remove = false;
 		this.finalSpeedModifier = 1;
+		this.finalDamageModifier = 1;
 		this.frametime = 0;
 		this.drawHeight = 0;
 		this.hasBeenDrawn = false;
+		this.drawColorMultiplier = Color.white;
+		this.disconnected = false;
 	}
 	
 	/**
@@ -369,8 +379,15 @@ public abstract class GameElement {
 			endPic.rotate(-(float)orientation);
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
-			g.drawImage(endPic, (float) this.loc.x - width/2, (float) this.loc.y - height/2 - this.getDrawHeight());
+			g.drawImage(endPic, (float) this.loc.x - width/2, (float) this.loc.y - height/2 - this.getDrawHeight(), this.drawColorMultiplier);
+			this.resetDrawColorModifier();
 		}
+	}
+	public Color getDrawColorModifier() {
+		return this.drawColorMultiplier;
+	}
+	public void resetDrawColorModifier() {
+		this.drawColorMultiplier = Color.white;
 	}
 	public void drawShadow(Graphics g) {
 		
@@ -421,6 +438,11 @@ public abstract class GameElement {
 				drawLoc.add(new Point(STATUS_EFFECT_ICON_SPACING, 0));
 				iconNum++;
 			}
+			if(s.getRemove() == false && 
+					(((s.getStackingProperty() == StackingProperty.STACKABLE_REFRESH_DURATION || s.getStackingProperty() == StackingProperty.STACKABLE_INDEPENDENT) && !isAlreadyDrawn)
+							||(s.getStackingProperty() != StackingProperty.STACKABLE_REFRESH_DURATION && s.getStackingProperty() != StackingProperty.STACKABLE_INDEPENDENT))) { //if it is stackable and it hasn't been drawn before, or if it isn't stackable
+				this.drawColorMultiplier = this.drawColorMultiplier.multiply(s.getColorModifier());
+			}
 		}
 	}
 	public double getFrameTime() {
@@ -433,8 +455,17 @@ public abstract class GameElement {
 		return this.map;
 	}
 	public void setMap(GameMap map) {
-		this.map = map;
-		this.onSetMap();
+		if(this.map != map) {
+			if(map != null) {
+				this.map = map;
+				this.onSetMap();
+			} else {
+				this.disconnected = true;
+			}
+		}
+	}
+	public boolean isDisconnected() {
+		return this.disconnected;
 	}
 	public float getCollisionRadius() {
 		return this.collisionRadius;
@@ -599,10 +630,13 @@ public abstract class GameElement {
 	}
 	public void updateFinalModifiers() {//updates the final speed and damage and resistance modifiers
 		float sModifier = 1;
+		float aModifier = 1;
 		for(StatusEffect e : this.statuseffects) { //Concantonates all the bonuses into one value
 			sModifier *= e.getMoveSpeedModifier();
+			aModifier *= e.getAttackDamageModifier();
 		}
 		this.finalSpeedModifier = sModifier;
+		this.finalDamageModifier = aModifier;
 	}
 	public void updateStatusEffects() { //each status effect runs its own code
 		for(StatusEffect e : this.statuseffects) {

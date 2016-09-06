@@ -8,6 +8,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import mechanic.Game;
+import mechanic.GameElement;
 import mechanic.GameMap;
 import mechanic.Point;
 
@@ -25,6 +26,7 @@ public class UIElement {
 	Point origin; //normally the parent, else it should be (0, 0)
 	Point loc;
 	UIElement parent;
+	GameElement elementToRemoveWith;
 	ArrayList<UIElement> children = new ArrayList<UIElement>();
 	ArrayList<UIElement> childrenAddBuffer = new ArrayList<UIElement>();
 	ArrayList<UIElement> childrenRemoveBuffer = new ArrayList<UIElement>();
@@ -145,6 +147,9 @@ public class UIElement {
 	}
 	public void setImage(Image pic) {
 		this.pic = pic.copy();
+	}
+	public void setElementToRemoveWith(GameElement e) {
+		this.elementToRemoveWith = e;
 	}
 	public boolean getRemove(){
 		return this.remove;
