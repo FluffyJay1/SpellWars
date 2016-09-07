@@ -328,7 +328,7 @@ public class Unit extends GameElement {
 			if(this.drawMoveCooldown && this.moveCooldown > 0) {
 				col = new Color(205, 205, 235);
 			}
-			if(this.drawSpellCasting && this.isCasting) {
+			if(this.drawSpellCasting && this.isCasting && this.spellCastTimer > 0) {
 				col = new Color(220, 180, 90);
 				float barwidth = 0;
 				if(!this.isCoolingDown){

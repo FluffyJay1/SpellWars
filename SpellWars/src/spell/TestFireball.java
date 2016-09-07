@@ -42,6 +42,9 @@ public class TestFireball extends Spell {
 		shotsFired++;
 		//System.out.println("DAMAGE " + (int)(8.85 * this.spellTimer/0.7f));
 		this.map.addGameElement(projectile);
+		if(this.shotsFired >= 16) {
+			this.finishSpell();
+		}
 	}
 	@Override
 	public void onSpellUpdate() {
@@ -51,9 +54,6 @@ public class TestFireball extends Spell {
 		}
 		*/
 		this.spellTimer -= this.getFrameTime();
-		if(this.spellTimer <= 0) {
-			this.finishSpell();
-		}
 		if(this.owner.getRemove()) {
 			this.finishSpell();
 		}

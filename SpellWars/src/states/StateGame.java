@@ -148,6 +148,21 @@ public class StateGame extends BasicGameState{
 		//g.clear();
 		backgroundImage.drawWarped(Game.WINDOW_WIDTH, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT, 0, Game.WINDOW_HEIGHT, 0, 0); //start with topright, then clockwise
 		map.draw(g);
+		if(!pickingPhase && this.readyTimer >= 0) {
+		float ratio = readyTimer/READY_TIME;
+			if(ratio > 0.8) {
+				this.readyText.setLetterHeight((int)((1 - ratio) * 200));
+				this.readyText.changeLoc(new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - (1 - ratio) * 100));
+			} else if(ratio < 0.2) {
+				this.readyText.setLetterHeight((int)(ratio * 200));
+				this.readyText.changeLoc(new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - ratio * 100));
+			} else {
+				this.readyText.setLetterHeight(40);
+				this.readyText.changeLoc(new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - 20));
+			}
+		} else {
+			this.readyText.setLetterHeight(0);
+		}
 		ui.draw(g);
 		//map.drawGridHighlight(g, map.getMousePosition());
 	}
@@ -184,14 +199,7 @@ public class StateGame extends BasicGameState{
 				}
 			}
 			this.readyTimer -= frametime;
-			float ratio = readyTimer/READY_TIME;
-			if(ratio > 0.8) {
-				this.readyText.setLetterHeight((int)((1 - ratio) * 200));
-				this.readyText.changeLoc(new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - (1 - ratio) * 100));
-			} else if(ratio < 0.2) {
-				this.readyText.setLetterHeight((int)(ratio * 200));
-				this.readyText.changeLoc(new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - ratio * 100));
-			} 
+			
 		} else {
 			this.readyText.setLetterHeight(0);
 		}

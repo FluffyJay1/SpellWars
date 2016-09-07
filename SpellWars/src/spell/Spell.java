@@ -18,6 +18,7 @@ public class Spell extends GameElement {
 	String name;
 	String description;
 	public boolean pauseWhenActivated;
+	public boolean isFinished;
 	float textTimer;
 	boolean activated;
 	boolean spellExecuted;
@@ -45,6 +46,7 @@ public class Spell extends GameElement {
 		this.backswingTime = backswingTime;
 		this.pausedByStuns = false;
 		this.disableUnitControl = false;
+		this.isFinished = false;
 		this.spellText = new Text(null, Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 18, 30, 22, 30, Color.white, "", TextFormat.CENTER_JUSTIFIED);
 	}
 	public Spell(String name, float castTime, float backswingTime, String description, String imagepath, boolean pauseWhenActivated) {
@@ -79,6 +81,7 @@ public class Spell extends GameElement {
 		}
 	}
 	public void finishSpell() {
+		this.isFinished = true;
 		if(this.disableUnitControl) {
 			this.owner.unitControl = true;
 		}
@@ -98,15 +101,19 @@ public class Spell extends GameElement {
 				this.onSpellUpdate();
 				if(this.think) {
 					this.thinkTimer -= this.getFrameTime();
-					if(this.thinkTimer <= 0) {
+					while(this.thinkTimer <= 0 && !this.isFinished) {
 						this.onThink();
 						this.thinkTimer += this.thinkInterval;
 					}
 				}
 			}
 		}
-		if(this.activated && this.textTimer >= 0 && this.pauseWhenActivated) {
-			this.textTimer -= this.getFrameTime();
+		if(this.activated && this.pauseWhenActivated) {
+			if(this.textTimer >= 0) {
+				this.textTimer -= this.getFrameTime();
+			} else {
+				this.spellText.setRemove(true);
+			}
 		}
 	}
 	public void onSpellUpdate() {
@@ -148,7 +155,10 @@ public class Spell extends GameElement {
 			} else if(ratio < 0.2) {
 				spellText.setLetterHeight((int)(ratio * 150));
 				spellText.changeLoc(Point.add(this.owner.getLoc(), new Point(-200, -200 - ratio * 75)));
-			} 
+			} else {
+				spellText.setLetterHeight(30);
+				spellText.changeLoc(Point.add(this.owner.getLoc(), new Point(-200, -215)));
+			}
 			/*
 			Text text = new Text(this.getMap().getUI(), Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 18, 30, 22, 30, Color.white, this.name.toUpperCase(), TextFormat.CENTER_JUSTIFIED);;
 			if(ratio > 0.8) {

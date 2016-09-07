@@ -30,7 +30,9 @@ public class Game extends StateBasedGame {
 	public static void main(String[] args) throws SlickException{
 		AppGameContainer app = new AppGameContainer(new Game("SpellWars"));
 		app.setDisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT, false);
+		//app.setTargetFrameRate(6);
 		app.start();
+		
 	}
 	
 	public Game(String title) {

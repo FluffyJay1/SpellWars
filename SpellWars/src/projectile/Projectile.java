@@ -44,7 +44,7 @@ public class Projectile extends GameElement {
 		super(0, 0, speed, 0, new Point(), 1, 0, imagePath);
 		this.useMoveVec = false;
 		this.gridLoc = gridLoc;
-		this.pastFrameGridLoc = gridLoc;
+		this.pastFrameGridLoc = Point.clone(gridLoc);
 		this.futureLoc = gridLoc;
 		this.direction = direction;
 		this.moveCooldown = 0;
@@ -108,6 +108,35 @@ public class Projectile extends GameElement {
 	@Override
 	public void update() {
 		this.flash();
+		if(this.think) {
+			if(this.thinkWithMove) {
+				this.thinkTimer -= this.getFrameTime() * this.getFinalSpeed();
+			} else {
+				this.thinkTimer -= this.getFrameTime();
+			}
+			while(this.thinkTimer <= 0) {
+				this.onThink();
+				this.flash();
+				this.gridLoc = this.futureLoc;
+				if(this.simpleProjectile) {
+					if(this.useMoveVec) {
+						this.move(this.vel, false, true);
+					} else {
+						this.move(this.direction, false, true);
+					}
+				}
+				if(this.thinkWithMove) {
+					this.thinkTimer += 1;
+				} else {
+					this.thinkTimer += this.thinkInterval;
+				}
+				//System.out.println("gridLoc: " + this.gridLoc.toString());
+				//System.out.println("futureloc: " + this.futureLoc.toString());
+				//System.out.println("getGridLoc: " + this.getGridLoc().toString());
+				//System.out.println("thinkTimer / thinkInterval: " + this.thinkTimer / this.thinkInterval);
+				//System.out.println("");
+			}
+		}
 		this.changeLoc(this.getMap().gridToPosition(Point.interpolate(this.gridLoc, this.futureLoc, 1 - (this.thinkTimer))));
 		//Point targetLoc = this.getGridLoc();
 		for(Point targetLoc : Point.getPointsBetween(this.pastFrameGridLoc, this.getGridLoc())) {
@@ -140,39 +169,12 @@ public class Projectile extends GameElement {
 				}
 			}
 		}
-		if(this.think) {
-			if(this.thinkWithMove) {
-				this.thinkTimer -= this.getFrameTime() * this.getFinalSpeed();
-			} else {
-				this.thinkTimer -= this.getFrameTime();
-			}
-			while(this.thinkTimer <= 0) {
-				this.onThink();
-				this.gridLoc = this.futureLoc;
-				if(this.simpleProjectile) {
-					if(this.useMoveVec) {
-						this.move(this.vel, false, true);
-					} else {
-						this.move(this.direction, false, true);
-					}
-				}
-				if(this.thinkWithMove) {
-					this.thinkTimer += 1;
-				} else {
-					this.thinkTimer += this.thinkInterval;
-				}
-				//System.out.println("gridLoc: " + this.gridLoc.toString());
-				//System.out.println("futureloc: " + this.futureLoc.toString());
-				//System.out.println("getGridLoc: " + this.getGridLoc().toString());
-				//System.out.println("thinkTimer / thinkInterval: " + this.thinkTimer / this.thinkInterval);
-				//System.out.println("");
-			}
-		}
+		
 		if(!this.getMap().pointIsInGrid(this.getGridLoc())) {
 			this.setRemove(true);
 			this.unitsHit.clear();
 		}
-		this.pastFrameGridLoc = this.getGridLoc();
+		this.pastFrameGridLoc = Point.clone(this.getGridLoc());
 		if(this.moveCooldown > 0) {
 			this.moveCooldown -= this.getFrameTime();
 		}
