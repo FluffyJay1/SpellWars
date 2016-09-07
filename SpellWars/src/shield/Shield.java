@@ -37,6 +37,7 @@ public class Shield extends GameElement {
 	public Color HPTextColor;
 	float drawOffset; //when layering multiple shields on top of each other
 	boolean drawHP;
+	Text hpText;
 	
 	public Shield(Unit owner, double hp, double maxhp, String imagePath) {
 		super(hp, maxhp, 0, 0, owner.getLoc(), 1, 0, imagePath);
@@ -51,6 +52,14 @@ public class Shield extends GameElement {
 		this.removeOnKill = true;
 		this.opacity = SHIELD_DISABLED_OPACITY;
 		this.isDead = false;
+		this.hpText = new Text(null, Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET + this.drawOffset)), 400, 10, 16, 12, 20, Color.white, "", TextFormat.CENTER_JUSTIFIED);
+		this.hpText.setUseOutline(true);
+		this.hpText.setOutlineColor(this.HPTextColor);
+		this.hpText.setElementToRemoveWith(this);
+	}
+	@Override
+	public void onSetMap() {
+		this.getMap().getUI().addUIElement(hpText);
 	}
 	public void setDrawOffset(float y) {
 		this.drawOffset = y;
@@ -142,11 +151,8 @@ public class Shield extends GameElement {
 			g.drawImage(endPic, (float) this.getLoc().x - width/2, (float) this.getLoc().y - height/2 - this.getDrawHeight() + this.drawOffset);
 		}
 		if(this.drawHP) {
-			Text text = new Text(this.getMap().getUI(), Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET + this.drawOffset)), 400, 10, 16, 12, 20, Color.white, "" + (int)this.getHP(), TextFormat.CENTER_JUSTIFIED);
-			text.setUseOutline(true);
-			text.setOutlineColor(this.HPTextColor);
-			text.setRemoveNextFrame(true);
-			this.getMap().getUI().addUIElement(text);
+			this.hpText.changeLoc(Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET + this.drawOffset)));
+			this.hpText.setText("" + (int)this.getHP());
 		}
 	}
 	public void onThink() {

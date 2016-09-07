@@ -68,7 +68,7 @@ public class Spell extends GameElement {
 	public void activate() {
 		this.activated = true;
 		if(this.disableUnitControl) {
-			this.owner.unitControl = false;
+			this.owner.unitControl++;
 		}
 		if(this.pauseWhenActivated) {
 			this.getMap().pauseAll();
@@ -83,7 +83,7 @@ public class Spell extends GameElement {
 	public void finishSpell() {
 		this.isFinished = true;
 		if(this.disableUnitControl) {
-			this.owner.unitControl = true;
+			this.owner.unitControl--;
 		}
 		if(this.pauseWhenActivated) {
 			this.map.unpauseAll();
