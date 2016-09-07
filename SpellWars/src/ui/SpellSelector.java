@@ -119,6 +119,7 @@ public class SpellSelector extends UIElement {
 	public void update() {
 		if(!this.hasCastFirstSpell && this.prevNumSelectedSpells > this.selectedSpells.size() && this.prevNumSelectedSpells != 0) {
 			this.spellCastHelp.setRemove(true);
+			this.hasCastFirstSpell = true;
 		} else {
 			this.prevNumSelectedSpells = this.selectedSpells.size();
 		}
@@ -195,6 +196,7 @@ public class SpellSelector extends UIElement {
 			}
 			this.updateText();
 		}
+		this.prevNumSelectedSpells = this.selectedSpells.size();
 	}
 	public void removeSelectedSpells() {
 		this.selectedSpells.clear();

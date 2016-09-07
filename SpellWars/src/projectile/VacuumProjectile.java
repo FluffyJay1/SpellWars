@@ -11,6 +11,6 @@ public class VacuumProjectile extends Projectile {
 	}
 	@Override
 	public void onTargetHit(Unit target) {
-		target.move(GameMap.getOppositeDirection((char)this.direction), false, false, false, false, true);
+		target.move(GameMap.getOppositeDirection((char)this.direction), false, false, false, false, true, true);
 	}
 }

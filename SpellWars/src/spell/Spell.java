@@ -24,6 +24,7 @@ public class Spell extends GameElement {
 	public float castTime;
 	public float backswingTime;
 	boolean pausedByStuns;
+	boolean disableUnitControl;
 	static final float TEXT_DURATION = 1.2f;
 	static final float TEXT_Y_OFFSET = 200;
 	Text spellText;
@@ -43,6 +44,7 @@ public class Spell extends GameElement {
 		this.castTime = castTime;
 		this.backswingTime = backswingTime;
 		this.pausedByStuns = false;
+		this.disableUnitControl = false;
 		this.spellText = new Text(null, Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 18, 30, 22, 30, Color.white, "", TextFormat.CENTER_JUSTIFIED);
 	}
 	public Spell(String name, float castTime, float backswingTime, String description, String imagepath, boolean pauseWhenActivated) {
@@ -63,6 +65,9 @@ public class Spell extends GameElement {
 	}
 	public void activate() {
 		this.activated = true;
+		if(this.disableUnitControl) {
+			this.owner.unitControl = false;
+		}
 		if(this.pauseWhenActivated) {
 			this.getMap().pauseAll();
 			this.setPause(false);
@@ -74,6 +79,9 @@ public class Spell extends GameElement {
 		}
 	}
 	public void finishSpell() {
+		if(this.disableUnitControl) {
+			this.owner.unitControl = true;
+		}
 		if(this.pauseWhenActivated) {
 			this.map.unpauseAll();
 		}

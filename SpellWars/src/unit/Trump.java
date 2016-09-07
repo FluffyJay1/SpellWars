@@ -51,7 +51,7 @@ public class Trump extends Unit {
 			this.isFirstMove = false;
 		}
 		if(this.state == 2) {
-			this.move(this.direction, false, false, true, true, true);
+			this.move(this.direction, false, false, true, true, true, false);
 			Point futureLoc = GameMap.getFuturePoint(this.gridLoc, (char)this.direction);
 			if(!this.canMoveToLoc(futureLoc)) {
 				this.setSpeed(SPEED + SPEED_PER_LEVEL * level);
@@ -59,7 +59,7 @@ public class Trump extends Unit {
 				this.state = 0;
 			}
 		} else if(this.state == 3) {
-			this.move(GameMap.getOppositeDirection((char)this.direction), false, false, true, true, true);
+			this.move(GameMap.getOppositeDirection((char)this.direction), false, false, true, true, true, false);
 			Point futureLoc = GameMap.getFuturePoint(this.gridLoc, GameMap.getOppositeDirection((char)this.direction));
 			if(!this.canMoveToLoc(futureLoc)) {
 				this.setSpeed(SPEED + SPEED_PER_LEVEL * level);
@@ -67,7 +67,7 @@ public class Trump extends Unit {
 				this.state = 0;
 			}
 		} else {
-			this.moveRandom4(false, false, true, true, true);
+			this.moveRandom4(false, false, true, true, true, false);
 		}
 		if(Math.random() < 0.15 && this.state == 0 && this.trumpWallCooldown <= 0) { //TRUMPS WALL
 			this.castSpell(new AreaGrab(this));

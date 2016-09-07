@@ -240,8 +240,8 @@ public class StateGame extends BasicGameState{
 			this.devPause = !devPause;
 		}
 		if(key == Input.KEY_H) {
-			leftPlayer.doDamage(2500);
-			rightPlayer.doDamage(2500);
+			leftPlayer.doDamage(399);
+			rightPlayer.doDamage(399);
 		}
 		if(key == Input.KEY_J) {
 			System.out.println("map.isPaused() is " + this.map.isPaused());
@@ -301,35 +301,35 @@ public class StateGame extends BasicGameState{
 			case Input.KEY_Q:
 				leftPlayer.castSpell(new PlayerFire(leftPlayer));
 				break;
+			case Input.KEY_W:
+				leftPlayer.move(GameMap.ID_UP, true, true, true, true, true, false);
+				break;
+			case Input.KEY_S:
+				leftPlayer.move(GameMap.ID_DOWN, true, true, true, true, true, false);
+				break;
+			case Input.KEY_A:
+				leftPlayer.move(GameMap.ID_LEFT, true, true, true, true, true, false);
+				break;
+			case Input.KEY_D:
+				leftPlayer.move(GameMap.ID_RIGHT, true, true, true, true, true, false);
+				break;
 			case Input.KEY_PERIOD:
 				rightPlayer.castNextAvailableSpell();
 				break;
 			case Input.KEY_SLASH:
 				rightPlayer.castSpell(new PlayerFire(rightPlayer));
 				break;
-			case Input.KEY_W:
-				leftPlayer.move(GameMap.ID_UP, true, true, true, true, true);
-				break;
-			case Input.KEY_S:
-				leftPlayer.move(GameMap.ID_DOWN, true, true, true, true, true);
-				break;
-			case Input.KEY_A:
-				leftPlayer.move(GameMap.ID_LEFT, true, true, true, true, true);
-				break;
-			case Input.KEY_D:
-				leftPlayer.move(GameMap.ID_RIGHT, true, true, true, true, true);
-				break;
 			case Input.KEY_UP:
-				rightPlayer.move(GameMap.ID_UP, true, true, true, true, true);
+				rightPlayer.move(GameMap.ID_UP, true, true, true, true, true, false);
 				break;
 			case Input.KEY_DOWN:
-				rightPlayer.move(GameMap.ID_DOWN, true, true, true, true, true);
+				rightPlayer.move(GameMap.ID_DOWN, true, true, true, true, true, false);
 				break;
 			case Input.KEY_LEFT:
-				rightPlayer.move(GameMap.ID_LEFT, true, true, true, true, true);
+				rightPlayer.move(GameMap.ID_LEFT, true, true, true, true, true, false);
 				break;
 			case Input.KEY_RIGHT:
-				rightPlayer.move(GameMap.ID_RIGHT, true, true, true, true, true);
+				rightPlayer.move(GameMap.ID_RIGHT, true, true, true, true, true, false);
 				break;
 			default:
 				break;

@@ -45,6 +45,7 @@ public class Unit extends GameElement {
 	public boolean isCoolingDown;
 	public Spell spellBeingCast;
 	public boolean spellCastIgnorePause;
+	public boolean unitControl;
 	
 	public Point gridLoc;
 	public int teamID;
@@ -104,6 +105,7 @@ public class Unit extends GameElement {
 		this.speedModifiedTooltipText = new Text(null, Point.add(this.getLoc(), new Point(-450, HP_Y_OFFSET)), 400, 10, 16, 13, 17, Color.yellow, "", TextFormat.RIGHT_JUSTIFIED);
 		this.speedHasBeenModified = false;
 		this.speedModifiedTooltipTimer = 0;
+		this.unitControl = true;
 	}
 	public void addShield(Shield shield) {
 		if(!this.shields.contains(shield)) {
@@ -404,9 +406,10 @@ public class Unit extends GameElement {
 	public void drawSpecialEffects(Graphics g) {
 		
 	}
-	public void move(int direction, boolean respectCooldown, boolean putCooldown, boolean respectCasting, boolean respectStun, boolean respectPause) {
+	public void move(int direction, boolean respectCooldown, boolean putCooldown, boolean respectCasting, boolean respectStun, boolean respectPause, boolean ignoreUnitControl) {
 		if(((respectCooldown && this.moveCooldown <= 0) || !respectCooldown) && ((respectCasting && !this.isCasting) || !respectCasting)
-				&& (!this.isPaused() || !respectPause) && !this.getRemove() && ((respectStun && this.stunTimer <= 0) || !respectStun)) {
+				&& (!this.isPaused() || !respectPause) && !this.getRemove() && ((respectStun && this.stunTimer <= 0) || !respectStun)
+				&& (this.unitControl || ignoreUnitControl)) {
 			Point moveVec = new Point();
 			switch(direction) {
 			case GameMap.ID_UP:
@@ -444,9 +447,10 @@ public class Unit extends GameElement {
 			this.moveTo(futurepoint, putCooldown);
 		}
 	}
-	public void moveRandom4(boolean respectCooldown, boolean putCooldown, boolean respectCasting, boolean respectStun, boolean respectPause) {
+	public void moveRandom4(boolean respectCooldown, boolean putCooldown, boolean respectCasting, boolean respectStun, boolean respectPause, boolean ignoreUnitControl) {
 		if(((respectCooldown && this.moveCooldown <= 0) || !respectCooldown) && ((respectCasting && !this.isCasting) || !respectCasting)
-				&& (!this.isPaused() || !respectPause) && !this.getRemove() && ((respectStun && this.stunTimer <= 0) || !respectStun)) {
+				&& (!this.isPaused() || !respectPause) && !this.getRemove() && ((respectStun && this.stunTimer <= 0) || !respectStun)
+				&& (this.unitControl || ignoreUnitControl)) {
 			ArrayList<Point> availablePoints = new ArrayList<Point>();
 			for(Point p : Point.proximity4(this.gridLoc)) {
 				if(this.canMoveToLoc(p)) {
@@ -484,8 +488,8 @@ public class Unit extends GameElement {
 		return map.pointIsInGrid(loc) && (map.getPanelAt(loc).teamID == this.teamID || this.ignoreTeam) && map.getPanelAt(loc).unitStandingOnPanel == null
 				&& !(!this.ignoreHoles && map.getPanelAt(loc).getPanelState() == PanelState.HOLE);
 	}
-	public boolean castSpell(Spell spell, boolean ignoreStun, boolean ignoreCast, boolean ignorePause) {
-		if((!this.isCasting || ignoreCast) && ((!ignoreStun && this.stunTimer <= 0) || ignoreStun)) {
+	public boolean castSpell(Spell spell, boolean ignoreStun, boolean ignoreCast, boolean ignorePause, boolean ignoreUnitControl) {
+		if((!this.isCasting || ignoreCast) && ((!ignoreStun && this.stunTimer <= 0) || ignoreStun) && (this.unitControl || ignoreUnitControl)) {
 			if(this.isCasting && ignoreCast) {
 				this.interruptCast();
 			}
@@ -516,7 +520,7 @@ public class Unit extends GameElement {
 		return false;
 	}
 	public boolean castSpell(Spell spell) {
-		return this.castSpell(spell, false, false, false);
+		return this.castSpell(spell, false, false, false, false);
 	}
 	public void interruptCast() {
 		if(!this.getRemove()) {

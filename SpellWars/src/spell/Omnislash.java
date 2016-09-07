@@ -28,6 +28,7 @@ public class Omnislash extends Spell {
 	boolean hasSlashedFinal;
 	public Omnislash(Unit owner) {
 		super(owner, 0, 0, "Omnislash", "A very powerful spell, teleport and slash at an enemy in every row, then slash in a huge area", "res/spell/slash.png", true);
+		this.disableUnitControl = true;
 		this.teleportPoints = new ArrayList<Point>();
 		this.hasSlashedFinal = false;
 	}
@@ -77,7 +78,7 @@ public class Omnislash extends Spell {
 			this.finishSpell();
 		} else if(this.teleportPoints.size() == 0 && !this.owner.isCasting) {
 			this.owner.moveTo(originalLoc, true);
-			this.owner.castSpell(new Slash(this.owner, LENGTH_FINAL, HEIGHT_FINAL, DAMAGE_FINAL, DELAY_FINAL, ANIMATION_DURATION_FINAL), true, true, true);
+			this.owner.castSpell(new Slash(this.owner, LENGTH_FINAL, HEIGHT_FINAL, DAMAGE_FINAL, DELAY_FINAL, ANIMATION_DURATION_FINAL), true, true, true, true);
 			this.hasSlashedFinal = true;
 		} else if (this.teleportPoints.size() != 0) {
 			this.owner.ignoreHoles = true;
@@ -94,7 +95,7 @@ public class Omnislash extends Spell {
 			}
 			//this.owner.setPause(false);
 			this.owner.disableThink();
-			this.owner.castSpell(new Slash(this.owner, LENGTH, HEIGHT, DAMAGE, DELAY, ANIMATION_DURATION), true, true, true);
+			this.owner.castSpell(new Slash(this.owner, LENGTH, HEIGHT, DAMAGE, DELAY, ANIMATION_DURATION), true, true, true, true);
 			this.teleportPoints.remove(0);
 		}
 	}

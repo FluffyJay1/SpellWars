@@ -11,7 +11,7 @@ public class WindProjectile extends Projectile {
 	}
 	@Override
 	public void onTargetHit(Unit target) {
-		target.move(this.direction, false, false, false, false, true);
+		target.move(this.direction, false, false, false, false, true, true);
 		target.stun(STUN_DURATION);
 		target.interruptCast();
 	}
