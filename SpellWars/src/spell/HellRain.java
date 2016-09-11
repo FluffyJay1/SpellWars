@@ -13,9 +13,9 @@ import unit.Unit;
 
 public class HellRain extends Spell {
 	public static final float DURATION = 4.0f;
-	public static final int NUM_STRIKES = 24;
+	public static final int NUM_STRIKES = 30;
 	public static final int DAMAGE = 15;
-	public static final float CHANCE_TO_CRACK = 0.07f;
+	public static final float CHANCE_TO_CRACK = 0.09f;
 	public static final float AIR_TIME = 1.25f;
 	float timer;
 	int shotsFired;

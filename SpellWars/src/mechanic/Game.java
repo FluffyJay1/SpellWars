@@ -25,7 +25,7 @@ public class Game extends StateBasedGame {
 	public static PlayerType rightPlayer;
 	public static int rightLevel;
 	
-	Map<String, Image> images = new HashMap<String, Image>();
+	public static Map<String, Image> images = new HashMap<String, Image>();
 	
 	public static void main(String[] args) throws SlickException{
 		AppGameContainer app = new AppGameContainer(new Game("SpellWars"));

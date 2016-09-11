@@ -12,7 +12,7 @@ public class Boss extends Unit {
 	public static final double HP = 400;
 	public static final double HP_PER_LEVEL = 50;
 	public static final double SPEED = 1.2;
-	public static final double SPEED_PER_LEVEL = 0.25;
+	public static final double SPEED_PER_LEVEL = 0.21;
 	public static final int MOVES_PER_FIRE = 6;
 	public static final int MOVES_VARIATION = 3;
 	int moves;

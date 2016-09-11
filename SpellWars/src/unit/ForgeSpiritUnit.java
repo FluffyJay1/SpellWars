@@ -7,8 +7,8 @@ import spell.ForgeSpiritFire;
 import spell.TestFireball;
 
 public class ForgeSpiritUnit extends Unit {
-	public static final double HP = 80;
-	public static final double SPEED = 1.25;
+	public static final double HP = 60;
+	public static final double SPEED = 1.35;
 	public static final int MOVES_PER_FIRE = 4;
 	int moves;
 	public ForgeSpiritUnit(Point gridLoc, int teamID) {

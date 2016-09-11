@@ -311,11 +311,18 @@ public abstract class GameElement {
 	}
 	
 	public void setImage(String path){
-		try {
-			this.pic = new Image(path);
-		} catch (SlickException e) {
-			System.out.println("Unable to load image");
-			e.printStackTrace();
+		if(Game.images.containsKey(path)) {
+			this.pic = Game.images.get(path).copy();
+		} else {
+			try {
+				this.pic = new Image(path);
+				Game.images.put(path, this.pic.copy());
+			} catch (SlickException e) {
+				System.out.println("Unable to load image");
+				e.printStackTrace();
+			} finally {
+				System.out.println("loaded into memory: " + path);
+			}
 		}
 	}
 	public void setImage(Image image) {

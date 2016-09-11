@@ -36,21 +36,21 @@ import unit.Player;
 import unit.Unit;
 
 public class SpellSelector extends UIElement {
-	public static final float WIDTH = 800;
+	public static final float WIDTH = 800; //originally 800x400
 	public static final float HEIGHT = 400;
 	public static final Color SPELL_BACKGROUND_COLOR = new Color(40, 40, 80);
-	public static final Point SPELL_SELECTOR_DIMENSIONS = new Point(4, 2);
-	public static final Point SPELLS_DRAWLOC_TOPLEFT = new Point(64, 94);
-	public static final Point SPELLS_DRAWLOC_BOTTOMRIGHT = new Point(256, 158);
-	public static final Point HIGHLIGHTED_SPELL_DRAWLOC = new Point(20, 180);
+	public static final Point SPELL_SELECTOR_DIMENSIONS = new Point(4, 2); //originally 4,2
+	public static final Point SPELLS_DRAWLOC_TOPLEFT = new Point(64, 94); //originally 64,94
+	public static final Point SPELLS_DRAWLOC_BOTTOMRIGHT = new Point(256, 158); //originally 256,158
+	public static final Point HIGHLIGHTED_SPELL_DRAWLOC = new Point(20, 180); //originally 20, 180
 	public static final Point HIGHLIGHTED_SPELL_DIMENSIONS = new Point(200, 200);
 	public static final Point SPELLS_SELECTED_DRAWLOC_TOP = new Point(352, 94);
 	public static final Point SPELLS_SELECTED_DRAWLOC_TOP_BATTLE = new Point(64, 94);
-	public static final float SPELLS_SELECTED_DRAW_HEIGHT = 250; //originally 198
-	public static final Point SPELL_ICON_DIMENSIONS = new Point(48, 48);
-	public static final Point SPELL_NAME_LOC = new Point(400, 36);
-	public static final Point SPELL_DESCRIPTION_LOC = new Point(412, 128);
-	public static final Point SPELL_SELECT_HELP_LOC = new Point(400, 350);
+	public static final float SPELLS_SELECTED_DRAW_HEIGHT = 262; //originally 198
+	public static final Point SPELL_ICON_DIMENSIONS = new Point(48, 48); //originally 48x48
+	public static final Point SPELL_NAME_LOC = new Point(400, 36); //originally 400, 36
+	public static final Point SPELL_DESCRIPTION_LOC = new Point(412, 128); //originally 412, 128
+	public static final Point SPELL_SELECT_HELP_LOC = new Point(400, 350); //originally 400, 350
 	public static final int MAX_SELECTED_SPELLS = 4;
 	public static final String SELECTOR_IMAGEPATH = "res/ui/gridSelect.png";
 	public static final float SPELL_CAST_HELP_OFFSET = 10;
@@ -219,7 +219,7 @@ public class SpellSelector extends UIElement {
 		return (int) (p.y * SPELL_SELECTOR_DIMENSIONS.x + p.x);
 	}
 	public Point getLocAtIndex(int index) {
-		return new Point(index%4, (int)(index/4));
+		return new Point(index%SPELL_SELECTOR_DIMENSIONS.x, (int)(index/SPELL_SELECTOR_DIMENSIONS.x));
 	}
 	public void refillSpells() {
 		for(int i = this.availableSpells.size(); i < SPELL_SELECTOR_DIMENSIONS.x * SPELL_SELECTOR_DIMENSIONS.y; i++) {
@@ -253,11 +253,11 @@ public class SpellSelector extends UIElement {
 				0.5, //recharging barrier
 				0.7, //time bomb
 				1.2, //forge spirit
-				0.8, //hell rain
+				0.7, //hell rain
 				1.0, //stun
 				1.3, //bouncing orb
 				1.0, //wind cannon
-				1.6, //firebreath
+				1.65, //firebreath
 				1.8, //pistol shot
 				0.45, //blizzard
 				0.6, //regenerate
