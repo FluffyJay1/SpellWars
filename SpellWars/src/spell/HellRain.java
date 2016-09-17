@@ -21,7 +21,7 @@ public class HellRain extends Spell {
 	int shotsFired;
 	ArrayList<Panel> affectedPanels;
 	public HellRain(Unit owner) {
-		super(owner, 0, DURATION, "Hell Rain", "Rain hell on the enemy, and also crack some of their panels", "res/x.png", false, true);
+		super(owner, 0, DURATION, "Hell Rain", "Rain hell on the enemy, and also crack some of their panels", "res/spell/hellrain.png", false, true);
 		this.timer = DURATION;
 		this.setThinkInterval(DURATION/NUM_STRIKES);
 		this.shotsFired = 0;

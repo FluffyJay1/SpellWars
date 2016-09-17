@@ -18,6 +18,8 @@ import spell.DamageAmp;
 import spell.ForgeSpirit;
 import spell.ForgeSpiritFire;
 import spell.HellRain;
+import spell.LavaToss;
+import spell.MudToss;
 import spell.MysteryBox;
 import spell.Omnislash;
 import spell.PistolShot;
@@ -245,7 +247,9 @@ public class SpellSelector extends UIElement {
 				new Omnislash(unit),
 				new TimeDilation(unit),
 				new VacuumCannon(unit),
-				new MysteryBox(unit)
+				new MysteryBox(unit),
+				new MudToss(unit),
+				new LavaToss(unit)
 		};
 		double[] weights = {0.45, //TRUMP WALL
 				0.45, //reflect barrier
@@ -260,12 +264,14 @@ public class SpellSelector extends UIElement {
 				1.65, //firebreath
 				1.8, //pistol shot
 				0.45, //blizzard
-				0.6, //regenerate
+				0.65, //regenerate
 				0.5, //damage amp
 				0.4, //omnislash
 				0.45, //time dilation
 				0.75, //vacuum cannon
-				0.4 //mystery box
+				0.4, //mystery box
+				0.4, //mud grenade
+				0.35 //lava grenade
 		};
 		if(spells.length != weights.length) {
 			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");

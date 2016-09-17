@@ -6,6 +6,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
+import statuseffect.PanelAura;
+import statuseffect.StatusFrost;
+import statuseffect.StatusMud;
 import unit.Unit;
 
 public class Panel {
@@ -15,15 +18,26 @@ public class Panel {
 	PanelState state;
 	GameMap map;
 	public Unit unitStandingOnPanel;
+	public static final float PANEL_FLASH_DURATION = 2;
+	public static final float PANEL_FLASH_INTERVAL = 0.2f;
+	public static final float CRACK_RESET_TIME = 15;
 	public static final float HOLE_RESET_TIME = 15;
-	float holeResetTimer;
+	public static final float LAVA_RESET_TIME = 20; //originally 20
+	public static final float MUD_RESET_TIME = 20;
+	public static final float LAVA_DAMAGE_PER_SECOND = 10;
+	public static final float MUD_SPEED_MODIFIER = 0.5f;
+	float panelResetTimer;
+	float lavaDamageTimer;
+	PanelAura aura;
 	boolean willBecomeHole; //used when the player stands on the cracked panel, to figure out when to make it a hole
-	public static Image normalRed;
-	public static Image normalBlue;
-	public static Image crackedRed;
-	public static Image crackedBlue;
-	public static Image holeRed;
-	public static Image holeBlue;
+	public static Image normal;
+	public static Image cracked;
+	public static Image hole;
+	public static Image blueoutline;
+	public static Image redoutline;
+	public static Image lavaAnimation;
+	public static Image mud;
+	Animation lava;
 	public static boolean imagesLoaded = false;
 	boolean drawProjectileFlash;
 	boolean drawImportantFlash;
@@ -32,24 +46,29 @@ public class Panel {
 	public Panel(int x, int y, int teamID, PanelState state, GameMap map) {
 		this.loc = new Point(x,y);
 		this.teamID = teamID;
-		this.state = state;
+		this.panelResetTimer = 0;
+		this.lavaDamageTimer = 0;
+		this.aura = new PanelAura(map, this);
+		this.setPanelState(state);
 		this.map = map;
-		this.holeResetTimer = 0;
 		this.willBecomeHole = false;
 		if(!imagesLoaded) {
 			try {
-				normalRed = new Image("res/panel/normal_red.png", false, Image.FILTER_NEAREST);
-				normalBlue = new Image("res/panel/normal_blue.png", false, Image.FILTER_NEAREST);
-				crackedRed = new Image("res/panel/cracked_red.png", false, Image.FILTER_NEAREST);
-				crackedBlue = new Image("res/panel/cracked_blue.png", false, Image.FILTER_NEAREST);
-				holeRed = new Image("res/panel/hole_red.png", false, Image.FILTER_NEAREST);
-				holeBlue = new Image("res/panel/hole_blue.png", false, Image.FILTER_NEAREST);
+				normal = new Image("res/panel/normal.png", false, Image.FILTER_NEAREST);
+				cracked = new Image("res/panel/cracked.png", false, Image.FILTER_NEAREST);
+				hole = new Image("res/panel/hole.png", false, Image.FILTER_NEAREST);
+				redoutline = new Image("res/panel/redoutline.png", false, Image.FILTER_NEAREST);
+				blueoutline = new Image("res/panel/blueoutline.png", false, Image.FILTER_NEAREST);
+				lavaAnimation = new Image("res/panel/lava_animation.png", false, Image.FILTER_NEAREST);
+				mud = new Image("res/panel/mud.png", false, Image.FILTER_NEAREST);
 				imagesLoaded = true;
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		this.lava = new Animation(lavaAnimation.getScaledCopy((int)map.getSizeOfPanel().x * 6,(int)map.getSizeOfPanel().y), 6, 1, 2f, true, false);
+		this.lava.changeLoc(map.gridToPosition(new Point(x, y)));
 		this.projectileFlashTimer = 0;
 		this.importantFlashTimer = 0;
 	}
@@ -61,24 +80,66 @@ public class Panel {
 	}
 	public void setPanelState(PanelState state) {
 		this.state = state;
-		if(state == PanelState.HOLE) {
-			this.holeResetTimer = HOLE_RESET_TIME;
+		this.aura.setEffect(null);
+		switch(state) {
+		case NORMAL:
+			this.panelResetTimer = 0;
+		case CRACKED:
+			this.panelResetTimer = CRACK_RESET_TIME;
+			break;
+		case HOLE:
+			this.panelResetTimer = HOLE_RESET_TIME;
 			this.willBecomeHole = false;
+			break;
+		case LAVA:
+			this.panelResetTimer = LAVA_RESET_TIME;
+			break;
+		case MUD:
+			this.panelResetTimer = MUD_RESET_TIME;
+			this.aura.setEffect(new StatusMud(MUD_SPEED_MODIFIER));
+			break;
+		default:
+				break;
 		}
 	}
+	public void crackLight() {
+		if(this.state == PanelState.CRACKED) {
+			this.setPanelState(PanelState.HOLE);
+		} else {
+			this.setPanelState(PanelState.CRACKED);
+		}
+	}
+	public void crackHeavy() {
+		this.setPanelState(PanelState.HOLE);
+	}
+	public void clearState() {
+		this.setPanelState(PanelState.NORMAL);
+	}
 	public void update(float frametime) {
+		this.aura.update();
+		if(panelResetTimer <= 0) {
+			this.setPanelState(PanelState.NORMAL);
+		} else {
+			this.panelResetTimer -= frametime;
+			
+		}
 		if(this.state == PanelState.HOLE) {
-			if(holeResetTimer <= 0) {
-				this.setPanelState(PanelState.NORMAL);
-			} else {
-				this.holeResetTimer -= frametime;
-			}
+			
 		} else if(this.state == PanelState.CRACKED) {
 			if(this.unitStandingOnPanel != null) {
 				this.willBecomeHole = true;
 			} else if(this.willBecomeHole) {
 				this.setPanelState(PanelState.HOLE);
 			}
+		} else if(this.state == PanelState.LAVA) {
+			this.lava.update(frametime);
+			while(this.lavaDamageTimer <= 0) {
+				if(this.unitStandingOnPanel != null) {
+					this.unitStandingOnPanel.doDamage(1);
+				}
+				this.lavaDamageTimer += 1/LAVA_DAMAGE_PER_SECOND;
+			}
+			this.lavaDamageTimer -= frametime;
 		}
 	}
 	public Point getLoc() {
@@ -107,42 +168,34 @@ public class Panel {
 		Point panelSize = this.map.getSizeOfPanel();
 		if(this.teamID == GameMap.ID_LEFT) {
 			//g.setColor(Color.red);
-			switch(this.state){
-			case NORMAL:
-				g.drawImage(normalRed.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
-				break;
-			case CRACKED:
-				g.drawImage(crackedRed.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
-				break;
-			case HOLE:
-				g.drawImage(holeRed.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
-				if(this.holeResetTimer < 2 && this.holeResetTimer % 0.15 > 0.075) {
-					g.drawImage(normalRed.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
-				}
-				break;
-			default:
-				break;
-			}
+			g.drawImage(redoutline.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
 		} else if(this.teamID == GameMap.ID_RIGHT) {
 			//g.setColor(Color.blue);
-			switch(this.state){
-			case NORMAL:
-				g.drawImage(normalBlue.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
-				break;
-			case CRACKED:
-				g.drawImage(crackedBlue.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
-				break;
-			case HOLE:
-				g.drawImage(holeBlue.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
-				if(this.holeResetTimer < 2 && this.holeResetTimer % 0.15 > 0.075) {
-					g.drawImage(normalBlue.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
-				}
-				break;
-			default:
-				break;
-			}
+			g.drawImage(blueoutline.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
 		} else {
 			//g.setColor(Color.gray);
+		}
+		switch(this.state){
+		case NORMAL:
+			g.drawImage(normal.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			break;
+		case CRACKED:
+			g.drawImage(cracked.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			break;
+		case HOLE:
+			g.drawImage(hole.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			break;
+		case LAVA:
+			lava.draw(g);
+			break;
+		case MUD:
+			g.drawImage(mud.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			break;
+		default:
+			break;
+		}
+		if(this.panelResetTimer < PANEL_FLASH_DURATION && this.panelResetTimer > 0 && this.panelResetTimer % PANEL_FLASH_INTERVAL > PANEL_FLASH_INTERVAL/2) {
+			g.drawImage(normal.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
 		}
 		/*
 		Rectangle rect = new Rectangle((float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2), (float)panelSize.x, (float)panelSize.y);

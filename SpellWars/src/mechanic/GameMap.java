@@ -150,6 +150,9 @@ public class GameMap {
 				}
 			}
 		}
+		this.updateLists();
+	}
+	public void updateLists() {
 		elementList.addAll(elementBuffer);
 		elementList.removeAll(elementRemoveBuffer);
 		projectiles.removeAll(elementRemoveBuffer);
@@ -227,7 +230,7 @@ public class GameMap {
 				this.panelGrid[x][y].draw(g);
 			}
 		}
-		for(int i = 0; i < elementList.size(); i++) { //draw elements
+		for(int i = 0; i < elementList.size(); i++) { //draw elements shadows
 			GameElement temp = elementList.get(i);
 			temp.drawShadow(g);
 			g.resetTransform();

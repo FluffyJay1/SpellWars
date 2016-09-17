@@ -74,7 +74,7 @@ public class TrumpWall extends Spell {
 			this.finishSpell();
 		} else {
 			while(this.numSpawned < (1 - this.timer/DELAY) * this.affectedPoints.size()) {
-				this.getMap().getPanelAt(this.affectedPoints.get(numSpawned)).setPanelState(PanelState.NORMAL);
+				this.getMap().getPanelAt(this.affectedPoints.get(numSpawned)).clearState();
 				if(this.getMap().getPanelAt(this.affectedPoints.get(numSpawned)).unitStandingOnPanel == null) {
 					Unit unit = new TrumpWallUnit(this.affectedPoints.get(numSpawned), this.owner.teamID);
 					this.owner.getMap().addUnit(unit);

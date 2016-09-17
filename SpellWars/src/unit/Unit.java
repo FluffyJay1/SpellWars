@@ -306,9 +306,6 @@ public class Unit extends GameElement {
 	}
 	@Override
 	public void draw(Graphics g){
-		if(this.hpText == null) {
-			System.out.println("DAT SHIT NULL");
-		}
 		int shieldsDrawn = 0;
 		for(Shield s : this.shields) {
 			s.setDrawOffset(EXTRA_SHIELDS_Y_OFFSET * shieldsDrawn);
@@ -361,22 +358,24 @@ public class Unit extends GameElement {
 				this.speedModifiedTooltipTimer = SPEED_MODIFIED_TOOLTIP_TIME;
 				this.speedHasBeenModified = true;
 			}
-			if(this.speedModifiedTooltipTimer > 0) {
-				this.speedModifiedTooltipText.setText("speed: ");
-				if(this.speedModifiedTooltipTimer < SPEED_MODIFIED_TOOLTIP_FADE_TIME) {
-					this.speedModifiedTooltipText.setAlpha(this.speedModifiedTooltipTimer/SPEED_MODIFIED_TOOLTIP_FADE_TIME);
-				}
-			} else {
-				this.speedModifiedTooltipText.setText("");
-			}
 			speedText.setText(Point.roundToNearestInteger(this.finalSpeedModifier * 100) + "%");
 			if(this.finalSpeedModifier < 1) {
 				speedText.setColor(Color.yellow);
 			} else {
 				speedText.setColor(Color.blue);
 			}
+		} else if(this.speedModifiedTooltipTimer > 0) {
+			speedText.setText("100");
 		} else {
 			speedText.setText("");
+		}
+		if(this.speedModifiedTooltipTimer > 0) {
+			this.speedModifiedTooltipText.setText("speed: ");
+			if(this.speedModifiedTooltipTimer < SPEED_MODIFIED_TOOLTIP_FADE_TIME) {
+				this.speedModifiedTooltipText.setAlpha(this.speedModifiedTooltipTimer/SPEED_MODIFIED_TOOLTIP_FADE_TIME);
+			}
+		} else {
+			this.speedModifiedTooltipText.setText("");
 		}
 		hpText.changeLoc(Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET)));
 		speedText.changeLoc(Point.add(this.getLoc(), new Point(-200, SPEED_Y_OFFSET)));

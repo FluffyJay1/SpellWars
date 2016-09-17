@@ -64,6 +64,22 @@ public class StateGame extends BasicGameState{
 	Text readyText;
 	Text battlePhaseText;
 	boolean devPause = false;
+	
+	static final float DRAW_INFO_SEND_INTERVAL = 0.1f;
+	float drawInfoTimer;
+	boolean isClient;
+	boolean isServer;
+	/*
+	 * DRAW INFO CRASH COURSE:
+	 * 
+	 * drawImage: drawi <string imagepath> <int xpos> <int ypos> <int width> <int height> <int rotation> <int r> <int g> <int b> <int a> \n
+	 * drawAnimation: drawa <string imagepath> <int xpos> <int ypos> <int width> <int height> <int srcx1> <int srcy1> <int srcx2> <int srcy2> <int r> <int g> <int b> <int a> \n
+	 * drawWarped: draww <string imagepath> <int x1> <int y1> <int x2> <int y2> <int x3> <int y3> <int x4> <int y4> <int r> <int g> <int b> <int a> \n
+	 * drawRect: drawr <int x> <int y> <int width> <int height> <int r> <int g> <int b> <int a> \n
+	 * drawEllipse: drawe <int x> <int y> <int width> <int height> <int r> <int g> <int b> <int a> \n
+	 * 
+	 */
+	
 	public StateGame(){
 	}
 	
@@ -73,6 +89,11 @@ public class StateGame extends BasicGameState{
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1){
+		drawInfoTimer = 0;
+		isClient = false;
+		isServer = false;
+		
+		systemTime = System.nanoTime();
 		container.setClearEachFrame(true);
 		this.setBackgroundImage("res/trail_lightning.png");
 		map = new GameMap(8, 4, //dimensions of game grid
@@ -135,12 +156,13 @@ public class StateGame extends BasicGameState{
 		
 		ui.addUIElement(leftSelect);
 		ui.addUIElement(rightSelect);
-		pickingPhase = false;
-		readyTimer = 0;
+		pickingPhase = true;
+		readyTimer = READY_TIME;
 		battlePhaseTimer = 0;
 		readyText = new Text(ui, new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2), 400, 24, 0, 28, 24, Color.white, "GET READY!", TextFormat.CENTER_JUSTIFIED);
 		readyText.setUseOutline(true);
 		ui.addUIElement(readyText);
+		map.updateLists();
 	}
 
 	@Override
@@ -210,6 +232,12 @@ public class StateGame extends BasicGameState{
 			battlePhaseText.setColor(Color.white);
 		}
 		ui.update();
+		if(this.isServer) {
+			drawInfoTimer -= frametime;
+			if(drawInfoTimer <= 0) {
+				drawInfoTimer += DRAW_INFO_SEND_INTERVAL;
+			}
+		}
 	}
 	@Override
 	public void mousePressed(int button, int x, int y) {

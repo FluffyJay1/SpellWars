@@ -4,7 +4,6 @@ public enum PanelState {
 	NORMAL,
 	CRACKED,
 	HOLE,
-	ICE,
 	LAVA,
 	MUD;
 }
