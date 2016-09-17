@@ -50,6 +50,7 @@ public class Grenade extends Projectile {
 		this.endLoc = Point.add(gridLoc, endDisplacement);
 		this.b = (float) (ACCELERATION * duration - (initialHeight - endHeight)/duration);
 		this.c = initialHeight;
+		this.setDrawHeight(initialHeight);
 		this.timeElapsed = 0;
 		this.flashPanel = false;
 		this.flashDestinationPanel = true;

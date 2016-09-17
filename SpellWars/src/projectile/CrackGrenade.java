@@ -19,6 +19,8 @@ public class CrackGrenade extends Grenade {
 	@Override
 	public void onProjectileSetMap() {
 		this.trail = new Trail(this, "res/trail_lightning.png", 48, 0, 0.15f, 48, false, 12);
+		this.trail.changeLoc(Point.add(this.getLoc(), new Point(0, -this.getDrawHeight())));
+		this.trail.resetTrail();
 		this.getMap().addGameElement(this.trail);
 	}
 	@Override
