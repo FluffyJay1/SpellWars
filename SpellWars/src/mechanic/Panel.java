@@ -103,14 +103,18 @@ public class Panel {
 		}
 	}
 	public void crackLight() {
-		if(this.state == PanelState.CRACKED) {
+		if(this.state == PanelState.CRACKED && this.state != PanelState.HOLE && this.unitStandingOnPanel == null) {
 			this.setPanelState(PanelState.HOLE);
 		} else {
 			this.setPanelState(PanelState.CRACKED);
 		}
 	}
 	public void crackHeavy() {
-		this.setPanelState(PanelState.HOLE);
+		if(this.unitStandingOnPanel == null) {
+			this.setPanelState(PanelState.HOLE);
+		} else {
+			this.setPanelState(PanelState.CRACKED);
+		}
 	}
 	public void clearState() {
 		this.setPanelState(PanelState.NORMAL);
