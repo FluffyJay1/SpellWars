@@ -6,11 +6,13 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import mechanic.Game;
 import mechanic.GameElement;
 import mechanic.Point;
 
 public class Trail extends GameElement {
 	Image trailPic;
+	private String imagepath;
 	float trailStartWidth, trailEndWidth;
 	float nodeSpawnInterval;
 	boolean reverseAfter;
@@ -26,12 +28,7 @@ public class Trail extends GameElement {
 	TrailNode headNode;
 	public Trail(Point loc, String imagePath, float startWidth, float endWidth, float trailLifeTime, float nodeSpawnInterval, boolean reverseAfter, float randomSpeed) {
 		super();
-		try {
-			this.trailPic = new Image(imagePath);
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.setImage(imagePath);
 		this.changeLoc(loc);
 		this.trailStartWidth = startWidth;
 		this.trailEndWidth = endWidth;
@@ -51,6 +48,22 @@ public class Trail extends GameElement {
 	public Trail(GameElement element, String imagePath, float startWidth, float endWidth, float trailLifeTime, float nodeSpawnInterval, boolean reverseAfter, float randomSpeed) {
 		this(element.getLoc(), imagePath, startWidth, endWidth, trailLifeTime, nodeSpawnInterval, reverseAfter, randomSpeed);
 		this.setParent(element);
+	}
+	public void setImage(String path){
+		if(Game.images.containsKey(path)) {
+			this.trailPic = Game.images.get(path).copy();
+		} else {
+			try {
+				this.trailPic = new Image(path);
+				Game.images.put(path, this.trailPic.copy());
+			} catch (SlickException e) {
+				System.out.println("Unable to load trail");
+				e.printStackTrace();
+			} finally {
+				System.out.println("loaded into memory: " + path);
+			}
+		}
+		this.imagepath = path;
 	}
 	public void resetTrail() {
 		this.distanceTraveledSinceLastNode = 0;

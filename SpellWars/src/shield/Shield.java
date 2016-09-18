@@ -132,7 +132,7 @@ public class Shield extends GameElement {
 			if(this.owner.getRemove()) {
 				this.setRemove(true);
 			}
-			}
+		}
 	}
 	public void onUpdate() {
 		

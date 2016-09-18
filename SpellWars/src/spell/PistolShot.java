@@ -24,7 +24,7 @@ public class PistolShot extends Spell {
 		if(this.owner.direction == GameMap.ID_LEFT) {
 			direction = 180;
 		}
-		ParticleEmitter pe = new ParticleEmitter(Point.add(this.owner.getLoc(), new Point(0, -28)), EmitterTypes.POINT_DIRECTION, GameMap.particle_genericWhite, false, //point/parent, emitter type, image path, alphaDecay
+		ParticleEmitter pe = new ParticleEmitter(Point.add(this.owner.getLoc(), new Point(0, -28)), EmitterTypes.POINT_DIRECTION, "res/particle_genericWhite.png", false, //point/parent, emitter type, image path, alphaDecay
 				6.5f, 1.5f, //particle start scale
 				0.0f, 0.0f, //particle end scale
 				13.5f, //drag

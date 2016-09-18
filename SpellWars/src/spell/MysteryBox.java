@@ -51,7 +51,7 @@ public class MysteryBox extends Spell {
 				((Player)this.owner).addSpell(this.spells.get(0));
 				this.previousSpellImage = this.spells.get(0).getImage();
 				this.spells.remove(0);
-				ParticleEmitter pe = new ParticleEmitter(new Point(this.owner.getLoc().x, this.owner.getLoc().y + SPELL_DRAW_Y_OFFSET), EmitterTypes.CIRCLE_RADIAL, GameMap.particle_genericWhite, true, //point/parent, emitter type, image path, alphaDecay
+				ParticleEmitter pe = new ParticleEmitter(new Point(this.owner.getLoc().x, this.owner.getLoc().y + SPELL_DRAW_Y_OFFSET), EmitterTypes.CIRCLE_RADIAL, "res/particle_genericYellow.png", true, //point/parent, emitter type, image path, alphaDecay
 						6.5f, 9.0f, //particle start scale
 						1.5f, 4.0f, //particle end scale
 						20.0f, //drag

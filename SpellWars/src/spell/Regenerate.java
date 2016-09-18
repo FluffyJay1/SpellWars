@@ -25,7 +25,7 @@ public class Regenerate extends Spell {
 		if(this.hpHealed >= HEAL_AMOUNT || this.owner.getRemove()) {
 			this.finishSpell();
 		}
-		ParticleEmitter pe = new ParticleEmitter(Point.add(this.owner.getLoc(), new Point(0, -this.owner.getDrawHeight())), EmitterTypes.CIRCLE_DIRECTION, GameMap.particle_heal, true, /*point, emitter type, image path, alphaDecay*/
+		ParticleEmitter pe = new ParticleEmitter(Point.add(this.owner.getLoc(), new Point(0, -this.owner.getDrawHeight())), EmitterTypes.CIRCLE_DIRECTION, "res/particle_heal.png", true, /*point, emitter type, image path, alphaDecay*/
 				0.5f, 1, /*particle start scale*/
 				0.5f, 1, /*particle end scale*/
 				3.5f, /*drag*/

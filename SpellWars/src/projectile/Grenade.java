@@ -118,7 +118,7 @@ public class Grenade extends Projectile {
 	}
 	public void onGrenadeLanded() {
 		//String i = "res/particle_genericYellow.png";
-		ParticleEmitter pe = new ParticleEmitter(this.getLoc(), EmitterTypes.POINT_RADIAL, GameMap.particle_explosion, true, //point/parent, emitter type, image path, alphaDecay
+		ParticleEmitter pe = new ParticleEmitter(this.getLoc(), EmitterTypes.POINT_RADIAL, "res/particle_explosion.png", true, //point/parent, emitter type, image path, alphaDecay
 				0.4f, 0.6f, //particle start scale
 				1.2f, 1.7f, //particle end scale
 				6.5f, //drag

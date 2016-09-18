@@ -42,7 +42,7 @@ public class HellRain extends Spell {
 	public void onThink(){
 		while(this.shotsFired < (1 - (this.timer/DURATION)) * NUM_STRIKES) {
 			this.fire();
-			ParticleEmitter pe = new ParticleEmitter(this.owner.getLoc(), EmitterTypes.LINE_RADIAL, GameMap.particle_genericYellow, false, //point/parent, emitter type, image path, alphaDecay
+			ParticleEmitter pe = new ParticleEmitter(this.owner.getLoc(), EmitterTypes.LINE_RADIAL, "res/particle_genericYellow.png", false, //point/parent, emitter type, image path, alphaDecay
 					2.8f, 3.0f, //particle start scale
 					0, 0, //particle end scale
 					10.5f, //drag

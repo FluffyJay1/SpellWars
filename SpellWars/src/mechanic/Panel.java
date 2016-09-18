@@ -35,7 +35,6 @@ public class Panel {
 	public static Image hole;
 	public static Image blueoutline;
 	public static Image redoutline;
-	public static Image lavaAnimation;
 	public static Image mud;
 	Animation lava;
 	public static boolean imagesLoaded = false;
@@ -59,7 +58,7 @@ public class Panel {
 				hole = new Image("res/panel/hole.png", false, Image.FILTER_NEAREST);
 				redoutline = new Image("res/panel/redoutline.png", false, Image.FILTER_NEAREST);
 				blueoutline = new Image("res/panel/blueoutline.png", false, Image.FILTER_NEAREST);
-				lavaAnimation = new Image("res/panel/lava_animation.png", false, Image.FILTER_NEAREST);
+				//lavaAnimation = new Image("res/panel/lava_animation.png", false, Image.FILTER_NEAREST);
 				mud = new Image("res/panel/mud.png", false, Image.FILTER_NEAREST);
 				imagesLoaded = true;
 			} catch (SlickException e) {
@@ -67,7 +66,7 @@ public class Panel {
 				e.printStackTrace();
 			}
 		}
-		this.lava = new Animation(lavaAnimation.getScaledCopy((int)map.getSizeOfPanel().x * 6,(int)map.getSizeOfPanel().y), 6, 1, 2f, true, false);
+		this.lava = new Animation("res/panel/lava_animation.png", 6, 1, (float)this.map.getSizeOfPanel().x, (float)this.map.getSizeOfPanel().y, 2f, true, false);
 		this.lava.changeLoc(map.gridToPosition(new Point(x, y)));
 		this.projectileFlashTimer = 0;
 		this.importantFlashTimer = 0;

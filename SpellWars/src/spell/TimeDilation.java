@@ -44,7 +44,7 @@ public class TimeDilation extends Spell {
 		this.setThinkInterval(INTERVAL);
 		this.ticks = 0;
 		this.onThink();
-		ParticleEmitter pe = new ParticleEmitter(new Point(Game.WINDOW_WIDTH/2, Game.WINDOW_HEIGHT/2), EmitterTypes.POINT_DIRECTION, this.getImage(), true, /*point, emitter type, image path, alphaDecay*/
+		ParticleEmitter pe = new ParticleEmitter(new Point(Game.WINDOW_WIDTH/2, Game.WINDOW_HEIGHT/2), EmitterTypes.POINT_DIRECTION, "res/spell/timedilation.png", true, /*point, emitter type, image path, alphaDecay*/
 				20.0f, 20.0f, /*particle start scale*/
 				25, 25, /*particle end scale*/
 				0.0f, /*drag*/

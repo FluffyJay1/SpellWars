@@ -1,4 +1,5 @@
 package particlesystem;
+import mechanic.Game;
 import mechanic.GameMap;
 import mechanic.Point;
 
@@ -9,6 +10,7 @@ import org.newdawn.slick.SlickException;
 
 public class ParticleBase {
 	private Image pic;
+	private String imagepath;
 	private Point loc;
 	private Point vel; //I DON'T CARE I'M REPRESENTING VELOCITY AS A POINT
 	private float drag; //BETWEEN 0 AND 100
@@ -36,10 +38,10 @@ public class ParticleBase {
 		this(loc, vel, 0, 0, 0, 1, null, false, 1, 1); //MAGIC NUMBER ALERT
 	}
 	public ParticleBase(Point loc, Point vel, float drag, float orientation, 
-			float rVel, float lifetime, Image pic, boolean alphaDecay, float startScale, float endScale){
+			float rVel, float lifetime, String path, boolean alphaDecay, float startScale, float endScale){
 		this.loc = loc;
 		this.vel = vel;
-		this.pic = pic.copy();
+		this.setImage(path);
 		this.lifetime = lifetime;
 		this.maxLifetime = lifetime;
 		this.drag = drag;
@@ -50,6 +52,25 @@ public class ParticleBase {
 		this.scale = startScale;
 		this.startScale = startScale;
 		this.endScale = endScale;
+	}
+	public void setImage(String path){
+		if(Game.images.containsKey(path)) {
+			this.pic = Game.images.get(path).copy();
+		} else {
+			try {
+				this.pic = new Image(path);
+				Game.images.put(path, this.pic.copy());
+			} catch (SlickException e) {
+				System.out.println("Unable to load particle: " + path);
+				e.printStackTrace();
+			} finally {
+				System.out.println("loaded into memory: " + path);
+			}
+		}
+		this.imagepath = path;
+	}
+	public String getImagePath() {
+		return this.imagepath;
 	}
 	public float getMaxLifetime(){
 		return maxLifetime;

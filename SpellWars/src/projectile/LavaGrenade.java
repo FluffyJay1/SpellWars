@@ -36,7 +36,7 @@ public class LavaGrenade extends Grenade {
 			Point f = Point.add(p, this.endLoc);
 			if(this.getMap().pointIsInGrid(f)) {
 				this.getMap().getPanelAt(f).setPanelState(PanelState.LAVA);
-				ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(f), EmitterTypes.CIRCLE_DIRECTION, GameMap.particle_genericYellow, false, //point/parent, emitter type, image path, alphaDecay
+				ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(f), EmitterTypes.CIRCLE_DIRECTION, "res/particle_genericYellow.png", false, //point/parent, emitter type, image path, alphaDecay
 						8.5f, 3.5f, //particle start scale
 						0.0f, 0.0f, //particle end scale
 						4.5f, //drag

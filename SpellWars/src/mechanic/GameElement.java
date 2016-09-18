@@ -53,6 +53,7 @@ public abstract class GameElement {
 	private GameElement target;
 	*/
 	private Image pic;
+	private String imagepath;
 	protected boolean remove;
 	protected boolean disconnected;
 	private float frametime;
@@ -87,6 +88,7 @@ public abstract class GameElement {
 		this.drawColorMultiplier = Color.white;
 		this.disconnected = false;
 	}
+	/*
 	public GameElement(double hp, double maxHP, double speed, double orientation, Point loc, double size, float collisionRadius, Image image) {
 		this.changeMaxHP(maxHP);
 		this.changeHP(hp);
@@ -104,6 +106,7 @@ public abstract class GameElement {
 		this.drawColorMultiplier = Color.white;
 		this.disconnected = false;
 	}
+	*/
 	
 	/**
 	 * Access instance variable hp
@@ -318,16 +321,22 @@ public abstract class GameElement {
 				this.pic = new Image(path);
 				Game.images.put(path, this.pic.copy());
 			} catch (SlickException e) {
-				System.out.println("Unable to load image");
+				System.out.println("Unable to load: " + path);
 				e.printStackTrace();
 			} finally {
 				System.out.println("loaded into memory: " + path);
 			}
 		}
+		this.imagepath = path;
 	}
+	public String getImagePath() {
+		return this.imagepath;
+	}
+	/*
 	public void setImage(Image image) {
 		this.pic = image;
 	}
+	*/
 	
 	public boolean getRemove(){
 		return remove;

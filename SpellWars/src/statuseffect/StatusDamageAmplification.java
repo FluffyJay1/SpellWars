@@ -34,9 +34,9 @@ public class StatusDamageAmplification extends StatusEffect {
 	@Override
 	public void onInterval() {
 		if(this.getOwner() != null && this.getOwner() instanceof Unit) {
-			Image image = GameMap.particle_genericRed;
+			String image = "res/particle_genericRed.png";
 			if(((Unit)this.getOwner()).teamID == GameMap.ID_RIGHT) {
-				image = GameMap.particle_genericBlue;
+				image = "res/particle_genericBlue.png";
 			}
 			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.CIRCLE_DIRECTION, image, true, /*point, emitter type, image path, alphaDecay*/
 					1.5f, 2.5f, /*particle start scale*/

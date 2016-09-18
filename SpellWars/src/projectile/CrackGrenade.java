@@ -33,7 +33,7 @@ public class CrackGrenade extends Grenade {
 		if(Math.random() < this.crackChance) {
 			Panel panel = this.getMap().getPanelAt(this.endLoc);
 			panel.crackLight();
-			ParticleEmitter pe = new ParticleEmitter(this.getLoc(), EmitterTypes.POINT_DIRECTION, GameMap.particle_genericWhite, false, //point/parent, emitter type, image path, alphaDecay
+			ParticleEmitter pe = new ParticleEmitter(this.getLoc(), EmitterTypes.POINT_DIRECTION, "res/particle_genericWhite.png", false, //point/parent, emitter type, image path, alphaDecay
 					2.8f, 3.0f, //particle start scale
 					0, 0, //particle end scale
 					10.5f, //drag
@@ -44,7 +44,7 @@ public class CrackGrenade extends Grenade {
 					90, 60, 0, 0); //keyvalues
 			this.getMap().addParticleEmitter(pe);
 		}
-		ParticleEmitter pe = new ParticleEmitter(this.getLoc(), EmitterTypes.POINT_RADIAL, GameMap.particle_genericYellow, false, //point/parent, emitter type, image path, alphaDecay
+		ParticleEmitter pe = new ParticleEmitter(this.getLoc(), EmitterTypes.POINT_RADIAL, "res/particle_genericYellow.png", false, //point/parent, emitter type, image path, alphaDecay
 				1.4f, 2.6f, //particle start scale
 				0, 0, //particle end scale
 				18.5f, //drag

@@ -41,7 +41,7 @@ public class StunGrenade extends Grenade {
 					if(this.getMap().getPanelAt(f).unitStandingOnPanel != null && this.getMap().getPanelAt(f).unitStandingOnPanel.teamID != this.teamID) {
 						this.getMap().getPanelAt(f).unitStandingOnPanel.stun(maxStunDuration);
 					}
-					ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(f), EmitterTypes.POINT_DIRECTION, GameMap.particle_genericBlue, false, //point/parent, emitter type, image path, alphaDecay
+					ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(f), EmitterTypes.POINT_DIRECTION, "res/particle_genericBlue.png", false, //point/parent, emitter type, image path, alphaDecay
 							3.0f, 1.5f, //particle start scale
 							0.0f, 0.0f, //particle end scale
 							4.5f, //drag
@@ -56,7 +56,7 @@ public class StunGrenade extends Grenade {
 						this.getMap().getPanelAt(f).unitStandingOnPanel.stun(minStunDuration);
 						this.getMap().getPanelAt(f).unitStandingOnPanel.doDamage(this.grenadeDamage);
 					}
-					ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(f), EmitterTypes.POINT_DIRECTION, GameMap.particle_genericBlue, false, //point/parent, emitter type, image path, alphaDecay
+					ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(f), EmitterTypes.POINT_DIRECTION, "res/particle_genericBlue.png", false, //point/parent, emitter type, image path, alphaDecay
 							2.5f, 1.5f, //particle start scale
 							0.0f, 0.0f, //particle end scale
 							4.5f, //drag

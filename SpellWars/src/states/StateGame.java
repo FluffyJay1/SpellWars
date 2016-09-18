@@ -72,7 +72,7 @@ public class StateGame extends BasicGameState{
 	/*
 	 * DRAW INFO CRASH COURSE:
 	 * 
-	 * drawImage: drawi <string imagepath> <int xpos> <int ypos> <int width> <int height> <int rotation> <int r> <int g> <int b> <int a> \n
+	 * drawImage: drawi <string imagepath> <int xpos> <int ypos> <int width> <int height> <int rotation> <int r> <int g> <int b> <int a> <int hflipvflip> \n
 	 * drawAnimation: drawa <string imagepath> <int xpos> <int ypos> <int width> <int height> <int srcx1> <int srcy1> <int srcx2> <int srcy2> <int r> <int g> <int b> <int a> \n
 	 * drawWarped: draww <string imagepath> <int x1> <int y1> <int x2> <int y2> <int x3> <int y3> <int x4> <int y4> <int r> <int g> <int b> <int a> \n
 	 * drawRect: drawr <int x> <int y> <int width> <int height> <int r> <int g> <int b> <int a> \n

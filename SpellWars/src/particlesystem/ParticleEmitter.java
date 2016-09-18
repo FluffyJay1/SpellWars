@@ -1,5 +1,6 @@
 package particlesystem;
 
+import mechanic.Game;
 import mechanic.GameElement;
 import mechanic.GameMap;
 import mechanic.Point;
@@ -23,7 +24,8 @@ public class ParticleEmitter extends GameElement {
 				0, 0, 0, 0); //keyvalues
 		this.getMap().addParticleEmitter(pe);
 	 */
-	private Image particlePic;
+	//private Image particlePic;
+	private String particleimagepath;
 	private float particleDrag; //BETWEEN 0 AND 100
 	private float particleMinRVel; //ROTATIONAL VELOCITY
 	private float particleMaxRVel;
@@ -75,12 +77,7 @@ public class ParticleEmitter extends GameElement {
 			float kv1, float kv2, float kv3, float kv4) { /*.kv1 to .kv4 are just for extra parameters to pass to the function based on its .emitterType*/
 		this.changeLoc(position);
 		this.emitterType = emitterType;
-		try {
-			this.particlePic = new Image(particlePic);
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.setParticleImage(particlePic);
 		this.particleDrag = particleDrag;
 		this.particleMinRVel = particleMinRVel;
 		this.particleMaxRVel = particleMaxRVel;
@@ -117,16 +114,16 @@ public class ParticleEmitter extends GameElement {
 		this.kv3 = kv3;
 		this.kv4 = kv4;
 	}
-	
-	public ParticleEmitter(Point position, EmitterTypes emitterType, Image particlePic, boolean particleAlphaDecay,/*Creates a particle emitter at .position, type is .emitterType, image is .particlePic, .particleAlphaDecay controls if particle fades out*/
-			float particleMinStartScale, float particleMaxStartScale, /*how much to scale the image at the start*/
-			float particleMinEndScale, float particleMaxEndScale, /*how much to scale the image at the end*/
-			float particleDrag, /*How much the particle slows down, as fraction of speed to lose per sec*/
-			float particleMinRVel, float particleMaxRVel, /*the minimum and maximum speeds the particle can spin at, in degrees per sec*/
-			float particleMinLifetime, float particleMaxLifetime, /*the minimum and maximum seconds the particle can live for, in seconds*/
-			float minLaunchSpeed, float maxLaunchSpeed, /*the minimum and maximum speeds the particle can start at, in pixels per second*/
-			float emitterLifetime, float emissionRate, /*the lifetime of the emitter itself in seconds, and .emissionRate is how often the emitter emits particles, in particles per second, and if the lifetime of the emitter is 0, then the emission rate becomes the number of particles to emit at once*/
-			float kv1, float kv2, float kv3, float kv4) { /*.kv1 to .kv4 are just for extra parameters to pass to the function based on its .emitterType*/
+	/*
+	public ParticleEmitter(Point position, EmitterTypes emitterType, Image particlePic, boolean particleAlphaDecay,//Creates a particle emitter at .position, type is .emitterType, image is .particlePic, .particleAlphaDecay controls if particle fades out
+			float particleMinStartScale, float particleMaxStartScale, //how much to scale the image at the start
+			float particleMinEndScale, float particleMaxEndScale, //how much to scale the image at the end
+			float particleDrag, //How much the particle slows down, as fraction of speed to lose per sec
+			float particleMinRVel, float particleMaxRVel, //the minimum and maximum speeds the particle can spin at, in degrees per sec
+			float particleMinLifetime, float particleMaxLifetime, //the minimum and maximum seconds the particle can live for, in seconds
+			float minLaunchSpeed, float maxLaunchSpeed, //the minimum and maximum speeds the particle can start at, in pixels per second
+			float emitterLifetime, float emissionRate, //the lifetime of the emitter itself in seconds, and .emissionRate is how often the emitter emits particles, in particles per second, and if the lifetime of the emitter is 0, then the emission rate becomes the number of particles to emit at once
+			float kv1, float kv2, float kv3, float kv4) { //.kv1 to .kv4 are just for extra parameters to pass to the function based on its .emitterType
 		this.changeLoc(position);
 		this.emitterType = emitterType;
 		this.particlePic = particlePic;
@@ -166,7 +163,7 @@ public class ParticleEmitter extends GameElement {
 		this.kv3 = kv3;
 		this.kv4 = kv4;
 	}
-	
+	*/
 	public ParticleEmitter(GameElement element, EmitterTypes emitterType, String particlePic, boolean particleAlphaDecay,/*Creates a particle emitter whose parent is element, type is .emitterType, filepath of image is .particlePic, .particleAlphaDecay controls if particle fades out*/
 			float particleMinStartScale, float particleMaxStartScale, /*how much to scale the image at the start*/
 			float particleMinEndScale, float particleMaxEndScale, /*how much to scale the image at the end*/
@@ -246,7 +243,9 @@ public class ParticleEmitter extends GameElement {
 			break;
 		}
 	}
-	
+	public void setParticleImage(String path){
+		this.particleimagepath = path;
+	}
 	@Override
 	public void update(){
 		while(this.emissionTimer <= 0) {
@@ -306,7 +305,7 @@ public class ParticleEmitter extends GameElement {
 		float randomLifetime = (float) (this.particleMinLifetime + Math.random() * (this.particleMaxLifetime - this.particleMinLifetime)); //interpolates between min and max lifetime
 		
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomRadian), 
-				randomRVel, randomLifetime, this.particlePic, this.particleAlphaDecay, randomStartScale, randomEndScale);
+				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle
 	}
 	private void emitPointDirection(){
@@ -326,7 +325,7 @@ public class ParticleEmitter extends GameElement {
 		float randomLifetime = (float) (this.particleMinLifetime + Math.random() * (this.particleMaxLifetime - this.particleMinLifetime)); //interpolates between min and max lifetime
 		
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(-randomRadian), 
-				randomRVel, randomLifetime, this.particlePic, this.particleAlphaDecay, randomStartScale, randomEndScale);
+				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle 
 	}
 	private void emitCircleRadial(){
@@ -351,7 +350,7 @@ public class ParticleEmitter extends GameElement {
 		float randomRVel = (float) (this.particleMinRVel + Math.random() * (this.particleMaxRVel - this.particleMinRVel)); //interpolates between min and max rvel
 		float randomLifetime = (float) (this.particleMinLifetime + Math.random() * (this.particleMaxLifetime - this.particleMinLifetime)); //interpolates between min and max lifetime
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomRadian), 
-				randomRVel, randomLifetime, this.particlePic, this.particleAlphaDecay, randomStartScale, randomEndScale);
+				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle
 	}
 	private void emitCircleDirection() {
@@ -379,7 +378,7 @@ public class ParticleEmitter extends GameElement {
 		float randomRVel = (float) (this.particleMinRVel + Math.random() * (this.particleMaxRVel - this.particleMinRVel)); //interpolates between min and max rvel
 		float randomLifetime = (float) (this.particleMinLifetime + Math.random() * (this.particleMaxLifetime - this.particleMinLifetime)); //interpolates between min and max lifetime
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomVelRadian), 
-				randomRVel, randomLifetime, this.particlePic, this.particleAlphaDecay, randomStartScale, randomEndScale);
+				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle
 	}
 	private void emitCircleRandom(){
@@ -405,7 +404,7 @@ public class ParticleEmitter extends GameElement {
 		float randomRVel = (float) (this.particleMinRVel + Math.random() * (this.particleMaxRVel - this.particleMinRVel)); //interpolates between min and max rvel
 		float randomLifetime = (float) (this.particleMinLifetime + Math.random() * (this.particleMaxLifetime - this.particleMinLifetime)); //interpolates between min and max lifetime
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomRadian), 
-				randomRVel, randomLifetime, this.particlePic, this.particleAlphaDecay, randomStartScale, randomEndScale);
+				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle
 	}
 	private void emitLineRadial() {
@@ -433,7 +432,7 @@ public class ParticleEmitter extends GameElement {
 			float randomRVel = (float) (this.particleMinRVel + Math.random() * (this.particleMaxRVel - this.particleMinRVel)); //interpolates between min and max rvel
 			float randomLifetime = (float) (this.particleMinLifetime + Math.random() * (this.particleMaxLifetime - this.particleMinLifetime)); //interpolates between min and max lifetime
 			ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(normalAngle), 
-					randomRVel, randomLifetime, this.particlePic, this.particleAlphaDecay, randomStartScale, randomEndScale);
+					randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 			this.getMap().addParticle(particle); //adds the particle
 		} else { //IF A WIDTH IS SPECIFIED
 			double circleSpawnWeight = this.kv4 * this.kv4 * Math.PI; //the weight of probablility to spawn in a circle end
@@ -490,7 +489,7 @@ public class ParticleEmitter extends GameElement {
 			float randomLifetime = (float) (this.particleMinLifetime + Math.random() * (this.particleMaxLifetime - this.particleMinLifetime)); //interpolates between min and max lifetime
 			
 			ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(spawnAngle), 
-					randomRVel, randomLifetime, this.particlePic, this.particleAlphaDecay, randomStartScale, randomEndScale);
+					randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 			this.getMap().addParticle(particle); //adds the particle
 		}
 	}
@@ -514,7 +513,7 @@ public class ParticleEmitter extends GameElement {
 			float randomRVel = (float) (this.particleMinRVel + Math.random() * (this.particleMaxRVel - this.particleMinRVel)); //interpolates between min and max rvel
 			float randomLifetime = (float) (this.particleMinLifetime + Math.random() * (this.particleMaxLifetime - this.particleMinLifetime)); //interpolates between min and max lifetime
 			ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomAngle), 
-					randomRVel, randomLifetime, this.particlePic, this.particleAlphaDecay, randomStartScale, randomEndScale);
+					randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 			this.getMap().addParticle(particle); //adds the particle
 		} else { //IF A WIDTH IS SPECIFIED
 			double circleSpawnWeight = this.kv4 * this.kv4 * Math.PI; //the weight of probablility to spawn in a circle end
@@ -572,7 +571,7 @@ public class ParticleEmitter extends GameElement {
 			float randomLifetime = (float) (this.particleMinLifetime + Math.random() * (this.particleMaxLifetime - this.particleMinLifetime)); //interpolates between min and max lifetime
 			
 			ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomMoveDirection), 
-					randomRVel, randomLifetime, this.particlePic, this.particleAlphaDecay, randomStartScale, randomEndScale);
+					randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 			this.getMap().addParticle(particle); //adds the particle
 		}
 	}

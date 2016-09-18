@@ -49,7 +49,7 @@ public class StatusFrostMei extends StatusEffect {
 	public void onInterval() {
 		this.setColorModifier(new Color(180, 180, 255));
 		if(Math.random() < EMIT_CHANCE) {
-			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, GameMap.particle_genericBlue, true, /*point, emitter type, image path, alphaDecay*/
+			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_genericBlue.png", true, /*point, emitter type, image path, alphaDecay*/
 					1.0f, 1.0f, /*particle start scale*/
 					2.5f, 2.5f, /*particle end scale*/
 					2.0f, /*drag*/
@@ -63,7 +63,7 @@ public class StatusFrostMei extends StatusEffect {
 		if(this.getOwner().getStatusEffectCount(ID) >= NUM_STACKS_TO_STUN && this.getOwner() instanceof Unit) {
 			((Unit)this.getOwner()).stun(this.interval);
 			this.setColorModifier(new Color(100, 100, 255));
-			ParticleEmitter pe2 = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.CIRCLE_RADIAL, GameMap.particle_genericBlue, true, /*point, emitter type, image path, alphaDecay*/
+			ParticleEmitter pe2 = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.CIRCLE_RADIAL, "res/particle_genericBlue.png", true, /*point, emitter type, image path, alphaDecay*/
 					1.0f, 1.0f, /*particle start scale*/
 					2.5f, 2.5f, /*particle end scale*/
 					2.0f, /*drag*/
@@ -86,7 +86,7 @@ public class StatusFrostMei extends StatusEffect {
 	@Override
 	public void onCreate() {
 		if(this.getOwner() != null) {
-			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, GameMap.particle_genericBlue, true, /*point, emitter type, image path, alphaDecay*/
+			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_genericBlue.png", true, /*point, emitter type, image path, alphaDecay*/
 					1.5f, 1.5f, /*particle start scale*/
 					4.0f, 8.0f, /*particle end scale*/
 					3.5f, /*drag*/

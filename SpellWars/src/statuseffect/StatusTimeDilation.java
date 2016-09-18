@@ -42,7 +42,7 @@ public class StatusTimeDilation extends StatusEffect {
 		if(this.getOwner() != null) {
 			if(this.isBuff) {
 				this.setColorModifier(new Color(200, 220, 255));
-				ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, GameMap.particle_timedilationgood, true, /*point, emitter type, image path, alphaDecay*/
+				ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_timedilationgood.png", true, /*point, emitter type, image path, alphaDecay*/
 						1.5f, 1.5f, /*particle start scale*/
 						4.0f, 7.0f, /*particle end scale*/
 						10.5f, /*drag*/
@@ -54,7 +54,7 @@ public class StatusTimeDilation extends StatusEffect {
 				getOwner().getMap().addParticleEmitter(pe);
 			} else {
 				this.setColorModifier(new Color(255, 150, 230));
-				ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, GameMap.particle_timedilationbad, true, /*point, emitter type, image path, alphaDecay*/
+				ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_timedilationbad.png", true, /*point, emitter type, image path, alphaDecay*/
 						1.5f, 1.5f, /*particle start scale*/
 						4.0f, 7.0f, /*particle end scale*/
 						6.5f, /*drag*/
@@ -71,7 +71,7 @@ public class StatusTimeDilation extends StatusEffect {
 	@Override
 	public void onInterval() {
 		if(this.isBuff) {
-			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, GameMap.particle_timedilationgood, true, /*point, emitter type, image path, alphaDecay*/
+			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_timedilationgood.png", true, /*point, emitter type, image path, alphaDecay*/
 					0.5f * (this.getMoveSpeedModifier() - 1), 1.0f, /*particle start scale*/
 					0.5f, 0.5f, /*particle end scale*/
 					22.0f, /*drag*/
@@ -82,7 +82,7 @@ public class StatusTimeDilation extends StatusEffect {
 					0, 0, 0, 0); /*keyvalues*/
 			this.getOwner().getMap().addParticleEmitter(pe);
 		} else {
-			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.CIRCLE_RADIAL, GameMap.particle_timedilationbad, true, /*point, emitter type, image path, alphaDecay*/
+			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.CIRCLE_RADIAL, "res/particle_timedilationbad.png", true, /*point, emitter type, image path, alphaDecay*/
 					0.6f / (float)Math.pow(this.getMoveSpeedModifier(), 0.5), 0.6f, /*particle start scale*/
 					0.2f, 0.2f, /*particle end scale*/
 					2.0f, /*drag*/

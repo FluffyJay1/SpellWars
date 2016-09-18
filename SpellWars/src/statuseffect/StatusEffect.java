@@ -6,6 +6,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 
+import mechanic.Game;
 import mechanic.GameElement;
 import mechanic.Point;
 
@@ -25,6 +26,7 @@ public class StatusEffect {
 	float damagePerInterval;
 	String id;
 	Image icon;
+	private String imagepath;
 	//INTRODUCE LEVELS
 	int level;
 	boolean muteEffect, drawIcon;
@@ -151,13 +153,21 @@ public class StatusEffect {
 	public void setIcon(Image icon) {
 		this.icon = icon;
 	}
-	public void setIcon(String icon) {
-		try {
-			this.icon = new Image(icon);
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void setIcon(String path){
+		if(Game.images.containsKey(path)) {
+			this.icon = Game.images.get(path).copy();
+		} else {
+			try {
+				this.icon = new Image(path);
+				Game.images.put(path, this.icon.copy());
+			} catch (SlickException e) {
+				System.out.println("Unable to load status effect icon");
+				e.printStackTrace();
+			} finally {
+				System.out.println("loaded into memory: " + path);
+			}
 		}
+		this.imagepath = path;
 	}
 	public Image getIcon() {
 		return this.icon;
