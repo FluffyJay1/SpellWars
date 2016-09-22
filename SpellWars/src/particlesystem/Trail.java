@@ -120,6 +120,8 @@ public class Trail extends GameElement {
 	}
 	@Override
 	public void draw(Graphics g){
+		this.headNode.orientation = directionOfTrail;
+		this.headNode.loc = Point.clone(this.getLoc());
 		for(int i = 1; i < this.trailNodes.size(); i++) {
 			TrailNode firstNode = this.trailNodes.get(i);
 			TrailNode secondNode = this.trailNodes.get(i - 1);

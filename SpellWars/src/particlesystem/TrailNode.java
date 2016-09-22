@@ -8,8 +8,9 @@ public class TrailNode {
 	float lifeTime;
 	float maxLifeTime;
 	Point loc;
-	Point leftControlPoint;
-	Point rightControlPoint;
+	//Point leftControlPoint;
+	//Point rightControlPoint;
+	float width;
 	Point velocity;
 	boolean reverseAfter;
 	boolean remove;
@@ -21,18 +22,18 @@ public class TrailNode {
 		this.endWidth = endWidth;
 		this.lifeTime = lifeTime;
 		this.maxLifeTime = lifeTime;
-		this.leftControlPoint = Point.getFuturePoint(this.loc, startWidth/2, Math.toRadians(this.orientation + 90));
-		this.rightControlPoint = Point.getFuturePoint(this.loc, startWidth/2, Math.toRadians(this.orientation - 90));
+		//this.leftControlPoint = Point.getFuturePoint(this.loc, startWidth/2, Math.toRadians(this.orientation + 90));
+		//this.rightControlPoint = Point.getFuturePoint(this.loc, startWidth/2, Math.toRadians(this.orientation - 90));
 		this.reverseAfter = reverseAfter;
 		this.velocity = velocity;
 	}
 	public void update(float frameTime) {
-		float width = this.endWidth + (this.lifeTime/this.maxLifeTime) * (this.startWidth - this.endWidth);
+		this.width = this.endWidth + (this.lifeTime/this.maxLifeTime) * (this.startWidth - this.endWidth);
 		if(reverseAfter) {
-			width = this.endWidth + Math.abs(2 *(this.lifeTime/this.maxLifeTime) - 1) * (this.startWidth - this.endWidth);
+			this.width = this.endWidth + Math.abs(2 *(this.lifeTime/this.maxLifeTime) - 1) * (this.startWidth - this.endWidth);
 		}
-		this.leftControlPoint = Point.getFuturePoint(this.loc, width/2, Math.toRadians(this.orientation + 90));
-		this.rightControlPoint = Point.getFuturePoint(this.loc, width/2, Math.toRadians(this.orientation - 90));
+		//this.leftControlPoint = Point.getFuturePoint(this.loc, width/2, Math.toRadians(this.orientation + 90));
+		//this.rightControlPoint = Point.getFuturePoint(this.loc, width/2, Math.toRadians(this.orientation - 90));
 		this.lifeTime -= frameTime;
 		if(lifeTime <= 0) {
 			this.remove = true;
@@ -40,9 +41,9 @@ public class TrailNode {
 		this.loc.add(Point.scale(this.velocity, frameTime));
 	}
 	public Point getLeftControlPoint() {
-		return this.leftControlPoint;
+		return Point.getFuturePoint(this.loc, this.width/2, Math.toRadians(this.orientation + 90));
 	}
 	public Point getRightControlPoint() {
-		return this.rightControlPoint;
+		return Point.getFuturePoint(this.loc, this.width/2, Math.toRadians(this.orientation - 90));
 	}
 }

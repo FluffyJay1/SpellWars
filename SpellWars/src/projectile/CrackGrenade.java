@@ -1,5 +1,7 @@
 package projectile;
 
+import org.newdawn.slick.Graphics;
+
 import mechanic.GameMap;
 import mechanic.Panel;
 import mechanic.PanelState;
@@ -54,5 +56,9 @@ public class CrackGrenade extends Grenade {
 				0, 5, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
 				0, 0, 0, 0); //keyvalues
 		this.getMap().addParticleEmitter(pe);
+	}
+	@Override
+	public void onDraw() {
+		this.trail.changeLoc(Point.add(this.getLoc(), new Point(0, -this.getDrawHeight())));
 	}
 }

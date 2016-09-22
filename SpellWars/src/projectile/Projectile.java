@@ -236,8 +236,12 @@ public class Projectile extends GameElement {
 	public void setImageScale(float imageScale){
 		this.imageScale = imageScale;
 	}
+	public void onDraw() {
+		
+	}
 	@Override
 	public void draw(Graphics g){
+		this.onDraw();
 		this.flash();
 		Point loc = Point.subtract(this.getMap().gridToPosition(this.getGridLoc()), Point.scale(this.getMap().getSizeOfPanel(), 0.4));
 		/*
