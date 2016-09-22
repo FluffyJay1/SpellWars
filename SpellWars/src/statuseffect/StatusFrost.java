@@ -16,20 +16,10 @@ import mechanic.Point;
 public class StatusFrost extends StatusEffect {
 	public static final String ID = "frost"; //for stacking
 	//public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
-	static Image icon;
-	static boolean imageLoaded = false;
 	//float damageChange;
 	public StatusFrost(GameElement owner, float speedModifier, float damagePerSecond, float duration, float damageChange, int level) {
 		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, duration, level);
-		if(imageLoaded == false) {
-			try {
-				icon = new Image("res/statuseffect/icon_frost.png");
-			} catch (SlickException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		this.setIcon(icon);
+		this.setIcon("res/statuseffect/icon_frost.png");
 		this.damagePerInterval = damagePerSecond;
 		this.interval = 1;
 		this.setMoveSpeedModifier(speedModifier);

@@ -8,7 +8,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import mechanic.GameMap;
 import mechanic.Point;
+import states.StateGame;
 /*
  * DESCRIPTION
  * 
@@ -20,6 +22,7 @@ import mechanic.Point;
 public class Text extends UIElement {
 	public static final int MAX_CHARACTER_VALUE = 255;
 	static Image[] characterImages = new Image[MAX_CHARACTER_VALUE];
+	static String[] characterImagePaths = new String[MAX_CHARACTER_VALUE];
 	static final Character[] USABLE_SPECIAL_CHARACTERS = {' ','\'',':',',','-','!','(','%','.','+','?',')',';','/'};
 	static final Character NEW_LINE = '|';
 	static boolean alreadyLoadedImages = false;
@@ -55,6 +58,7 @@ public class Text extends UIElement {
 			for(int i = 0; i < MAX_CHARACTER_VALUE; i++) {
 				if(isUsableSpecialCharacter(i) || (i >= 48 && i <= 57) || (i >= 65 && i <= 90) || (i >= 97 && i <= 122) | i == 124) {
 					characterImages[i] = this.loadImageFromCharacter((char)i);
+					characterImagePaths[i] = this.getImagePathFromCharacter((char)i);
 				}
 			}
 			System.out.println("Text images successfully loaded!");
@@ -236,9 +240,18 @@ public class Text extends UIElement {
 				}
 			}
 		}
+		if(this.getMap() != null){
+			int drawoutline = 0;
+			if(this.useOutline) {
+				drawoutline = 1;
+			}
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataT(this.text, this.getFinalLoc().x, this.getFinalLoc().y, this.boxWidth, this.letterWidth, this.letterHeight, this.kerning, this.lineSpacing, this.format, drawoutline, this.color.getRed(), this.color.getGreen(), this.color.getBlue(), this.color.getAlpha(), this.outlineColor.getRed(), this.outlineColor.getGreen(), this.outlineColor.getBlue(), this.outlineColor.getAlpha()));
+		}
 	}
 	public void drawCharacter(Point loc, int index, Graphics g, boolean isUppercase) {
 		Image characterImage = characterImages[this.text.charAt(index)].getScaledCopy(this.letterWidth, this.letterHeight);
+		String characterImagePath = characterImagePaths[this.text.charAt(index)];
 		characterImage.setAlpha(this.getAlpha());
 		if(useOutline && !isUppercase) {
 			/* OBLITERATES FRAMERATE
@@ -251,8 +264,15 @@ public class Text extends UIElement {
 			g.drawImage(characterImage, (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY()), outlineColor);
 			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() + this.letterHeight * 0.0633), outlineColor);
 			g.drawImage(characterImage, (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY()), outlineColor);
-			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
 			
+			/*g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
+			if(this.getMap() != null) {
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() + this.letterWidth * 0.0833, loc.getY(), this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX(), loc.getY() + this.letterHeight * 0.0633, this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() - this.letterWidth * 0.0833, loc.getY(), this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX(), loc.getY() - this.letterHeight * 0.0633, this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+			}
+			*/
 		}
 		if(useOutline && isUppercase) {
 			/* DESTROYS FRAMERATE WTF
@@ -270,16 +290,37 @@ public class Text extends UIElement {
 			g.drawImage(characterImage, (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
 			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.1266), outlineColor);
 			g.drawImage(characterImage, (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
-			
-			
+			/*
+			if(this.getMap() != null) {
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() + this.letterWidth * 0.1667, loc.getY(), this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() + this.letterWidth * 0.0833, loc.getY() + this.letterHeight * 0.0633, this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX(), loc.getY() + this.letterHeight * 0.1266, this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() - this.letterWidth * 0.0833, loc.getY() + this.letterHeight * 0.0633, this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() - this.letterWidth * 0.1667, loc.getY(), this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() - this.letterWidth * 0.0833, loc.getY() - this.letterHeight * 0.0633, this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX(), loc.getY() - this.letterHeight * 0.1266, this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() + this.letterWidth * 0.0833, loc.getY() - this.letterHeight * 0.0633, this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
+			}
+			*/
 		}
 		g.drawImage(characterImage, (float)loc.getX(), (float)loc.getY(), color);
+		if(this.getMap() != null) {
+			//this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX(), loc.getY(), this.letterWidth, this.letterHeight, 0, color.getRedByte(), color.getGreenByte(), color.getBlueByte(), color.getAlphaByte(), 0));
+		}
 		if(isUppercase) {
 			//boldens the text
 			g.drawImage(characterImage, (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY()), color);
 			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() + this.letterHeight * 0.0633), color);
 			g.drawImage(characterImage, (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY()), color);
 			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.0633), color);
+			/*
+			if(this.getMap() != null) {
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() + this.letterWidth * 0.0833, loc.getY(), this.letterWidth, this.letterHeight, 0, color.getRedByte(), color.getGreenByte(), color.getBlueByte(), color.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX(), loc.getY() + this.letterHeight * 0.0633, this.letterWidth, this.letterHeight, 0, color.getRedByte(), color.getGreenByte(), color.getBlueByte(), color.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() - this.letterWidth * 0.0833, loc.getY(), this.letterWidth, this.letterHeight, 0, color.getRedByte(), color.getGreenByte(), color.getBlueByte(), color.getAlphaByte(), 0));
+				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX(), loc.getY() - this.letterHeight * 0.0633, this.letterWidth, this.letterHeight, 0, color.getRedByte(), color.getGreenByte(), color.getBlueByte(), color.getAlphaByte(), 0));
+			}
+			*/
 		}
 	}
 	/*
@@ -311,6 +352,42 @@ public class Text extends UIElement {
 	}
 	public Image getImageForCharacter(Character c) {
 		return characterImages[c];
+	}
+	public String getImagePathFromCharacter(Character c) {
+		switch(c) {
+		case ' ':
+			return "res/blank.png";
+		case '|':
+			return "res/blank.png";
+		case '\'':
+			return "res/ui/text/text_apostrophe.png";
+		case ':':
+			return "res/ui/text/text_colon.png";
+		case ',':
+			return "res/ui/text/text_comma.png";
+		case '-':
+			return "res/ui/text/text_dash.png";
+		case '!':
+			return "res/ui/text/text_exclam.png";
+		case '(':
+			return "res/ui/text/text_leftparen.png";
+		case '%':
+			return "res/ui/text/text_percent.png";
+		case '.':
+			return "res/ui/text/text_period.png";
+		case '+':
+			return "res/ui/text/text_plus.png";
+		case '?':
+			return "res/ui/text/text_question.png";
+		case ')':
+			return "res/ui/text/text_rightparen.png";
+		case ';':
+			return "res/ui/text/text_semicolon.png";
+		case '/':
+			return "res/ui/text/text_slash.png";
+		default:
+		return "res/ui/text/text_" + Character.toUpperCase(c) + ".png";
+		}
 	}
 	public Image loadImageFromCharacter(Character c){
 		switch(c) {

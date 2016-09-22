@@ -6,6 +6,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
+import states.StateGame;
 import statuseffect.PanelAura;
 import statuseffect.StatusFrost;
 import statuseffect.StatusMud;
@@ -172,33 +173,47 @@ public class Panel {
 		if(this.teamID == GameMap.ID_LEFT) {
 			//g.setColor(Color.red);
 			g.drawImage(redoutline.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataFN("res/panel/redoutline.png", this.map.gridToPosition(loc).x - panelSize.x/2, this.map.gridToPosition(loc).y - panelSize.y/2, panelSize.x, panelSize.y, 0, 255, 255, 255, 255, 0));
 		} else if(this.teamID == GameMap.ID_RIGHT) {
 			//g.setColor(Color.blue);
 			g.drawImage(blueoutline.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataFN("res/panel/blueoutline.png", this.map.gridToPosition(loc).x - panelSize.x/2, this.map.gridToPosition(loc).y - panelSize.y/2, panelSize.x, panelSize.y, 0, 255, 255, 255, 255, 0));
 		} else {
 			//g.setColor(Color.gray);
 		}
 		switch(this.state){
 		case NORMAL:
 			g.drawImage(normal.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataFN("res/panel/normal.png", this.map.gridToPosition(loc).x - panelSize.x/2, this.map.gridToPosition(loc).y - panelSize.y/2, panelSize.x, panelSize.y, 0, 255, 255, 255, 255, 0));
 			break;
 		case CRACKED:
 			g.drawImage(cracked.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataFN("res/panel/cracked.png", this.map.gridToPosition(loc).x - panelSize.x/2, this.map.gridToPosition(loc).y - panelSize.y/2, panelSize.x, panelSize.y, 0, 255, 255, 255, 255, 0));
 			break;
 		case HOLE:
 			g.drawImage(hole.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataFN("res/panel/hole.png", this.map.gridToPosition(loc).x - panelSize.x/2, this.map.gridToPosition(loc).y - panelSize.y/2, panelSize.x, panelSize.y, 0, 255, 255, 255, 255, 0));
 			break;
 		case LAVA:
-			lava.draw(g);
+			lava.draw(g, this.map);
 			break;
 		case MUD:
 			g.drawImage(mud.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataFN("res/panel/mud.png", this.map.gridToPosition(loc).x - panelSize.x/2, this.map.gridToPosition(loc).y - panelSize.y/2, panelSize.x, panelSize.y, 0, 255, 255, 255, 255, 0));
 			break;
 		default:
 			break;
 		}
 		if(this.panelResetTimer < PANEL_FLASH_DURATION && this.panelResetTimer > 0 && this.panelResetTimer % PANEL_FLASH_INTERVAL > PANEL_FLASH_INTERVAL/2) {
 			g.drawImage(normal.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataFN("res/panel/normal.png", this.map.gridToPosition(loc).x - panelSize.x/2, this.map.gridToPosition(loc).y - panelSize.y/2, panelSize.x, panelSize.y, 0, 255, 255, 255, 255, 0));
 		}
 		/*
 		Rectangle rect = new Rectangle((float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2), (float)panelSize.x, (float)panelSize.y);
@@ -211,6 +226,8 @@ public class Panel {
 			g.setColor(Color.yellow);
 			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * 0.8f, (float)panelSize.y * 0.8f);
 			g.fill(rect);
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * 0.8, panelSize.y * 0.8, 255, 255, 0, 255));
 			this.drawProjectileFlash = false;
 		}
 		if(this.drawImportantFlash || this.importantFlashTimer > 0) {
@@ -218,6 +235,8 @@ public class Panel {
 			g.setColor(Color.red);
 			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * 0.6f, (float)panelSize.y * 0.6f);
 			g.fill(rect);
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * 0.6, panelSize.y * 0.6, 255, 0, 0, 255));
 			this.drawImportantFlash = false;
 		}
 		if(this.projectileFlashTimer > 0) {

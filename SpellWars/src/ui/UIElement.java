@@ -11,6 +11,7 @@ import mechanic.Game;
 import mechanic.GameElement;
 import mechanic.GameMap;
 import mechanic.Point;
+import states.StateGame;
 
 public class UIElement {
 	/*
@@ -33,6 +34,7 @@ public class UIElement {
 	
 	private boolean isFront;
 	private Image pic;
+	private String imagepath;
 	private Color color;
 	private boolean fixedHitbox;
 	private float width; //for hitbox (clicking)
@@ -138,16 +140,26 @@ public class UIElement {
 	}
 	
 	public void setImage(String path){
-		try {
-			this.pic = new Image(path);
-		} catch (SlickException e) {
-			System.out.println("Unable to load image");
-			e.printStackTrace();
+		if(Game.images.containsKey(path)) {
+			this.pic = Game.images.get(path).copy();
+		} else {
+			try {
+				this.pic = new Image(path);
+				Game.images.put(path, this.pic.copy());
+			} catch (SlickException e) {
+				System.out.println("Unable to load: " + path);
+				e.printStackTrace();
+			} finally {
+				System.out.println("loaded into memory: " + path);
+			}
 		}
+		this.imagepath = path;
 	}
+	/*
 	public void setImage(Image pic) {
 		this.pic = pic.copy();
 	}
+	*/
 	public void setElementToRemoveWith(GameElement e) {
 		this.elementToRemoveWith = e;
 	}
@@ -189,7 +201,14 @@ public class UIElement {
 				this.width = width;
 				this.height = height;
 			}
+			if(this.getMap() != null) {
+				if(StateGame.isServer)
+				this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.imagepath, this.getFinalLoc().getX() - width/2, this.getFinalLoc().getY() - height/2, width, height, 0, this.color.getRed(), this.color.getGreen(), this.color.getBlue(), this.color.getAlpha(), 0));
+			}
 		}
+	}
+	public String getImagePath() {
+		return this.imagepath;
 	}
 	public double getFrameTime() {
 		return frametime;
@@ -279,14 +298,14 @@ public class UIElement {
 		if(this.getFinalLoc().getX() - width/2 < 0) {
 			this.loc = new Point(width/2 - this.getOrigin().getX(), this.loc.getY());
 		} 
-		if(this.getFinalLoc().getX() + width/2 > Game.WINDOW_WIDTH) { //TODO CHANGE THIS IF WINDOW DIMENSIONS CHANGE
-			this.loc = new Point(800 - width/2 - this.getOrigin().getX(), this.loc.getY());
+		if(this.getFinalLoc().getX() + width/2 > Game.WINDOW_WIDTH) {
+			this.loc = new Point(Game.WINDOW_WIDTH - width/2 - this.getOrigin().getX(), this.loc.getY());
 		}
 		if(this.getFinalLoc().getY() - height/2 < 0) {
 			this.loc = new Point(this.loc.getX(), height/2 - this.getOrigin().getY());
 		}
-		if(this.getFinalLoc().getY() + height/2 > Game.WINDOW_HEIGHT) { //TODO CHANGE THIS IF WINDOW DIMENSIONS CHANGE
-			this.loc = new Point(this.loc.getX(), 800 - height/2 - this.getOrigin().getY());
+		if(this.getFinalLoc().getY() + height/2 > Game.WINDOW_HEIGHT) {
+			this.loc = new Point(this.loc.getX(), Game.WINDOW_HEIGHT - height/2 - this.getOrigin().getY());
 		}
 	}
 	public boolean pointIsInHitbox(Point loc) {

@@ -7,7 +7,10 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.opengl.Texture;
 
+import mechanic.Game;
+import mechanic.GameMap;
 import mechanic.Point;
+import states.StateGame;
 /*
  * DESCRIPTION
  * 
@@ -77,10 +80,18 @@ public class UIBox extends UIElement {
 		Image texture = this.getImage().getScaledCopy((int)this.getWidth(), (int)this.getHeight());
 		texture.setAlpha(this.getAlpha());
 		g.drawImage(texture, (float)drawTopLeft.getX(), (float)drawTopLeft.getY(), this.bodyColor);
+		if(this.getMap() != null) {
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.getImagePath(), drawTopLeft.getX(), drawTopLeft.getY(), this.getWidth(), this.getHeight(), 0, this.bodyColor.getRedByte(), this.bodyColor.getGreenByte(), this.bodyColor.getBlueByte(), this.bodyColor.getAlphaByte(),0));
+		}
 		//g.texture(rectangle, texture);
 		if(this.hasEdge) {
 			g.setColor(this.edgeColor);
 			g.drawRect((float)drawTopLeft.getX(), (float)drawTopLeft.getY(), this.getWidth(), this.getHeight());
+			if(this.getMap() != null) {
+				if(StateGame.isServer)
+				this.getMap().addToDrawInfo(GameMap.getDrawDataUR(drawTopLeft.getX(), drawTopLeft.getY(), this.getWidth(), this.getHeight(), this.edgeColor.getRedByte(), this.edgeColor.getGreenByte(), this.edgeColor.getBlueByte(), this.edgeColor.getAlphaByte()));
+			}
 		}
 	}
 	public void setEdgeColor(Color color) {
@@ -151,14 +162,14 @@ public class UIBox extends UIElement {
 		if(Point.add(this.getOrigin(), this.getCenterLoc()).getX() - this.getWidth()/2 < 0) {
 			this.loc.add(new Point(-(Point.add(this.getOrigin(), this.getCenterLoc()).getX() - this.getWidth()/2), 0));
 		} 
-		if(Point.add(this.getOrigin(), this.getCenterLoc()).getX() + this.getWidth()/2 > 800) { //TODO CHANGE THIS IF WINDOW DIMENSIONS CHANGE
-			this.loc.add(new Point(800 - (Point.add(this.getOrigin(), this.getCenterLoc()).getX() + this.getWidth()/2), 0));
+		if(Point.add(this.getOrigin(), this.getCenterLoc()).getX() + this.getWidth()/2 > Game.WINDOW_WIDTH) {
+			this.loc.add(new Point(Game.WINDOW_WIDTH - (Point.add(this.getOrigin(), this.getCenterLoc()).getX() + this.getWidth()/2), 0));
 		}
 		if(Point.add(this.getOrigin(), this.getCenterLoc()).getY() - this.getHeight()/2 < 0) {
 			this.loc.add(new Point(0, -(Point.add(this.getOrigin(), this.getCenterLoc()).getY() - this.getHeight()/2)));
 		}
-		if(Point.add(this.getOrigin(), this.getCenterLoc()).getY() + this.getHeight()/2 > 800) { //TODO CHANGE THIS IF WINDOW DIMENSIONS CHANGE
-			this.loc.add(new Point(0, 800 - (Point.add(this.getOrigin(), this.getCenterLoc()).getY() + this.getHeight()/2)));
+		if(Point.add(this.getOrigin(), this.getCenterLoc()).getY() + this.getHeight()/2 > Game.WINDOW_HEIGHT) {
+			this.loc.add(new Point(0, Game.WINDOW_HEIGHT - (Point.add(this.getOrigin(), this.getCenterLoc()).getY() + this.getHeight()/2)));
 		}
 	}
 	@Override

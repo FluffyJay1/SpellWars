@@ -13,19 +13,9 @@ import unit.Unit;
 
 public class StatusDamageAmplification extends StatusEffect {
 	public static final String ID = "damageamp";
-	static Image icon;
-	static boolean imageLoaded = false;
 	public StatusDamageAmplification(GameElement owner, float damageChange, float duration, int level) {
 		super(owner, StackingProperty.UNSTACKABLE_REFRESH_DURATION, ID, duration, level);
-		if(imageLoaded == false) {
-			try {
-				icon = new Image("res/spell/damageamp.png").getScaledCopy(16,16);
-			} catch (SlickException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		this.setIcon(icon);
+		this.setIcon("res/spell/damageamp.png");
 		this.interval = 0.1f;
 		if(this.getOwner() instanceof Unit) {
 			this.setAttackDamageModifier(damageChange);

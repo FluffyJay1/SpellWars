@@ -14,6 +14,7 @@ import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Triangulator;
 
 import projectile.Projectile;
+import states.StateGame;
 import statuseffect.StackingProperty;
 import statuseffect.StatusEffect;
 import ui.Text;
@@ -396,6 +397,8 @@ public abstract class GameElement {
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
 			g.drawImage(endPic, (float) this.loc.x - width/2, (float) this.loc.y - height/2 - this.getDrawHeight(), this.drawColorMultiplier);
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.imagepath, this.loc.x-width/2, this.loc.y-height/2, width, height, -orientation, this.drawColorMultiplier.getRedByte(), this.drawColorMultiplier.getGreenByte(), this.drawColorMultiplier.getBlueByte(), this.drawColorMultiplier.getAlphaByte(), 0));
 			this.resetDrawColorModifier();
 		}
 	}

@@ -26,20 +26,10 @@ public class StatusFrostMei extends StatusEffect {
 	public static final float CHECK_INTERVAL = 0.25f;
 	public static final double EMIT_CHANCE = 0.25;
 	//public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
-	static Image icon;
-	static boolean imageLoaded = false;
 	//float damageChange;
 	public StatusFrostMei(GameElement owner, int level) {
 		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, DURATION, level);
-		if(imageLoaded == false) {
-			try {
-				icon = new Image("res/statuseffect/icon_frost.png");
-			} catch (SlickException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		this.setIcon(icon);
+		this.setIcon("res/statuseffect/icon_frost.png");
 		this.damagePerInterval = 0;
 		this.interval = CHECK_INTERVAL;
 		this.setMoveSpeedModifier(SPEED_MODIFIER);

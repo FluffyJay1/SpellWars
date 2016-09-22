@@ -8,11 +8,13 @@ import org.newdawn.slick.geom.Polygon;
 
 import mechanic.Game;
 import mechanic.GameElement;
+import mechanic.GameMap;
 import mechanic.Point;
+import states.StateGame;
 
 public class StatusEffect {
 	public static final int ICON_SIDE_LENGTH = 16;
-	static final Color DURATION_INDICATOR_FADED_COLOR = new Color(100, 100, 160);
+	public static final Color DURATION_INDICATOR_FADED_COLOR = new Color(130, 130, 180);
 	private GameElement owner;
 	boolean remove;
 	StackingProperty stackingProperty;
@@ -146,20 +148,27 @@ public class StatusEffect {
 				poly.setLocation((float)loc.getX() + ICON_SIDE_LENGTH/2, (float)loc.getY() + ICON_SIDE_LENGTH/2);
 				g.setColor(Color.white);
 				g.drawImage(this.icon, (float)loc.getX(), (float)loc.getY(), DURATION_INDICATOR_FADED_COLOR);
+				if(StateGame.isServer)
+				this.getOwner().getMap().addToDrawInfo(GameMap.getDrawDataI(this.imagepath, loc.getX(), loc.getY(), ICON_SIDE_LENGTH, ICON_SIDE_LENGTH, 0, DURATION_INDICATOR_FADED_COLOR.getRedByte(), DURATION_INDICATOR_FADED_COLOR.getGreenByte(), DURATION_INDICATOR_FADED_COLOR.getBlueByte(), DURATION_INDICATOR_FADED_COLOR.getAlphaByte(), 0));
 				g.texture(poly, this.icon, true);
+				if(StateGame.isServer)
+				this.getOwner().getMap().addToDrawInfo(GameMap.getDrawDataSI(this.imagepath, loc.getX(), loc.getY(), ratio));
 			}
 		}
 	}
+	/*
 	public void setIcon(Image icon) {
 		this.icon = icon;
 	}
+	*/
 	public void setIcon(String path){
 		if(Game.images.containsKey(path)) {
-			this.icon = Game.images.get(path).copy();
+			this.icon = Game.images.get(path).getScaledCopy(ICON_SIDE_LENGTH, ICON_SIDE_LENGTH);
 		} else {
 			try {
 				this.icon = new Image(path);
 				Game.images.put(path, this.icon.copy());
+				this.icon = this.icon.getScaledCopy(ICON_SIDE_LENGTH, ICON_SIDE_LENGTH);
 			} catch (SlickException e) {
 				System.out.println("Unable to load status effect icon");
 				e.printStackTrace();

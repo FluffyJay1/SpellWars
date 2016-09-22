@@ -19,22 +19,12 @@ public class StatusTimeDilation extends StatusEffect {
 	public static final float UPDATE_INTERVAL = 0.25f;
 	public static final float SPEED_DECAY_PER_INTERVAL = 0.82f;
 	//public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
-	static Image icon;
-	static boolean imageLoaded = false;
 	boolean isBuff;
 	//float damageChange;
 	public StatusTimeDilation(GameElement owner, float speedModifier, float duration, int level) {
 		super(owner, StackingProperty.UNSTACKABLE_REPLACE, ID, duration, level);
-		if(imageLoaded == false) {
-			try {
-				icon = new Image("res/statuseffect/icon_timedilation.png");
-			} catch (SlickException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		this.isBuff = speedModifier >= 1;
-		this.setIcon(icon);
+		this.setIcon("res/statuseffect/icon_timedilation.png");
 		this.interval = UPDATE_INTERVAL;
 		this.setMoveSpeedModifier(speedModifier);
 		//this.damageChange = damageReduction;

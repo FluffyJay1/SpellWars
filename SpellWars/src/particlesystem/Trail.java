@@ -8,7 +8,9 @@ import org.newdawn.slick.SlickException;
 
 import mechanic.Game;
 import mechanic.GameElement;
+import mechanic.GameMap;
 import mechanic.Point;
+import states.StateGame;
 
 public class Trail extends GameElement {
 	Image trailPic;
@@ -139,6 +141,10 @@ public class Trail extends GameElement {
 				(float)secondNode.getRightControlPoint().getX(), (float)secondNode.getRightControlPoint().getY(), 
 				(float)secondNode.getLeftControlPoint().getX(), (float)secondNode.getLeftControlPoint().getY(), 
 				(float)firstNode.getLeftControlPoint().getX(), (float)firstNode.getLeftControlPoint().getY());
+		if(StateGame.isServer)
+		this.getMap().addToDrawInfo(GameMap.getDrawDataW(this.imagepath, firstNode.getRightControlPoint().x, firstNode.getRightControlPoint().y, 
+				secondNode.getRightControlPoint().x, secondNode.getRightControlPoint().y, secondNode.getLeftControlPoint().x, secondNode.getLeftControlPoint().y,
+				firstNode.getLeftControlPoint().x, firstNode.getLeftControlPoint().y, 255, 255, 255, 255));
 	}
 	public void drawNode(Graphics g, TrailNode t) { //A DEBUG FUNCTION
 		g.drawOval((float)t.loc.getX() - 5, (float)t.loc.getY() - 5, 10, 10);

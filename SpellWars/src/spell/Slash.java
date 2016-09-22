@@ -10,6 +10,7 @@ import mechanic.Animation;
 import mechanic.GameMap;
 import mechanic.Panel;
 import mechanic.Point;
+import states.StateGame;
 import unit.Unit;
 
 public class Slash extends Spell {	
@@ -100,6 +101,8 @@ public class Slash extends Spell {
 			srcy2 = temp;
 		}
 		g.drawImage(animation, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
+		if(StateGame.isServer)
+		this.getMap().addToDrawInfo(GameMap.getDrawDataA("res/spell/slashanimation.png", x, y, x2 - x, y2 - y, srcx, srcy, srcx2, srcy2, 255, 255, 255, 255));
 	}
 	@Override
 	public void onSpellUpdate() {

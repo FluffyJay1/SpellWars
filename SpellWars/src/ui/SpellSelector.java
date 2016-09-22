@@ -34,6 +34,7 @@ import spell.TimeDilation;
 import spell.TrumpWall;
 import spell.VacuumCannon;
 import spell.WindCannon;
+import states.StateGame;
 import unit.Player;
 import unit.Unit;
 
@@ -336,9 +337,13 @@ public class SpellSelector extends UIElement {
 				g.setColor(SPELL_BACKGROUND_COLOR);
 				Rectangle rect = new Rectangle((float)(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y), (float)SPELL_ICON_DIMENSIONS.x, (float)SPELL_ICON_DIMENSIONS.y);
 				g.fill(rect);
+				if(StateGame.isServer)
+				this.getMap().addToDrawInfo(GameMap.getDrawDataR(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x, spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y, SPELL_ICON_DIMENSIONS.x, SPELL_ICON_DIMENSIONS.y, SPELL_BACKGROUND_COLOR.getRedByte(), SPELL_BACKGROUND_COLOR.getGreenByte(), SPELL_BACKGROUND_COLOR.getBlueByte(), SPELL_BACKGROUND_COLOR.getAlphaByte()));
 				if(i < this.availableSpells.size()) {
 					//draws a spell icon if there is a spell
 					g.drawImage(this.availableSpells.get(i).getImage().getScaledCopy((int)SPELL_ICON_DIMENSIONS.x, (int)SPELL_ICON_DIMENSIONS.y), (float)(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y));
+					if(StateGame.isServer)
+					this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.availableSpells.get(i).getImagePath(), spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x, spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y, SPELL_ICON_DIMENSIONS.x, SPELL_ICON_DIMENSIONS.y, 0, 255, 255, 255, 255, 0));
 				}
 			}
 			if(this.getIndexAtLoc(this.selectorLoc) < this.availableSpells.size()) {
@@ -347,7 +352,11 @@ public class SpellSelector extends UIElement {
 					g.setColor(SPELL_BACKGROUND_COLOR); //background
 					Rectangle rect = new Rectangle((float)(HIGHLIGHTED_SPELL_DRAWLOC.x + this.getLoc().x + this.box.getTopLeftLoc().x), (float)(HIGHLIGHTED_SPELL_DRAWLOC.y + this.getLoc().y + this.box.getTopLeftLoc().y), (int)(HIGHLIGHTED_SPELL_DIMENSIONS.x), (int)(HIGHLIGHTED_SPELL_DIMENSIONS.y));
 					g.fill(rect);
+					if(StateGame.isServer)
+					this.getMap().addToDrawInfo(GameMap.getDrawDataR(HIGHLIGHTED_SPELL_DRAWLOC.x + this.getLoc().x + this.box.getTopLeftLoc().x, HIGHLIGHTED_SPELL_DRAWLOC.y + this.getLoc().y + this.box.getTopLeftLoc().y, HIGHLIGHTED_SPELL_DIMENSIONS.x, HIGHLIGHTED_SPELL_DIMENSIONS.y, SPELL_BACKGROUND_COLOR.getRedByte(), SPELL_BACKGROUND_COLOR.getGreenByte(), SPELL_BACKGROUND_COLOR.getBlueByte(), SPELL_BACKGROUND_COLOR.getAlphaByte()));
 					g.drawImage(spell.getImage().getScaledCopy((int)(HIGHLIGHTED_SPELL_DIMENSIONS.x), (int)(HIGHLIGHTED_SPELL_DIMENSIONS.y)), (float)(HIGHLIGHTED_SPELL_DRAWLOC.x + this.getLoc().x + this.box.getTopLeftLoc().x), (float)(HIGHLIGHTED_SPELL_DRAWLOC.y + this.getLoc().y + this.box.getTopLeftLoc().y));
+					if(StateGame.isServer)
+					this.getMap().addToDrawInfo(GameMap.getDrawDataI(spell.getImagePath(), HIGHLIGHTED_SPELL_DRAWLOC.x + this.getLoc().x + this.box.getTopLeftLoc().x, HIGHLIGHTED_SPELL_DRAWLOC.y + this.getLoc().y + this.box.getTopLeftLoc().y, HIGHLIGHTED_SPELL_DIMENSIONS.x, HIGHLIGHTED_SPELL_DIMENSIONS.y, 0, 255, 255, 255, 255, 0));
 				}
 			}
 		}
@@ -368,11 +377,15 @@ public class SpellSelector extends UIElement {
 			g.setColor(SPELL_BACKGROUND_COLOR);
 			Rectangle rect = new Rectangle((float)(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y), (float)SPELL_ICON_DIMENSIONS.x, (float)SPELL_ICON_DIMENSIONS.y);
 			g.fill(rect);
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataR(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x, spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y, SPELL_ICON_DIMENSIONS.x, SPELL_ICON_DIMENSIONS.y, SPELL_BACKGROUND_COLOR.getRedByte(), SPELL_BACKGROUND_COLOR.getGreenByte(), SPELL_BACKGROUND_COLOR.getBlueByte(), SPELL_BACKGROUND_COLOR.getAlphaByte()));
 			if(i < this.selectedSpells.size()) {
 				//draws a spell icon if there is a spell
 				g.drawImage(this.selectedSpells.get(i).getImage().getScaledCopy((int)SPELL_ICON_DIMENSIONS.x, (int)SPELL_ICON_DIMENSIONS.y), (float)(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y));
 				if(i == 0 && !this.pickingPhase) {
 					g.drawImage(selectorImage.getScaledCopy((int)SPELL_ICON_DIMENSIONS.x, (int)SPELL_ICON_DIMENSIONS.y), (float)(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y));
+					if(StateGame.isServer)
+					this.getMap().addToDrawInfo(GameMap.getDrawDataI(SELECTOR_IMAGEPATH, spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x, spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y, SPELL_ICON_DIMENSIONS.x, SPELL_ICON_DIMENSIONS.y, 0, 255, 255, 255, 255, 0));
 				}
 			}
 		}
@@ -380,8 +393,12 @@ public class SpellSelector extends UIElement {
 			Point selectorDrawLoc = Point.add(Point.add(SPELLS_DRAWLOC_TOPLEFT, Point.add(this.getLoc(), this.box.getTopLeftLoc())), new Point(horizontalSpacing * selectorLoc.x, verticalSpacing * selectorLoc.y));
 			if(this.selectedSpells.size() == MAX_SELECTED_SPELLS || this.getIndexAtLoc(this.selectorLoc) >= this.availableSpells.size()) {
 				g.drawImage(selectorImage.getScaledCopy((int)SPELL_ICON_DIMENSIONS.x, (int)SPELL_ICON_DIMENSIONS.y), (float)(selectorDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(selectorDrawLoc.y - SPELL_ICON_DIMENSIONS.y), Color.gray);
+				if(StateGame.isServer)
+				this.getMap().addToDrawInfo(GameMap.getDrawDataI(SELECTOR_IMAGEPATH, selectorDrawLoc.x - SPELL_ICON_DIMENSIONS.x, selectorDrawLoc.y - SPELL_ICON_DIMENSIONS.y, SPELL_ICON_DIMENSIONS.x, SPELL_ICON_DIMENSIONS.y, 0, Color.gray.getRedByte(), Color.gray.getGreenByte(), Color.gray.getBlueByte(), Color.gray.getAlphaByte(), 0));
 			} else {
 				g.drawImage(selectorImage.getScaledCopy((int)SPELL_ICON_DIMENSIONS.x, (int)SPELL_ICON_DIMENSIONS.y), (float)(selectorDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(selectorDrawLoc.y - SPELL_ICON_DIMENSIONS.y));
+				if(StateGame.isServer)
+				this.getMap().addToDrawInfo(GameMap.getDrawDataI(SELECTOR_IMAGEPATH, selectorDrawLoc.x - SPELL_ICON_DIMENSIONS.x, selectorDrawLoc.y - SPELL_ICON_DIMENSIONS.y, SPELL_ICON_DIMENSIONS.x, SPELL_ICON_DIMENSIONS.y, 0, 255, 255, 255, 255, 0));
 			}
 		}
 	}

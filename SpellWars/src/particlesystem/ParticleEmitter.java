@@ -307,6 +307,7 @@ public class ParticleEmitter extends GameElement {
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomRadian), 
 				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle
+		particle.setMap(this.getMap());
 	}
 	private void emitPointDirection(){
 		Point tempVel = new Point();
@@ -327,6 +328,7 @@ public class ParticleEmitter extends GameElement {
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(-randomRadian), 
 				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle 
+		particle.setMap(this.getMap());
 	}
 	private void emitCircleRadial(){
 		Point tempVel = new Point();
@@ -352,6 +354,7 @@ public class ParticleEmitter extends GameElement {
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomRadian), 
 				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle
+		particle.setMap(this.getMap());
 	}
 	private void emitCircleDirection() {
 		Point tempVel = new Point();
@@ -380,6 +383,7 @@ public class ParticleEmitter extends GameElement {
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomVelRadian), 
 				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle
+		particle.setMap(this.getMap());
 	}
 	private void emitCircleRandom(){
 		Point tempVel = new Point();
@@ -406,6 +410,7 @@ public class ParticleEmitter extends GameElement {
 		ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomRadian), 
 				randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 		this.getMap().addParticle(particle); //adds the particle
+		particle.setMap(this.getMap());
 	}
 	private void emitLineRadial() {
 		if(this.kv3 == 0 && this.kv4 == 0){
@@ -434,6 +439,7 @@ public class ParticleEmitter extends GameElement {
 			ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(normalAngle), 
 					randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 			this.getMap().addParticle(particle); //adds the particle
+			particle.setMap(this.getMap());
 		} else { //IF A WIDTH IS SPECIFIED
 			double circleSpawnWeight = this.kv4 * this.kv4 * Math.PI; //the weight of probablility to spawn in a circle end
 			double lineSpawnWeight = 1 * this.kv4 * Point.getDistance(this.getLoc(), new Point(this.kv1, this.kv2));
@@ -491,6 +497,7 @@ public class ParticleEmitter extends GameElement {
 			ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(spawnAngle), 
 					randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 			this.getMap().addParticle(particle); //adds the particle
+			particle.setMap(this.getMap());
 		}
 	}
 	private void emitLineRandom() {
@@ -515,6 +522,7 @@ public class ParticleEmitter extends GameElement {
 			ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomAngle), 
 					randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 			this.getMap().addParticle(particle); //adds the particle
+			particle.setMap(this.getMap());
 		} else { //IF A WIDTH IS SPECIFIED
 			double circleSpawnWeight = this.kv4 * this.kv4 * Math.PI; //the weight of probablility to spawn in a circle end
 			double lineSpawnWeight = 1 * this.kv4 * Point.getDistance(this.getLoc(), new Point(this.kv1, this.kv2));
@@ -573,6 +581,7 @@ public class ParticleEmitter extends GameElement {
 			ParticleBase particle = new ParticleBase(tempLoc, tempVel, this.particleDrag, (float)Math.toDegrees(randomMoveDirection), 
 					randomRVel, randomLifetime, this.particleimagepath, this.particleAlphaDecay, randomStartScale, randomEndScale);
 			this.getMap().addParticle(particle); //adds the particle
+			particle.setMap(this.getMap());
 		}
 	}
 }

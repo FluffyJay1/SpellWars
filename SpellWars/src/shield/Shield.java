@@ -8,6 +8,7 @@ import mechanic.GameElement;
 import mechanic.GameMap;
 import mechanic.Point;
 import projectile.Projectile;
+import states.StateGame;
 import ui.Text;
 import ui.TextFormat;
 import unit.Unit;
@@ -148,7 +149,13 @@ public class Shield extends GameElement {
 			endPic.setAlpha((float) this.opacity);
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
+			int hflipvflip = 0;
+			if(this.owner.direction == GameMap.ID_LEFT) {
+				hflipvflip += 2;
+			}
 			g.drawImage(endPic, (float) this.getLoc().x - width/2, (float) this.getLoc().y - height/2 - this.getDrawHeight() + this.drawOffset);
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.getImagePath(), this.getLoc().x -width/2, this.getLoc().y - height/2 - this.getDrawHeight() + this.drawOffset, width, height, 0, 255, 255, 255, 255 * (float)this.opacity, hflipvflip));
 		}
 		if(this.drawHP) {
 			this.hpText.changeLoc(Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET + this.drawOffset)));

@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Rectangle;
 import mechanic.GameMap;
 import mechanic.Panel;
 import mechanic.Point;
+import states.StateGame;
 import unit.Unit;
 
 public class AreaGrab extends Spell {
@@ -123,9 +124,13 @@ public class AreaGrab extends Spell {
 			for(Panel p : this.affectedPanels) {
 				Point drawLoc = Point.add(this.map.gridToPosition(p.getLoc()), new Point(0, -ANIMATION_HEIGHT * (this.timer - 0.5)/(ANIMATION_TIME - 0.5)));
 				if(this.owner.teamID == GameMap.ID_LEFT) {
-					g.drawImage(redOrb.getScaledCopy(8), (float)drawLoc.x - redOrb.getWidth() * 4, (float)drawLoc.y - redOrb.getWidth()/2);
+					g.drawImage(redOrb.getScaledCopy(8), (float)drawLoc.x - redOrb.getWidth() * 4, (float)drawLoc.y - redOrb.getWidth() * 4);
+					if(StateGame.isServer)
+					this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/particle_genericRed.png", drawLoc.x - redOrb.getWidth() * 4, drawLoc.y - redOrb.getWidth()/2, redOrb.getWidth() * 4, redOrb.getHeight() * 4, 0, 255, 255, 255, 255, 0));
 				} else {
-					g.drawImage(blueOrb.getScaledCopy(8), (float)drawLoc.x - redOrb.getWidth() * 4, (float)drawLoc.y - redOrb.getWidth()/2);
+					g.drawImage(blueOrb.getScaledCopy(8), (float)drawLoc.x - blueOrb.getWidth() * 4, (float)drawLoc.y - blueOrb.getWidth() * 4);
+					if(StateGame.isServer)
+					this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/particle_genericBlue.png", drawLoc.x - blueOrb.getWidth() * 4, drawLoc.y - blueOrb.getWidth()/2, blueOrb.getWidth() * 4, blueOrb.getHeight() * 4, 0, 255, 255, 255, 255, 0));
 				}
 			}
 		}

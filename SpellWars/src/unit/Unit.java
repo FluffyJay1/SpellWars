@@ -16,6 +16,7 @@ import mechanic.Point;
 import projectile.Projectile;
 import shield.Shield;
 import spell.Spell;
+import states.StateGame;
 import ui.Text;
 import ui.TextFormat;
 
@@ -318,6 +319,10 @@ public class Unit extends GameElement {
 		this.shields.removeAll(shieldsRemoveBuffer);
 		if(this.getImage() != null){
 			Image endPic = this.getImage().getFlippedCopy(this.direction == GameMap.ID_LEFT, false);
+			int hflipvflip = 0;
+			if(this.direction == GameMap.ID_LEFT) {
+				hflipvflip += 2;
+			}
 			endPic = endPic.getScaledCopy((float) this.getSize());
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
@@ -338,6 +343,8 @@ public class Unit extends GameElement {
 				Rectangle rect = new Rectangle((float) this.getLoc().x - CAST_BAR_WIDTH/2, (float)this.getLoc().y + CAST_BAR_OFFSET,
 						barwidth, CAST_BAR_HEIGHT);
 				g.fill(rect);
+				if(StateGame.isServer)
+				this.getMap().addToDrawInfo(GameMap.getDrawDataR(this.getLoc().x - CAST_BAR_WIDTH/2, this.getLoc().y + CAST_BAR_OFFSET, barwidth, CAST_BAR_HEIGHT, g.getColor().getRedByte(), g.getColor().getGreenByte(), g.getColor().getBlueByte(), g.getColor().getAlphaByte()));
 			}
 			if(this.stunTimer > 0 && this.stunTimer % 0.15 > 0.075) {
 				col = new Color(160, 160, 0);
@@ -345,6 +352,8 @@ public class Unit extends GameElement {
 			col = col.multiply(this.drawColor);
 			col = col.multiply(this.getDrawColorModifier());
 			g.drawImage(endPic, (float) this.getLoc().x - width/2, (float) this.getLoc().y - height/2 - this.getDrawHeight(), col);
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.getImagePath(), this.getLoc().x - width/2, this.getLoc().y - height/2 - this.getDrawHeight(), width, height, 0, col.getRedByte(), col.getGreenByte(), col.getBlueByte(), col.getAlphaByte(), hflipvflip));
 			this.resetDrawColorModifier();
 		}
 		this.drawSpecialEffects(g);
@@ -364,7 +373,7 @@ public class Unit extends GameElement {
 			} else {
 				speedText.setColor(Color.blue);
 			}
-		} else if(this.speedModifiedTooltipTimer > 0) {
+		} else if(this.speedModifiedTooltipTimer > 0 && this.isImportant) {
 			speedText.setText("100");
 		} else {
 			speedText.setText("");
@@ -400,6 +409,8 @@ public class Unit extends GameElement {
 			float shadowRatio = (float) (this.getMap().getSizeOfPanel().x / this.getMap().getSizeOfPanel().y);
 			g.setColor(GameMap.SHADOW_COLOR);
 			g.fillOval((float) (this.getLoc().x - SHADOW_SCALE * width/2), (float) (this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio)), (float)(width * SHADOW_SCALE), (float)(SHADOW_SCALE * width/shadowRatio));
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataE(this.getLoc().x - SHADOW_SCALE * width/2, this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio), width * SHADOW_SCALE, SHADOW_SCALE * width/shadowRatio, GameMap.SHADOW_COLOR.getRedByte(), GameMap.SHADOW_COLOR.getGreenByte(), GameMap.SHADOW_COLOR.getBlueByte(), GameMap.SHADOW_COLOR.getAlphaByte()));
 		}
 	}
 	public void drawSpecialEffects(Graphics g) {

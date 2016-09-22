@@ -65,20 +65,9 @@ public class StateGame extends BasicGameState{
 	Text battlePhaseText;
 	boolean devPause = false;
 	
-	static final float DRAW_INFO_SEND_INTERVAL = 0.1f;
-	float drawInfoTimer;
-	boolean isClient;
-	boolean isServer;
-	/*
-	 * DRAW INFO CRASH COURSE:
-	 * 
-	 * drawImage: drawi <string imagepath> <int xpos> <int ypos> <int width> <int height> <int rotation> <int r> <int g> <int b> <int a> <int hflipvflip> \n
-	 * drawAnimation: drawa <string imagepath> <int xpos> <int ypos> <int width> <int height> <int srcx1> <int srcy1> <int srcx2> <int srcy2> <int r> <int g> <int b> <int a> \n
-	 * drawWarped: draww <string imagepath> <int x1> <int y1> <int x2> <int y2> <int x3> <int y3> <int x4> <int y4> <int r> <int g> <int b> <int a> \n
-	 * drawRect: drawr <int x> <int y> <int width> <int height> <int r> <int g> <int b> <int a> \n
-	 * drawEllipse: drawe <int x> <int y> <int width> <int height> <int r> <int g> <int b> <int a> \n
-	 * 
-	 */
+	public static boolean isClient;
+	public static boolean isServer;
+	
 	
 	public StateGame(){
 	}
@@ -89,9 +78,8 @@ public class StateGame extends BasicGameState{
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1){
-		drawInfoTimer = 0;
 		isClient = false;
-		isServer = false;
+		isServer = true;
 		
 		systemTime = System.nanoTime();
 		container.setClearEachFrame(true);
@@ -101,6 +89,7 @@ public class StateGame extends BasicGameState{
 				new Point(Game.WINDOW_WIDTH/12, Game.WINDOW_HEIGHT * 500/1080)); //top left corner of map (map coordinates)
 		ui = new UI();
 		map.setUI(ui);
+		ui.setMap(map);
 		Point leftStartLoc = new Point(0, 0);
 		Point rightStartLoc = new Point(7, 3);
 		leftPlayer = new Player(400, 5, GameMap.ID_LEFT, leftStartLoc);
@@ -168,6 +157,7 @@ public class StateGame extends BasicGameState{
 	@Override
 	public void render(GameContainer container, StateBasedGame arg1, Graphics g) throws SlickException {
 		//g.clear();
+		map.clearDrawInfo();
 		backgroundImage.drawWarped(Game.WINDOW_WIDTH, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT, 0, Game.WINDOW_HEIGHT, 0, 0); //start with topright, then clockwise
 		map.draw(g);
 		if(!pickingPhase && this.readyTimer >= 0) {
@@ -232,12 +222,6 @@ public class StateGame extends BasicGameState{
 			battlePhaseText.setColor(Color.white);
 		}
 		ui.update();
-		if(this.isServer) {
-			drawInfoTimer -= frametime;
-			if(drawInfoTimer <= 0) {
-				drawInfoTimer += DRAW_INFO_SEND_INTERVAL;
-			}
-		}
 	}
 	@Override
 	public void mousePressed(int button, int x, int y) {
@@ -274,6 +258,7 @@ public class StateGame extends BasicGameState{
 		String message = "";
 		if(key == Input.KEY_SPACE) {
 			this.devPause = !devPause;
+			System.out.println(this.map.getDrawInfo());
 		}
 		if(key == Input.KEY_H) {
 			leftPlayer.doDamage(399);

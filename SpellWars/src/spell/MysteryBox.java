@@ -10,6 +10,7 @@ import mechanic.GameMap;
 import mechanic.Point;
 import particlesystem.EmitterTypes;
 import particlesystem.ParticleEmitter;
+import states.StateGame;
 import ui.SpellSelector;
 import unit.Player;
 import unit.Unit;
@@ -23,6 +24,7 @@ public class MysteryBox extends Spell {
 	float timer;
 	static Image background;
 	Image previousSpellImage;
+	String previousSpellImagePath;
 	public MysteryBox(Unit owner) {
 		super(owner, 0, 0, "Mystery Box", "Grants you up to 3 extra spells to cast", "res/spell/mysterybox.png", false);
 		if(owner instanceof Player) {
@@ -50,6 +52,7 @@ public class MysteryBox extends Spell {
 				this.timer = INTERVAL;
 				((Player)this.owner).addSpell(this.spells.get(0));
 				this.previousSpellImage = this.spells.get(0).getImage();
+				this.previousSpellImagePath = this.spells.get(0).getImagePath();
 				this.spells.remove(0);
 				ParticleEmitter pe = new ParticleEmitter(new Point(this.owner.getLoc().x, this.owner.getLoc().y + SPELL_DRAW_Y_OFFSET), EmitterTypes.CIRCLE_RADIAL, "res/particle_genericYellow.png", true, //point/parent, emitter type, image path, alphaDecay
 						6.5f, 9.0f, //particle start scale
@@ -79,8 +82,12 @@ public class MysteryBox extends Spell {
 	public void drawSpecialEffects(Graphics g) {
 		if(this.previousSpellImage != null) {
 			g.drawImage(background, (float)(this.owner.getLoc().x - 74 * SPELL_DRAW_DIMENSIONS/128), (float)(this.owner.getLoc().y + SPELL_DRAW_Y_OFFSET - 98 * SPELL_DRAW_DIMENSIONS/128));
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/spell/mysteryboxbackground.png", this.owner.getLoc().x - 74 * SPELL_DRAW_DIMENSIONS/128, this.owner.getLoc().y + SPELL_DRAW_Y_OFFSET - 98 * SPELL_DRAW_DIMENSIONS/128, 148 * SPELL_DRAW_DIMENSIONS/128, 172 * SPELL_DRAW_DIMENSIONS/128, 0, 255, 255, 255, 255, 0));
 			Image i = this.previousSpellImage.getScaledCopy(SPELL_DRAW_DIMENSIONS, SPELL_DRAW_DIMENSIONS);
 			g.drawImage(i, (float)(this.owner.getLoc().x - SPELL_DRAW_DIMENSIONS/2), (float)(this.owner.getLoc().y + SPELL_DRAW_Y_OFFSET - SPELL_DRAW_DIMENSIONS/2));
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.previousSpellImagePath, this.owner.getLoc().x - SPELL_DRAW_DIMENSIONS/2, this.owner.getLoc().y + SPELL_DRAW_Y_OFFSET - SPELL_DRAW_DIMENSIONS/2, SPELL_DRAW_DIMENSIONS, SPELL_DRAW_DIMENSIONS, 0, 255, 255, 255, 255, 0));
 		}
 	}
 }

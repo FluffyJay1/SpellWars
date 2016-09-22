@@ -12,6 +12,7 @@ import mechanic.GameMap;
 import mechanic.Panel;
 import mechanic.PanelState;
 import mechanic.Point;
+import states.StateGame;
 import unit.Unit;
 
 public class Projectile extends GameElement {
@@ -248,7 +249,14 @@ public class Projectile extends GameElement {
 			Image endPic = this.getImage().getFlippedCopy(this.direction == GameMap.ID_LEFT, false).getScaledCopy(this.imageScale);
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
+			if(StateGame.isServer)
 			g.drawImage(endPic, (float) this.getLoc().x - width/2, (float) this.getLoc().y - height/2 - this.getDrawHeight());
+			int hflipvflip = 0;
+			if(this.direction == GameMap.ID_LEFT) {
+				hflipvflip += 2;
+			}
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.getImagePath(), this.getLoc().x - width/2, this.getLoc().y - height/2 - this.getDrawHeight(), width, height, 0, 255, 255, 255, 255, hflipvflip));
 		}
 		/*
 		Point loc = Point.subtract(this.getMap().gridToPosition(this.getGridLoc()), new Point(15, 15));
@@ -270,6 +278,8 @@ public class Projectile extends GameElement {
 			float shadowRatio = (float) (this.getMap().getSizeOfPanel().x / this.getMap().getSizeOfPanel().y);
 			g.setColor(GameMap.SHADOW_COLOR);
 			g.fillOval((float) (this.getLoc().x - SHADOW_SCALE * width/2), (float) (this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio)), (float)(width * SHADOW_SCALE), (float)(SHADOW_SCALE * width/shadowRatio));
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataE(this.getLoc().x - SHADOW_SCALE * width/2, this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio), width * SHADOW_SCALE, SHADOW_SCALE * width/shadowRatio, GameMap.SHADOW_COLOR.getRedByte(), GameMap.SHADOW_COLOR.getGreenByte(), GameMap.SHADOW_COLOR.getBlueByte(), GameMap.SHADOW_COLOR.getAlphaByte()));
 		}
 	}
 	public void move(int direction, boolean respectCooldown, boolean putCooldown) {

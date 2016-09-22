@@ -2,6 +2,7 @@ package particlesystem;
 import mechanic.Game;
 import mechanic.GameMap;
 import mechanic.Point;
+import states.StateGame;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -24,6 +25,7 @@ public class ParticleBase {
 	private float endScale;
 	public float frametime;
 	public boolean isPaused;
+	GameMap map;
 	
 	private boolean remove;
 
@@ -52,6 +54,9 @@ public class ParticleBase {
 		this.scale = startScale;
 		this.startScale = startScale;
 		this.endScale = endScale;
+	}
+	public void setMap(GameMap map) {
+		this.map = map;
 	}
 	public void setImage(String path){
 		if(Game.images.containsKey(path)) {
@@ -88,6 +93,8 @@ public class ParticleBase {
 			endPic.setAlpha(lifetime/maxLifetime); //GOES TO 0
 		}
 		g.drawImage(endPic, (float) loc.getX() - width/2, (float) loc.getY() - height/2);
+		if(StateGame.isServer)
+		this.map.addToDrawInfo(GameMap.getDrawDataI(this.imagepath, loc.getX() - width/2, loc.getY() - height/2, width, height, orientation, 255, 255, 255, 255 * lifetime/maxLifetime, 0));
 	}
 	public void move(){ //basically update
 		lifetime -= this.frametime; //lifetime decay

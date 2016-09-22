@@ -20,6 +20,6 @@ public class StatusShock extends StatusEffect {
 				e.printStackTrace();
 			}
 		}
-		this.setIcon(icon);
+		//this.setIcon(icon);
 	}
 }

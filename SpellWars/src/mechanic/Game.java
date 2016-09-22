@@ -27,6 +27,7 @@ public class Game extends StateBasedGame {
 	
 	public static Map<String, Image> images = new HashMap<String, Image>();
 	
+	
 	public static void main(String[] args) throws SlickException{
 		AppGameContainer app = new AppGameContainer(new Game("SpellWars"));
 		app.setDisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT, false);
@@ -46,6 +47,4 @@ public class Game extends StateBasedGame {
 		addState(stategame);
 			
 	}
-
-
 }
