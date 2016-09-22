@@ -36,13 +36,13 @@ public class CrackGrenade extends Grenade {
 			Panel panel = this.getMap().getPanelAt(this.endLoc);
 			panel.crackLight();
 			ParticleEmitter pe = new ParticleEmitter(this.getLoc(), EmitterTypes.POINT_DIRECTION, "res/particle_genericWhite.png", false, //point/parent, emitter type, image path, alphaDecay
-					2.8f, 3.0f, //particle start scale
+					3.3f, 4.0f, //particle start scale
 					0, 0, //particle end scale
 					10.5f, //drag
 					0, 0, //rotational velocity
-					0.1f, 0.55f, //min and max lifetime
-					200, 4200, //min and max launch speed
-					0, 16, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
+					0.45f, 0.55f, //min and max lifetime
+					200, 3500, //min and max launch speed
+					0, 12, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
 					90, 60, 0, 0); //keyvalues
 			this.getMap().addParticleEmitter(pe);
 		}
@@ -52,8 +52,8 @@ public class CrackGrenade extends Grenade {
 				18.5f, //drag
 				0, 0, //rotational velocity
 				0.1f, 0.25f, //min and max lifetime
-				200, 3200, //min and max launch speed
-				0, 5, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
+				200, 2600, //min and max launch speed
+				0, 3, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
 				0, 0, 0, 0); //keyvalues
 		this.getMap().addParticleEmitter(pe);
 	}

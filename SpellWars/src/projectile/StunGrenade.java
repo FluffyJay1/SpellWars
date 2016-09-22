@@ -48,7 +48,7 @@ public class StunGrenade extends Grenade {
 							0, 0, //rotational velocity
 							2.8f, 4.1f, //min and max lifetime
 							-100, 700, //min and max launch speed
-							0, 18, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
+							0, 15, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
 							90, 60, 0, 0); //keyvalues
 					this.getMap().addParticleEmitter(pe);
 				} else {
@@ -63,7 +63,7 @@ public class StunGrenade extends Grenade {
 							0, 0, //rotational velocity
 							1.6f, 2.8f, //min and max lifetime
 							-100, 500, //min and max launch speed
-							0, 12, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
+							0, 10, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
 							90, 60, 0, 0); //keyvalues
 					this.getMap().addParticleEmitter(pe);
 				}

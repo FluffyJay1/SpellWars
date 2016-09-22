@@ -39,7 +39,7 @@ public class StatusTimeDilation extends StatusEffect {
 						0, 0, /*rotational velocity*/
 						0.4f, 0.8f, /*min and max lifetime*/
 						0, 2350, /*min and max launch speed*/
-						0, 6, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
+						0, 5, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
 						0, 0, 0, 0); /*keyvalues*/
 				getOwner().getMap().addParticleEmitter(pe);
 			} else {
@@ -51,7 +51,7 @@ public class StatusTimeDilation extends StatusEffect {
 						0, 0, /*rotational velocity*/
 						0.4f, 0.8f, /*min and max lifetime*/
 						0, 1350, /*min and max launch speed*/
-						0, 6, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
+						0, 5, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
 						0, 0, 0, 0); /*keyvalues*/
 				getOwner().getMap().addParticleEmitter(pe);
 			}

@@ -32,24 +32,7 @@ public class StatusFrost extends StatusEffect {
 	
 	@Override
 	public void onInterval() {
-		ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_genericBlue.png", true, /*point, emitter type, image path, alphaDecay*/
-				1.0f, 1.0f, /*particle start scale*/
-				2.5f, 2.5f, /*particle end scale*/
-				2.0f, /*drag*/
-				0, 0, /*rotational velocity*/
-				0.5f, 1.5f, /*min and max lifetime*/
-				25, 60, /*min and max launch speed*/
-				0, 2, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
-				0, 0, 0, 0); /*keyvalues*/
-		this.getOwner().getMap().addParticleEmitter(pe);
-		/*
-		if(this.owner.getRemove() == false){
-			for(GameElement e : this.owner.getMap().findElementsInArea(owner.getLoc(), 1250)) {
-				if(e instanceof Monster) {
-					this.owner.getMap().addProjectile(new Projectile(this.owner, e, this.damagePerInterval, DamageType.IMPACT, 150, "res/particle_genericBlue.png"));
-				}
-			}
-		} */
+		
 	}
 	@Override
 	public void onCreate() {
@@ -61,7 +44,7 @@ public class StatusFrost extends StatusEffect {
 					0, 0, /*rotational velocity*/
 					0.4f, 0.8f, /*min and max lifetime*/
 					0, 350, /*min and max launch speed*/
-					0, 6, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
+					0, 1, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
 					0, 0, 0, 0); /*keyvalues*/
 			getOwner().getMap().addParticleEmitter(pe);
 		}
