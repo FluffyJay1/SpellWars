@@ -79,7 +79,7 @@ public class StateGame extends BasicGameState{
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1){
 		isClient = false;
-		isServer = true;
+		isServer = false;
 		
 		systemTime = System.nanoTime();
 		container.setClearEachFrame(true);

@@ -269,6 +269,7 @@ public class GameMap {
 			Rectangle rect = new Rectangle(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
 			g.setColor(new Color(0, 0, 0, 100));
 			g.fill(rect);
+			if(StateGame.isServer)
 			this.addToDrawInfo(GameMap.getDrawDataR(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT, 0, 0, 0, 100));
 		}
 		for(int i = 0; i < elementList.size(); i++) { //draw elements that haven't been drawn before, excluding projectiles (since they should've been drawn before)

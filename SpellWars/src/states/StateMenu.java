@@ -16,6 +16,7 @@ import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import ui.MultiplayerButton;
 import ui.PlayerTypeSelector;
 import ui.StartButton;
 import ui.Text;
@@ -35,6 +36,7 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 	private StateBasedGame game;
 	private UI ui;
 	private StartButton button;
+	MultiplayerButton multiplayerButton;
 	String string;
 	PlayerTypeSelector leftSelector;
 	PlayerTypeSelector rightSelector;
@@ -53,6 +55,8 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 		ui = new UI();
 		button = new StartButton(ui, new Point(Game.WINDOW_WIDTH/2, Game.WINDOW_HEIGHT/2));
 		ui.addUIElement(button);
+		multiplayerButton = new MultiplayerButton(ui, new Point(Game.WINDOW_WIDTH/2, Game.WINDOW_HEIGHT/2 + 200));
+		ui.addUIElement(multiplayerButton);
 		leftSelector = new PlayerTypeSelector(ui, new Point(400,800));
 		ui.addUIElement(leftSelector);
 		rightSelector = new PlayerTypeSelector(ui, new Point(Game.WINDOW_WIDTH - 400,800));
@@ -87,6 +91,11 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 			Game.rightPlayer = rightSelector.getPlayerType();
 			Game.rightLevel = rightSelector.level;
 			game.enterState(Game.STATE_GAME);
+		}
+		if(multiplayerButton.isPressed) {
+			button.setRemove(true);
+			leftSelector.setRemove(true);
+			rightSelector.setRemove(true);
 		}
 	}
 	@Override

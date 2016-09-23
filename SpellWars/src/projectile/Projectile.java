@@ -253,7 +253,6 @@ public class Projectile extends GameElement {
 			Image endPic = this.getImage().getFlippedCopy(this.direction == GameMap.ID_LEFT, false).getScaledCopy(this.imageScale);
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
-			if(StateGame.isServer)
 			g.drawImage(endPic, (float) this.getLoc().x - width/2, (float) this.getLoc().y - height/2 - this.getDrawHeight());
 			int hflipvflip = 0;
 			if(this.direction == GameMap.ID_LEFT) {

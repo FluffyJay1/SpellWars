@@ -264,7 +264,8 @@ public class Text extends UIElement {
 			g.drawImage(characterImage, (float)(loc.getX() + this.letterWidth * 0.0833), (float)(loc.getY()), outlineColor);
 			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() + this.letterHeight * 0.0633), outlineColor);
 			g.drawImage(characterImage, (float)(loc.getX() - this.letterWidth * 0.0833), (float)(loc.getY()), outlineColor);
-			
+			g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
+
 			/*g.drawImage(characterImage, (float)(loc.getX()), (float)(loc.getY() - this.letterHeight * 0.0633), outlineColor);
 			if(this.getMap() != null) {
 				this.getMap().addToDrawInfo(GameMap.getDrawDataFN(characterImagePath, loc.getX() + this.letterWidth * 0.0833, loc.getY(), this.letterWidth, this.letterHeight, 0, outlineColor.getRedByte(), outlineColor.getGreenByte(), outlineColor.getBlueByte(), outlineColor.getAlphaByte(), 0));
