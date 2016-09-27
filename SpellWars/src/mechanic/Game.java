@@ -1,6 +1,8 @@
 
 package mechanic;
 
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,11 +21,16 @@ public class Game extends StateBasedGame {
 	public static int STATE_HELP = 2;
 	public static final int WINDOW_WIDTH = 1920;
 	public static final int WINDOW_HEIGHT = 1080;
+	public static final int SERVER_PORT = 9091;
+	public static final String DRAW_INFO_REQUEST_STRING = "di";
 	StateGame stategame = new StateGame();
 	public static PlayerType leftPlayer;
 	public static int leftLevel;
 	public static PlayerType rightPlayer;
 	public static int rightLevel;
+	public static ServerSocket serverSocket;
+	public static ServerListenerThread serverListenerThread;
+	public static Socket socket;
 	
 	public static Map<String, Image> images = new HashMap<String, Image>();
 	

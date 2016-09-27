@@ -65,6 +65,7 @@ public class GameMap {
 	boolean isPaused;
 	
 	String drawInfo;
+	String lastFullDrawInfo;
 	
 	public GameMap(int gridWidth, int gridHeight, float mapWidth, float mapHeight, Point mapTopLeft){
 		this.gWidth = gridWidth;
@@ -287,10 +288,11 @@ public class GameMap {
 		for(int i = 0; i < elementList.size(); i++) { //draw the elements' status icons
 			elementList.get(i).drawStatusIcons(g);
 		}
+		this.lastFullDrawInfo = this.drawInfo;
 		//System.out.println(this.drawInfo);
 	}
 	public String getDrawInfo() {
-		return this.drawInfo;
+		return this.lastFullDrawInfo;
 	}
 	public void addToDrawInfo(String info) {
 		if(StateGame.isServer) {
