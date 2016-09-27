@@ -34,6 +34,7 @@ import ui.UIBox;
 import ui.UIBoxOrigin;
 import mechanic.Game;
 import mechanic.GameMap;
+import mechanic.PlayerType;
 import mechanic.Point;
 import mechanic.ServerListenerThread;
 
@@ -127,6 +128,10 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 			
 		}
 		if(Game.serverListenerThread != null && Game.serverListenerThread.clientConnected) {
+			Game.leftPlayer = PlayerType.PLAYER;
+			Game.leftLevel = leftSelector.level;
+			Game.rightPlayer = PlayerType.PLAYER;
+			Game.rightLevel = rightSelector.level;
 			StateGame.isClient = false;
 			StateGame.isServer = true;
 			game.enterState(Game.STATE_GAME);

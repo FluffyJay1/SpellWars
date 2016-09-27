@@ -305,9 +305,11 @@ public class GameMap {
 		this.drawInfo = "";
 	}
 	public static void drawFromImageData(Graphics graphics, String data) {
-		StringTokenizer st = new StringTokenizer(data);
-		while(st.hasMoreTokens()) {
-			drawFromImageDataLine(graphics, st.nextToken("" + LINE_DELIMITER));
+		if(data != null) {
+			StringTokenizer st = new StringTokenizer(data);
+			while(st.hasMoreTokens()) {
+				drawFromImageDataLine(graphics, st.nextToken("" + LINE_DELIMITER));
+			}
 		}
 	}
 	public static void drawFromImageDataLine(Graphics graphics, String dataline) {

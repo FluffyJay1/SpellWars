@@ -30,6 +30,7 @@ public class ServerListenerThread extends Thread {
 		try {
 			s = serverSocket.accept();
 			this.clientConnected = true;
+			System.out.println("CLIENT CONNECTED");
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out = new PrintWriter(s.getOutputStream(), true);
 		} catch (IOException e) {
