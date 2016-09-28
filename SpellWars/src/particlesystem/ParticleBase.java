@@ -94,7 +94,7 @@ public class ParticleBase {
 		}
 		g.drawImage(endPic, (float) loc.getX() - width/2, (float) loc.getY() - height/2);
 		if(StateGame.isServer)
-		this.map.addToDrawInfo(GameMap.getDrawDataI(this.imagepath, loc.getX() - width/2, loc.getY() - height/2, width, height, orientation, 255, 255, 255, 255 * lifetime/maxLifetime, 0));
+		this.map.addToDrawInfo(GameMap.getDrawDataI(this.imagepath, loc.getX() - width/2, loc.getY() - height/2, width, height, orientation, 255, 255, 255, 255 * endPic.getAlpha(), 0));
 	}
 	public void move(){ //basically update
 		lifetime -= this.frametime; //lifetime decay

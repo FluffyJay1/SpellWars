@@ -51,6 +51,7 @@ import unit.Trump;
 import unit.Unit;
 
 public class StateGame extends BasicGameState{
+	StateBasedGame game;
 	float timescale = 1f;
 	double systemTime; //USED FOR FINDING FPS, USED IN UPDATE
 	int monstersSpawned = 0;
@@ -76,6 +77,9 @@ public class StateGame extends BasicGameState{
 	public static char serverPlayerDirection;
 	public static char clientPlayerDirection;
 	
+	static boolean hasReceivedDrawData;
+	static boolean hasReceivedFirstDrawData;
+	
 	private BufferedReader clientIn;
     private PrintWriter clientOut;
 	
@@ -88,12 +92,15 @@ public class StateGame extends BasicGameState{
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1){
+		this.game = arg1;
 		serverPlayerDirection = GameMap.ID_LEFT;
 		clientPlayerDirection = GameMap.getOppositeDirection(serverPlayerDirection);
 		if(isClient) {
+			hasReceivedFirstDrawData = false;
+			hasReceivedDrawData = true;
 			try {
 				clientIn = new BufferedReader(new InputStreamReader(Game.socket.getInputStream()));
-				clientOut = new PrintWriter(Game.socket.getOutputStream());
+				clientOut = new PrintWriter(Game.socket.getOutputStream(), true);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -101,7 +108,6 @@ public class StateGame extends BasicGameState{
 		}
 		
 		systemTime = System.nanoTime();
-		container.setClearEachFrame(true);
 		this.setBackgroundImage("res/trail_lightning.png");
 		if(!isClient) {
 			map = new GameMap(8, 4, //dimensions of game grid
@@ -201,8 +207,17 @@ public class StateGame extends BasicGameState{
 		} else {
 			String data = null;
 			try {
-				clientOut.println(Game.DRAW_INFO_REQUEST_STRING);
-				data = clientIn.readLine();
+				while(clientIn.ready()) {
+					g.setColor(Color.black);
+					g.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
+					data = clientIn.readLine();
+					hasReceivedDrawData = true;
+					hasReceivedFirstDrawData = true;
+				}
+				if(hasReceivedDrawData || !hasReceivedFirstDrawData) {
+					clientOut.println(Game.DRAW_INFO_REQUEST_STRING);
+					hasReceivedDrawData = false;
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
@@ -401,7 +416,7 @@ public class StateGame extends BasicGameState{
 			this.onButtonPress(key, serverPlayerDirection);
 		}
 		if(isClient) {
-			clientOut.println(key);
+			clientOut.print(Integer.toString(key) + " ");
 		}
 	}
 	public void onButtonPress(int key, char player) {

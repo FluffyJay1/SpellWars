@@ -126,11 +126,11 @@ public class AreaGrab extends Spell {
 				if(this.owner.teamID == GameMap.ID_LEFT) {
 					g.drawImage(redOrb.getScaledCopy(8), (float)drawLoc.x - redOrb.getWidth() * 4, (float)drawLoc.y - redOrb.getWidth() * 4);
 					if(StateGame.isServer)
-					this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/particle_genericRed.png", drawLoc.x - redOrb.getWidth() * 4, drawLoc.y - redOrb.getWidth()/2, redOrb.getWidth() * 4, redOrb.getHeight() * 4, 0, 255, 255, 255, 255, 0));
+					this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/particle_genericRed.png", drawLoc.x - redOrb.getWidth() * 4, drawLoc.y - redOrb.getWidth()/2, redOrb.getWidth() * 8, redOrb.getHeight() * 8, 0, 255, 255, 255, 255, 0));
 				} else {
 					g.drawImage(blueOrb.getScaledCopy(8), (float)drawLoc.x - blueOrb.getWidth() * 4, (float)drawLoc.y - blueOrb.getWidth() * 4);
 					if(StateGame.isServer)
-					this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/particle_genericBlue.png", drawLoc.x - blueOrb.getWidth() * 4, drawLoc.y - blueOrb.getWidth()/2, blueOrb.getWidth() * 4, blueOrb.getHeight() * 4, 0, 255, 255, 255, 255, 0));
+					this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/particle_genericBlue.png", drawLoc.x - blueOrb.getWidth() * 4, drawLoc.y - blueOrb.getWidth()/2, blueOrb.getWidth() * 8, blueOrb.getHeight() * 8, 0, 255, 255, 255, 255, 0));
 				}
 			}
 		}

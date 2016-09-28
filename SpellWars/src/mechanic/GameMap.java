@@ -446,7 +446,6 @@ public class GameMap {
 			int y = Integer.parseInt(st.nextToken());
 			double ratio = (double)(Integer.parseInt(st.nextToken()))/100;
 			double radiansFromTopCounterClockwise = ratio * Math.PI * 2;
-			System.out.println(ratio);
 			if(ratio == 1) {
 				graphics.drawImage(image, x, y);
 			} else {

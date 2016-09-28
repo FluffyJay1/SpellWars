@@ -382,6 +382,8 @@ public class SpellSelector extends UIElement {
 			if(i < this.selectedSpells.size()) {
 				//draws a spell icon if there is a spell
 				g.drawImage(this.selectedSpells.get(i).getImage().getScaledCopy((int)SPELL_ICON_DIMENSIONS.x, (int)SPELL_ICON_DIMENSIONS.y), (float)(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y));
+				if(StateGame.isServer)
+				this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.selectedSpells.get(i).getImagePath(), spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x, spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y, SPELL_ICON_DIMENSIONS.x, SPELL_ICON_DIMENSIONS.y, 0, 255, 255, 255, 255, 0));
 				if(i == 0 && !this.pickingPhase) {
 					g.drawImage(selectorImage.getScaledCopy((int)SPELL_ICON_DIMENSIONS.x, (int)SPELL_ICON_DIMENSIONS.y), (float)(spellDrawLoc.x - SPELL_ICON_DIMENSIONS.x), (float)(spellDrawLoc.y - SPELL_ICON_DIMENSIONS.y));
 					if(StateGame.isServer)

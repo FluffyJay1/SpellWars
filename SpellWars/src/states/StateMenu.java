@@ -56,6 +56,7 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 
 	}
 	public void init(GameContainer container, StateBasedGame arg1){
+		container.setClearEachFrame(true);
 		// TODO Auto-generated method stub
 		try{
 		startButton = new Image("res/StartButton.png");
@@ -150,6 +151,7 @@ public class StateMenu extends BasicGameState implements ComponentListener{
 				StateGame.isClient = true;
 				StateGame.isServer = false;
 				game.enterState(Game.STATE_GAME);
+				game.getContainer().setClearEachFrame(false);
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
