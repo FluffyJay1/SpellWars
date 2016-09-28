@@ -288,11 +288,13 @@ public class GameMap {
 		for(int i = 0; i < elementList.size(); i++) { //draw the elements' status icons
 			elementList.get(i).drawStatusIcons(g);
 		}
-		this.lastFullDrawInfo = this.drawInfo;
 		//System.out.println(this.drawInfo);
 	}
 	public String getDrawInfo() {
 		return this.lastFullDrawInfo;
+	}
+	public void engraveDrawInfo() {
+		this.lastFullDrawInfo = this.drawInfo;
 	}
 	public void addToDrawInfo(String info) {
 		if(StateGame.isServer) {

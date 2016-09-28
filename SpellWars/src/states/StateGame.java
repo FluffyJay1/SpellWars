@@ -106,7 +106,6 @@ public class StateGame extends BasicGameState{
 				e.printStackTrace();
 			}
 		}
-		
 		systemTime = System.nanoTime();
 		this.setBackgroundImage("res/trail_lightning.png");
 		if(!isClient) {
@@ -178,6 +177,9 @@ public class StateGame extends BasicGameState{
 			readyText.setUseOutline(true);
 			ui.addUIElement(readyText);
 			map.updateLists();
+			if(isServer) {
+				Game.serverListenerThread.setMap(map);
+			}
 		}
 	}
 
@@ -204,6 +206,7 @@ public class StateGame extends BasicGameState{
 				this.readyText.setLetterHeight(0);
 			}
 			ui.draw(g);
+			map.engraveDrawInfo();
 		} else {
 			String data = null;
 			try {

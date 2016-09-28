@@ -38,18 +38,23 @@ public class ServerListenerThread extends Thread {
 			e.printStackTrace();
 		}
 		while(true) {
-			String input = null;
+			//System.out.println(this.map == null);
+			String input = "";
 			try {
-				 input = in.readLine();
+				while(in.ready()) {
+					input += in.readLine();
+					input += " ";
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(input != null) {
+			if(!input.equals("")) {
 				StringTokenizer st = new StringTokenizer(input);
 				while(st.hasMoreElements()) {
 					String token = st.nextToken();
 					if(token.equals(Game.DRAW_INFO_REQUEST_STRING)) {
+						if(this.map != null)
 						out.println(this.map.getDrawInfo());
 					} else {
 						try {
