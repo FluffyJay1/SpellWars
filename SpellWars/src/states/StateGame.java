@@ -201,13 +201,13 @@ public class StateGame extends BasicGameState{
 		} else {
 			String data = null;
 			try {
+				clientOut.println(Game.DRAW_INFO_REQUEST_STRING);
 				data = clientIn.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
 			}
 			GameMap.drawFromImageData(g, data);
-			clientOut.println(Game.DRAW_INFO_REQUEST_STRING);
 		}
 	}
 
