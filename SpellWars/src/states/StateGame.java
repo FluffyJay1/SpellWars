@@ -360,6 +360,7 @@ public class StateGame extends BasicGameState{
 		this.hasPressedFirstButton = true;
 		if(key == Input.KEY_SPACE) {
 			this.devPause = !devPause;
+			if(this.map != null)
 			System.out.println(this.map.getDrawInfo());
 		}
 		if(!isClient && !isServer) { //if singleplayer

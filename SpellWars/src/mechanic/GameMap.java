@@ -343,8 +343,8 @@ public class GameMap {
 			int b = Integer.parseInt(st.nextToken());
 			int a = Integer.parseInt(st.nextToken());
 			int hflipvflip = Integer.parseInt(st.nextToken());
-			image.rotate(rotation);
 			image = image.getScaledCopy(width, height).getFlippedCopy(hflipvflip > 1, hflipvflip % 2 == 1);
+			image.rotate(rotation);
 			graphics.drawImage(image, xpos, ypos, new Color(r, g, b, a));
 		}else if(type.equals("drawfn")) {
 			String path = st.nextToken();
