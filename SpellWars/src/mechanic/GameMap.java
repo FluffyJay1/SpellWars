@@ -474,7 +474,7 @@ public class GameMap {
 				//WORKING AROUND THE FITTING IMAGE INSIDE SHAPE
 				poly.addPoint(-0.01f, 0.01f);
 				poly.addPoint(StatusEffect.ICON_SIDE_LENGTH/2, StatusEffect.ICON_SIDE_LENGTH/2); 
-				poly.addPoint(0.01f, -0.01f);
+				poly.addPoint(-0.01f, -0.01f);
 				poly.setLocation(x + StatusEffect.ICON_SIDE_LENGTH/2, y + StatusEffect.ICON_SIDE_LENGTH/2);
 				graphics.setColor(Color.white);
 				graphics.drawImage(image, x, y, StatusEffect.DURATION_INDICATOR_FADED_COLOR);
