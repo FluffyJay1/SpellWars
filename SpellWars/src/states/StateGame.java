@@ -76,6 +76,10 @@ public class StateGame extends BasicGameState{
 	
 	public static char serverPlayerDirection;
 	public static char clientPlayerDirection;
+	Text multiplayerDirectionText;
+	float multiplayerDirectionTooltipTimer;
+	boolean hasPressedFirstButton;
+	static final float MULTIPLAYER_DIRECTION_TOOLTIP_TIME = 2.5f;
 	
 	static boolean hasReceivedDrawData;
 	static boolean hasReceivedFirstDrawData;
@@ -93,6 +97,7 @@ public class StateGame extends BasicGameState{
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1){
 		this.game = arg1;
+		this.hasPressedFirstButton = false;
 		serverPlayerDirection = GameMap.ID_LEFT;
 		clientPlayerDirection = GameMap.getOppositeDirection(serverPlayerDirection);
 		if(isClient) {
@@ -108,11 +113,14 @@ public class StateGame extends BasicGameState{
 		}
 		systemTime = System.nanoTime();
 		this.setBackgroundImage("res/trail_lightning.png");
+		if(isClient || isServer) {
+			this.multiplayerDirectionTooltipTimer = MULTIPLAYER_DIRECTION_TOOLTIP_TIME;
+		}
+		ui = new UI();
 		if(!isClient) {
 			map = new GameMap(8, 4, //dimensions of game grid
 					Game.WINDOW_WIDTH * 5/6 /*1600 on 1920x1080 monitors*/, Game.WINDOW_HEIGHT * 540/1080 /*540 on 1920x1080 monitors*/, //dimensions of map
 					new Point(Game.WINDOW_WIDTH/12, Game.WINDOW_HEIGHT * 500/1080)); //top left corner of map (map coordinates)
-			ui = new UI();
 			map.setUI(ui);
 			ui.setMap(map);
 			Point leftStartLoc = new Point(0, 0);
@@ -177,8 +185,23 @@ public class StateGame extends BasicGameState{
 			readyText.setUseOutline(true);
 			ui.addUIElement(readyText);
 			map.updateLists();
-			if(isServer) {
-				Game.serverListenerThread.setMap(map);
+		}
+		multiplayerDirectionText = new Text(ui, new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - 20), 400, 24, 40, 28, 44, Color.white, "", TextFormat.CENTER_JUSTIFIED);
+		multiplayerDirectionText.setUseOutline(true);
+		ui.addUIElement(multiplayerDirectionText);
+		if(isServer) {
+			Game.serverListenerThread.setMap(map);
+			if(serverPlayerDirection == GameMap.ID_LEFT) {
+				multiplayerDirectionText.setText("you are on the LEFT side");
+			} else {
+				multiplayerDirectionText.setText("you are on the RIGHT side");
+			}
+		}
+		if(isClient) {
+			if(clientPlayerDirection == GameMap.ID_LEFT) {
+				multiplayerDirectionText.setText("you are on the LEFT side");
+			} else {
+				multiplayerDirectionText.setText("you are on the RIGHT side");
 			}
 		}
 	}
@@ -189,6 +212,8 @@ public class StateGame extends BasicGameState{
 		if(!isClient) {
 			map.clearDrawInfo();
 			backgroundImage.drawWarped(Game.WINDOW_WIDTH, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT, 0, Game.WINDOW_HEIGHT, 0, 0); //start with topright, then clockwise
+			if(isServer)
+			map.addToDrawInfo(GameMap.getDrawDataW("res/trail_lightning.png", Game.WINDOW_WIDTH, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT, 0, Game.WINDOW_HEIGHT, 0, 0, 255, 255, 255, 255));
 			map.draw(g);
 			if(!pickingPhase && this.readyTimer >= 0) {
 			float ratio = readyTimer/READY_TIME;
@@ -226,16 +251,26 @@ public class StateGame extends BasicGameState{
 				//e.printStackTrace();
 			}
 			GameMap.drawFromImageData(g, data);
+			ui.draw(g);
+		}
+		if(isServer || isClient) {
+			if(this.multiplayerDirectionTooltipTimer <= 0.3) {
+				if(this.multiplayerDirectionTooltipTimer <= 0) {
+					this.multiplayerDirectionText.setRemove(true);
+				}
+				this.multiplayerDirectionText.setLetterHeight((int) (40 * this.multiplayerDirectionTooltipTimer/0.3));
+				this.multiplayerDirectionText.changeLoc(new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - 20 * this.multiplayerDirectionTooltipTimer/0.3));
+			}
 		}
 	}
 
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {
+		float frametime = (float) ((System.nanoTime() - systemTime) / 1000000000) * timescale;
+		systemTime = System.nanoTime();
 		if(!isClient) {
-			float frametime = (float) ((System.nanoTime() - systemTime) / 1000000000) * timescale;
 			map.passFrameTime(frametime); //calculates difference in time per frame , and magic number is there since 1 second is 10^9 nanoseconds
 			ui.passFrameTime(frametime);
-			systemTime = System.nanoTime();
 			pickingPhase = !(leftSelect.getIsReady() && rightSelect.getIsReady());
 			if(!pickingPhase && this.readyTimer <= 0 && !devPause) {
 				map.update();
@@ -272,13 +307,17 @@ public class StateGame extends BasicGameState{
 			} else {
 				battlePhaseText.setColor(Color.white);
 			}
-			ui.update();
 		}
+		ui.update();
 		if(isServer) {
 			int[] keys = Game.serverListenerThread.getKeyInputsFromClient();
 			for(int i = 0; i < keys.length; i++) {
 				this.onButtonPress(keys[i], clientPlayerDirection);
 			}
+		}
+		if(isClient || isServer) {
+			if(this.multiplayerDirectionTooltipTimer > 0 && this.hasPressedFirstButton)
+			this.multiplayerDirectionTooltipTimer -= frametime;
 		}
 	}
 	@Override
@@ -317,6 +356,7 @@ public class StateGame extends BasicGameState{
 	}
 	@Override
 	public void keyPressed(int key, char c) {
+		this.hasPressedFirstButton = true;
 		if(key == Input.KEY_SPACE) {
 			this.devPause = !devPause;
 			System.out.println(this.map.getDrawInfo());
