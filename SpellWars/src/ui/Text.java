@@ -245,7 +245,7 @@ public class Text extends UIElement {
 			if(this.useOutline) {
 				drawoutline = 1;
 			}
-			if(StateGame.isServer)
+			if(StateGame.isServer && this.sendDrawInfo)
 			this.getMap().addToDrawInfo(GameMap.getDrawDataT(this.text, this.getFinalLoc().x, this.getFinalLoc().y, this.boxWidth, this.letterWidth, this.letterHeight, this.kerning, this.lineSpacing, this.format, drawoutline, this.color.getRed(), this.color.getGreen(), this.color.getBlue(), this.color.getAlpha(), this.outlineColor.getRed(), this.outlineColor.getGreen(), this.outlineColor.getBlue(), this.outlineColor.getAlpha()));
 		}
 	}

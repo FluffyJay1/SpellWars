@@ -188,6 +188,7 @@ public class StateGame extends BasicGameState{
 		}
 		multiplayerDirectionText = new Text(ui, new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2 - 20), 400, 24, 40, 28, 44, Color.white, "", TextFormat.CENTER_JUSTIFIED);
 		multiplayerDirectionText.setUseOutline(true);
+		multiplayerDirectionText.sendDrawInfo = false;
 		ui.addUIElement(multiplayerDirectionText);
 		if(isServer) {
 			Game.serverListenerThread.setMap(map);

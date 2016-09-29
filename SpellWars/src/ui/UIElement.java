@@ -35,6 +35,7 @@ public class UIElement {
 	private boolean isFront;
 	private Image pic;
 	private String imagepath;
+	public boolean sendDrawInfo;
 	private Color color;
 	private boolean fixedHitbox;
 	private float width; //for hitbox (clicking)
@@ -66,6 +67,7 @@ public class UIElement {
 		this.loc = loc;
 		this.origin = new Point();
 		this.alpha = 1;
+		this.sendDrawInfo = true;
 	}
 	public UIElement(UI ui, Point loc) {
 		this.setSize(1);
@@ -78,6 +80,7 @@ public class UIElement {
 		this.origin = new Point();
 		this.loc = loc;
 		this.alpha = 1;
+		this.sendDrawInfo = true;
 	}
 	/**
 	 * Access instance variable loc
@@ -202,7 +205,7 @@ public class UIElement {
 				this.height = height;
 			}
 			if(this.getMap() != null) {
-				if(StateGame.isServer)
+				if(StateGame.isServer && this.sendDrawInfo)
 				this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.imagepath, this.getFinalLoc().getX() - width/2, this.getFinalLoc().getY() - height/2, width, height, 0, this.color.getRed(), this.color.getGreen(), this.color.getBlue(), this.color.getAlpha(), 0));
 			}
 		}
