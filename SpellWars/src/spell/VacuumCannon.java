@@ -6,12 +6,12 @@ import unit.Unit;
 
 public class VacuumCannon extends Spell {
 	public static final int DAMAGE = 5;
-	public static final int NUM_SHOTS = 12;
-	public static final float DURATION = 0.8f;
+	public static final int NUM_SHOTS = 8;
+	public static final float DURATION = 0.9f;
 	public static final double SPEED = 15;
 	int shotsFired;
 	public VacuumCannon(Unit owner) {
-		super(owner, 0, DURATION, "Vacuum Cannon", "Blow the enemy towards you and deal a bunch of damage", "res/spell/vacuumcannon.png", false);
+		super(owner, 0, DURATION, "Vacuum Cannon", "Blow the enemy towards you, stun them, and deal a bunch of damage", "res/spell/vacuumcannon.png", false);
 		this.setThinkInterval(DURATION/NUM_SHOTS);
 	}
 	@Override

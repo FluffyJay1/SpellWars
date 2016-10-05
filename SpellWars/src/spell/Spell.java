@@ -49,9 +49,10 @@ public class Spell extends GameElement {
 		this.isFinished = false;
 		this.spellText = new Text(null, Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 18, 30, 22, 30, Color.white, "", TextFormat.CENTER_JUSTIFIED);
 	}
+	/*
 	public Spell(String name, float castTime, float backswingTime, String description, String imagepath, boolean pauseWhenActivated) {
 		this(null, castTime, backswingTime, name, description, imagepath, pauseWhenActivated);
-	}
+	}*/
 	public Spell(Unit owner, float castTime, float backswingTime, String name, String description, String imagepath, boolean pauseWhenActivated, boolean pausedByStuns) {
 		this(owner, castTime, backswingTime, name, description, imagepath, pauseWhenActivated);
 		this.pausedByStuns = pausedByStuns;
@@ -61,6 +62,10 @@ public class Spell extends GameElement {
 		this.spellText.setUI(this.getMap().getUI());
 		this.spellText.setUseOutline(true);
 		this.spellText.setElementToRemoveWith(this);
+		this.onSpellSetMap();
+	}
+	public void onSpellSetMap() {
+		
 	}
 	public void setOwner(Unit owner) {
 		this.owner = owner;

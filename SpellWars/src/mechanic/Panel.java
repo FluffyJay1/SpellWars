@@ -21,10 +21,14 @@ public class Panel {
 	public Unit unitStandingOnPanel;
 	public static final float PANEL_FLASH_DURATION = 2;
 	public static final float PANEL_FLASH_INTERVAL = 0.2f;
+	public static final double PANEL_FLASH_SIZE = 0.8;
+	public static final Color PANEL_FLASH_COLOR = new Color(230, 230, 0);
+	public static final double PANEL_FLASH_IMPORTANT_SIZE = 0.6;
+	public static final Color PANEL_FLASH_IMPORTANT_COLOR = new Color(220, 20, 0);
 	public static final float CRACK_RESET_TIME = 15;
 	public static final float HOLE_RESET_TIME = 15;
 	public static final float LAVA_RESET_TIME = 20; //originally 20
-	public static final float MUD_RESET_TIME = 20;
+	public static final float MUD_RESET_TIME = 40;
 	public static final float LAVA_DAMAGE_PER_SECOND = 10;
 	public static final float MUD_SPEED_MODIFIER = 0.5f;
 	float panelResetTimer;
@@ -103,9 +107,9 @@ public class Panel {
 		}
 	}
 	public void crackLight() {
-		if(this.state == PanelState.CRACKED && this.state != PanelState.HOLE && this.unitStandingOnPanel == null) {
+		if(this.state == PanelState.CRACKED && this.unitStandingOnPanel == null) {
 			this.setPanelState(PanelState.HOLE);
-		} else {
+		} else if (this.state != PanelState.HOLE) {
 			this.setPanelState(PanelState.CRACKED);
 		}
 	}
@@ -222,21 +226,21 @@ public class Panel {
 		g.draw(rect);
 		*/
 		if(this.drawProjectileFlash || this.projectileFlashTimer > 0) {
-			Point loc = Point.subtract(this.map.gridToPosition(this.getLoc()), Point.scale(panelSize, 0.4));
-			g.setColor(Color.yellow);
-			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * 0.8f, (float)panelSize.y * 0.8f);
+			Point loc = Point.subtract(this.map.gridToPosition(this.getLoc()), Point.scale(panelSize, PANEL_FLASH_SIZE/2));
+			g.setColor(PANEL_FLASH_COLOR);
+			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * (float)PANEL_FLASH_SIZE, (float)panelSize.y * (float)PANEL_FLASH_SIZE);
 			g.fill(rect);
 			if(StateGame.isServer)
-			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * 0.8, panelSize.y * 0.8, 255, 255, 0, 255));
+			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * PANEL_FLASH_SIZE, panelSize.y * PANEL_FLASH_SIZE, PANEL_FLASH_COLOR.getRedByte(), PANEL_FLASH_COLOR.getGreenByte(), PANEL_FLASH_COLOR.getBlueByte(), 255));
 			this.drawProjectileFlash = false;
 		}
 		if(this.drawImportantFlash || this.importantFlashTimer > 0) {
-			Point loc = Point.subtract(this.map.gridToPosition(this.getLoc()), Point.scale(panelSize, 0.3));
-			g.setColor(Color.red);
-			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * 0.6f, (float)panelSize.y * 0.6f);
+			Point loc = Point.subtract(this.map.gridToPosition(this.getLoc()), Point.scale(panelSize, PANEL_FLASH_IMPORTANT_SIZE/2));
+			g.setColor(PANEL_FLASH_IMPORTANT_COLOR);
+			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * (float)PANEL_FLASH_IMPORTANT_SIZE, (float)panelSize.y * (float)PANEL_FLASH_IMPORTANT_SIZE);
 			g.fill(rect);
 			if(StateGame.isServer)
-			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * 0.6, panelSize.y * 0.6, 255, 0, 0, 255));
+			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * PANEL_FLASH_IMPORTANT_SIZE, panelSize.y * PANEL_FLASH_IMPORTANT_SIZE, PANEL_FLASH_IMPORTANT_COLOR.getRedByte(), PANEL_FLASH_IMPORTANT_COLOR.getGreenByte(), PANEL_FLASH_IMPORTANT_COLOR.getBlueByte(), 255));
 			this.drawImportantFlash = false;
 		}
 		if(this.projectileFlashTimer > 0) {

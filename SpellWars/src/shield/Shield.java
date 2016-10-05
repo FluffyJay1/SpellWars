@@ -161,6 +161,10 @@ public class Shield extends GameElement {
 			this.hpText.changeLoc(Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET + this.drawOffset)));
 			this.hpText.setText("" + (int)this.getHP());
 		}
+		this.drawSpecialEffects(g);
+	}
+	public void drawSpecialEffects(Graphics g) {
+		
 	}
 	public void onThink() {
 		

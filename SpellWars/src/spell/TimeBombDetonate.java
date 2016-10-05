@@ -8,7 +8,7 @@ import projectile.Projectile;
 import unit.Unit;
 
 public class TimeBombDetonate extends Spell {
-	public static final int DAMAGE = 80;
+	public static final int DAMAGE = 75;
 	/*
 	public static final Point[] AFFECTED_POINTS = {new Point(0,4),
 			new Point(-1,3), new Point(0,3), new Point(1,3),

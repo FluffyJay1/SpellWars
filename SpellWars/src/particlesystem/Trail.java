@@ -159,6 +159,8 @@ public class Trail extends GameElement {
 		if(this.getParent() != null) {
 			if(this.getParent().getRemove() && this.trailNodes.size() == 0) {
 				this.setRemove(true);
+			} else {
+				this.changeLoc(Point.add(this.getParent().getLoc(), new Point(0, -this.getParent().getDrawHeight())));
 			}
 		}
 	}

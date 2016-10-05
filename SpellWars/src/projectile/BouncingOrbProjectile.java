@@ -21,7 +21,10 @@ public class BouncingOrbProjectile extends Projectile {
 	@Override
 	public void onProjectileUpdate() {
 		if(this.clearUnitsHitNextTime && this.thinkTimer < 0.5) {
-			this.unitsHit.clear();
+			this.resetUnitsHit();
+			if(this.getMap().getPanelAt(this.getGridLoc()).unitStandingOnPanel != null) {
+				this.unitsHit.add(this.getMap().getPanelAt(this.getGridLoc()).unitStandingOnPanel);
+			}
 			this.clearUnitsHitNextTime = false;
 		}
 	}

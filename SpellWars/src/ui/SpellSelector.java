@@ -12,12 +12,16 @@ import mechanic.GameMap;
 import mechanic.Point;
 import projectile.StunGrenade;
 import spell.AreaGrab;
+import spell.AwpShot;
 import spell.Blizzard;
 import spell.BouncingOrb;
 import spell.DamageAmp;
+import spell.DragonBreath;
+import spell.FireAndBrimstone;
 import spell.ForgeSpirit;
 import spell.ForgeSpiritFire;
 import spell.HellRain;
+import spell.HopesAndDreams;
 import spell.LavaToss;
 import spell.MudToss;
 import spell.MysteryBox;
@@ -34,6 +38,7 @@ import spell.TimeDilation;
 import spell.TrumpWall;
 import spell.VacuumCannon;
 import spell.WindCannon;
+import spell.WishUponALuckyStar;
 import states.StateGame;
 import unit.Player;
 import unit.Unit;
@@ -57,17 +62,31 @@ public class SpellSelector extends UIElement {
 	public static final int MAX_SELECTED_SPELLS = 4;
 	public static final String SELECTOR_IMAGEPATH = "res/ui/gridSelect.png";
 	public static final float SPELL_CAST_HELP_OFFSET = 10;
+	
+	public static final float SPELLS_COMBO_OFFSET = 90;
+	public static final float SPELLS_COMBO_FINAL_Y = 184;
+	public static final int SPELLS_COMBO_SIZE = 128;
+	public static final float SPELLS_COMBO_DURATION = 3.25f;
+	public static final float SPELLS_COMBO_FINAL_DISPLAY_DURATION = 2.5f;
+	public static final float SPELLS_COMBO_TRANSITION_DURATION = 0.1f;
+	public static final float SPELLS_COMBO_NAME_X_OFFSET = 148;
+	public static final float SPELLS_COMBO_NAME_Y_OFFSET = 80;
+	public static final float SPELLS_COMBO_DESCRIPTION_Y_OFFSET = 100;
+	float spellComboTimer;
 	char style;
 	UIBox box;
 	Point selectorLoc;
 	Image selectorImage;
 	ArrayList<Spell> availableSpells;
 	ArrayList<Spell> selectedSpells; 
+	ArrayList<Integer> indexesSelectedForCombo;
+	ArrayList<Spell> spellsSelectedForCombo;
+	Spell comboSpell;
+	Text comboSpellName;
+	Text comboSpellDescription;
+	
 	Player player;
 	boolean pickingPhase;
-	
-	boolean hasCastFirstSpell;
-	int prevNumSelectedSpells;
 	
 	Text spellName;
 	Text spellDescription;
@@ -78,6 +97,9 @@ public class SpellSelector extends UIElement {
 		this.setIsFront(true);
 		this.availableSpells = new ArrayList<Spell>();
 		this.selectedSpells = new ArrayList<Spell>();
+		this.indexesSelectedForCombo = new ArrayList<Integer>();
+		this.spellsSelectedForCombo = new ArrayList<Spell>();
+		this.spellComboTimer = 0;
 		this.selectorLoc = new Point();
 		this.style = style;
 		UIBoxOrigin originStyle = null;
@@ -109,22 +131,46 @@ public class SpellSelector extends UIElement {
 		this.addChild(spellSelectHelp);
 		this.spellCastHelp = new Text(ui, new Point(SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.x + SPELL_CAST_HELP_OFFSET, SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.y), 386, 12, 14, 13, 15, new Color(230, 230, 240), "", TextFormat.LEFT_JUSTIFIED);
 		this.addChild(spellCastHelp);
+		
+		this.comboSpellName = new Text(ui, Point.add(SPELLS_SELECTED_DRAWLOC_TOP_BATTLE, new Point(SPELLS_COMBO_OFFSET + SPELLS_COMBO_NAME_X_OFFSET, SPELLS_COMBO_NAME_Y_OFFSET)), 400, 22, 40, 28, 42, new Color(255, 255, 235), "", TextFormat.LEFT_JUSTIFIED);
+		this.comboSpellName.setUseOutline(true);
+		this.addChild(comboSpellName);
+		this.comboSpellDescription = new Text(ui, Point.add(SPELLS_SELECTED_DRAWLOC_TOP_BATTLE, new Point(SPELLS_COMBO_OFFSET + SPELLS_COMBO_NAME_X_OFFSET, SPELLS_COMBO_NAME_Y_OFFSET + SPELLS_COMBO_DESCRIPTION_Y_OFFSET)), 386, 10, 18, 16, 24, new Color(230, 230, 240), "asdf", TextFormat.LEFT_JUSTIFIED);
+		this.comboSpellDescription.setUseOutline(true);
+		this.addChild(comboSpellDescription);
 		if(style == GameMap.ID_LEFT) {
 			this.spellSelectHelp.setText("WASD to move, E to select, Q to deselect, T to finish selecting");
 		} else if(style == GameMap.ID_RIGHT) {
+			this.comboSpellName.changeLoc(new Point(-SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.x - SPELLS_COMBO_OFFSET - SPELLS_COMBO_NAME_X_OFFSET - this.comboSpellName.boxWidth, SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.y + SPELLS_COMBO_NAME_Y_OFFSET));
+			this.comboSpellDescription.changeLoc(new Point(-SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.x - SPELLS_COMBO_OFFSET - SPELLS_COMBO_NAME_X_OFFSET - this.comboSpellName.boxWidth, SPELLS_SELECTED_DRAWLOC_TOP_BATTLE.y + SPELLS_COMBO_NAME_Y_OFFSET + SPELLS_COMBO_DESCRIPTION_Y_OFFSET));
+			this.comboSpellName.format = TextFormat.RIGHT_JUSTIFIED;
+			this.comboSpellDescription.format = TextFormat.RIGHT_JUSTIFIED;
 			this.spellSelectHelp.setText("arrows to move, (.) to select, (/) to deselect, L to finish selecting");
 		}
-		
-		this.hasCastFirstSpell = false;
-		this.prevNumSelectedSpells = 0;
 	}
 	@Override
 	public void update() {
-		if(!this.hasCastFirstSpell && this.prevNumSelectedSpells > this.selectedSpells.size() && this.prevNumSelectedSpells != 0) {
+		if(this.player.hasCastFirstSpell) {
 			this.spellCastHelp.setRemove(true);
-			this.hasCastFirstSpell = true;
-		} else {
-			this.prevNumSelectedSpells = this.selectedSpells.size();
+		}
+		if(this.spellComboTimer > 0 && this.comboSpell != null) {
+			this.spellComboTimer -= this.getFrameTime();
+			if(this.spellComboTimer <= SPELLS_COMBO_FINAL_DISPLAY_DURATION && this.spellComboTimer + this.getFrameTime() > SPELLS_COMBO_FINAL_DISPLAY_DURATION) {
+				this.selectedSpells.removeAll(this.spellsSelectedForCombo);
+				int firstIndex = this.selectedSpells.size();
+				for(int i : this.indexesSelectedForCombo) {
+					if(firstIndex > i) {
+						firstIndex = i;
+					}
+				}
+				ArrayList<Spell> spellsAfterFirstIndex = new ArrayList<Spell>();
+				for(int i = firstIndex; i < this.selectedSpells.size(); /*nothing lmao*/) {
+					spellsAfterFirstIndex.add(this.selectedSpells.get(firstIndex)); //because the indexes always change every time i remove something
+					this.selectedSpells.remove(firstIndex);
+				}
+				this.selectedSpells.add(this.comboSpell);
+				this.selectedSpells.addAll(spellsAfterFirstIndex);
+			}
 		}
 	}
 	public void updateText() {
@@ -161,7 +207,7 @@ public class SpellSelector extends UIElement {
 			this.spellName.setText("");
 			this.spellDescription.setText("");
 			this.spellSelectHelp.setRemove(true);
-			if(!this.player.getRemove() && this.selectedSpells.size() > 0) {
+			if(!this.player.getRemove() && this.selectedSpells.size() > 0 && !this.player.hasCastFirstSpell) {
 				if(this.style == GameMap.ID_LEFT) {
 					this.spellCastHelp.setText("press (E) to cast!");
 				} else {
@@ -171,6 +217,7 @@ public class SpellSelector extends UIElement {
 				}
 			}
 		} else {
+			this.spellCastHelp.setText("");
 			this.box.setImage("res/ui/uibox_texture.png");
 			this.box.setEdgeColor(new Color(125, 125, 200, 200));
 			this.selectorLoc = new Point();
@@ -199,7 +246,6 @@ public class SpellSelector extends UIElement {
 			}
 			this.updateText();
 		}
-		this.prevNumSelectedSpells = this.selectedSpells.size();
 	}
 	public void removeSelectedSpells() {
 		this.selectedSpells.clear();
@@ -229,6 +275,76 @@ public class SpellSelector extends UIElement {
 			this.availableSpells.add(getRandomSpell(this.player));
 		}
 	}
+	public boolean isComboing() {
+		return this.spellComboTimer > 0;
+	}
+	public boolean detectSpellCombos() {
+		String[] combos = { //3 TO A COMBO, ANY OTHER LENGTH WILL BREAK IT, case insensitive
+				//HOPES AND DREAMS
+				"Wish upon a lucky star", 
+				"Wish upon a lucky star", 
+				"Wish upon a lucky star", 
+				//AWP SHOT
+				"Pistol Shot",
+				"Pistol Shot",
+				"Pistol Shot",
+				//DRAGON'S BREATH
+				"Firebreath",
+				"Firebreath",
+				"Firebreath"
+		};
+		Spell[] spells = {
+			new HopesAndDreams(this.player),
+			new AwpShot(this.player),
+			new DragonBreath(this.player)
+		};
+		boolean[] spellsDetected = new boolean[combos.length];
+		for(int i = 0; i < spellsDetected.length; i++) {
+			spellsDetected[i] = false;
+		}
+		this.spellsSelectedForCombo.clear();
+		this.indexesSelectedForCombo.clear();
+		boolean comboFound = false;
+		for(int i = 0; i < this.selectedSpells.size(); i++) {
+			for(int j = 0; j < combos.length; j += 3) {
+				for(int combopart = 0; combopart < 3; combopart++)
+				if(spellsDetected[j + combopart] == false && this.selectedSpells.get(i).getName().toLowerCase().equals(combos[j + combopart].toLowerCase())) {
+					spellsDetected[j + combopart] = true;
+					/*
+					indexesSelectedForCombo.add(i);
+					spellsSelectedForCombo.add(this.selectedSpells.get(i));
+					*/
+					break;
+				}
+			}
+			for(int j = 0; j < combos.length; j += 3) {
+				if(spellsDetected[j] && spellsDetected[j + 1] && spellsDetected[j + 2]) {
+					for(int k = 0; k < this.selectedSpells.size(); k++) {
+						for(int combopart = 0; combopart < 3; combopart++) {
+							if(this.selectedSpells.get(k).getName().toLowerCase().equals(combos[j + combopart].toLowerCase()) && spellsDetected[j + combopart]) {
+								spellsSelectedForCombo.add(this.selectedSpells.get(k));
+								indexesSelectedForCombo.add(k);
+								spellsDetected[j + combopart] = false;
+								break;
+							}
+						}
+					}
+					if(indexesSelectedForCombo.size() == 3) {
+						comboFound = true;
+						this.comboSpell = spells[j/3];
+						break;
+					}
+				}
+			}
+			if(comboFound) {
+				break;
+			}
+		}
+		if(comboFound) {
+			this.spellComboTimer = SPELLS_COMBO_DURATION;
+		}
+		return comboFound;
+	}
 	public static Spell getRandomSpell(Unit unit) {
 		Spell[] spells = {new TrumpWall(unit),
 				new ReflectBarrier(unit),
@@ -250,7 +366,9 @@ public class SpellSelector extends UIElement {
 				new VacuumCannon(unit),
 				new MysteryBox(unit),
 				new MudToss(unit),
-				new LavaToss(unit)
+				new LavaToss(unit),
+				new FireAndBrimstone(unit),
+				new WishUponALuckyStar(unit)
 		};
 		double[] weights = {0.45, //TRUMP WALL
 				0.45, //reflect barrier
@@ -263,16 +381,18 @@ public class SpellSelector extends UIElement {
 				1.3, //bouncing orb
 				1.0, //wind cannon
 				1.65, //firebreath
-				1.8, //pistol shot
-				0.45, //blizzard
+				1.9, //pistol shot
+				0.4, //blizzard
 				0.65, //regenerate
 				0.5, //damage amp
 				0.4, //omnislash
 				0.45, //time dilation
 				0.75, //vacuum cannon
-				0.4, //mystery box
+				0.25, //mystery box
 				0.4, //mud grenade
-				0.35 //lava grenade
+				0.35, //lava grenade
+				0.2, //fire and brimstone
+				1.4, //wish upon a lucky star
 		};
 		if(spells.length != weights.length) {
 			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");
@@ -402,6 +522,45 @@ public class SpellSelector extends UIElement {
 				if(StateGame.isServer)
 				this.getMap().addToDrawInfo(GameMap.getDrawDataI(SELECTOR_IMAGEPATH, selectorDrawLoc.x - SPELL_ICON_DIMENSIONS.x, selectorDrawLoc.y - SPELL_ICON_DIMENSIONS.y, SPELL_ICON_DIMENSIONS.x, SPELL_ICON_DIMENSIONS.y, 0, 255, 255, 255, 255, 0));
 			}
+		}
+		if(this.isComboing()) {
+			Point localDrawLoc = Point.clone(SPELLS_SELECTED_DRAWLOC_TOP_BATTLE);
+			if(this.style == GameMap.ID_LEFT) {
+				localDrawLoc.x += SPELLS_COMBO_OFFSET;
+			}
+			if(this.style == GameMap.ID_RIGHT) {
+				localDrawLoc.x = -localDrawLoc.x - SPELLS_COMBO_SIZE - SPELLS_COMBO_OFFSET;
+			}
+			if(this.spellComboTimer > SPELLS_COMBO_FINAL_DISPLAY_DURATION) { //merging icons together
+				float ratio = (this.spellComboTimer - SPELLS_COMBO_FINAL_DISPLAY_DURATION)/(SPELLS_COMBO_DURATION - SPELLS_COMBO_FINAL_DISPLAY_DURATION);
+				for(int i : this.indexesSelectedForCombo) {
+					Point spellDrawLoc = Point.add(Point.add(localDrawLoc, Point.add(this.getLoc(), this.box.getTopLeftLoc())), new Point(0, SPELLS_SELECTED_DRAW_HEIGHT * i/(MAX_SELECTED_SPELLS-1)));
+					if(this.style == GameMap.ID_RIGHT && !this.pickingPhase) {
+						spellDrawLoc = Point.add(Point.add(localDrawLoc, Point.add(this.getLoc(), this.box.getTopRightLoc())), new Point(0, SPELLS_SELECTED_DRAW_HEIGHT * i/(MAX_SELECTED_SPELLS-1)));
+					}
+					float y = (float)(((1-ratio) * SPELLS_COMBO_FINAL_Y) + (ratio * spellDrawLoc.y));
+					g.drawImage(this.selectedSpells.get(i).getImage().getScaledCopy(SPELLS_COMBO_SIZE, SPELLS_COMBO_SIZE), (float)(spellDrawLoc.x), y);
+					if(StateGame.isServer)
+					this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.selectedSpells.get(i).getImagePath(), spellDrawLoc.x, y, SPELLS_COMBO_SIZE, SPELLS_COMBO_SIZE, 0, 255, 255, 255, 255, 0));
+				}
+			} else { //final icon
+				Point spellDrawLoc = Point.add(localDrawLoc, Point.add(this.getLoc(), this.box.getTopLeftLoc()));
+				if(this.style == GameMap.ID_RIGHT && !this.pickingPhase) {
+					spellDrawLoc = Point.add(localDrawLoc, Point.add(this.getLoc(), this.box.getTopRightLoc()));
+				}
+				float yscale = 1;
+				if(this.spellComboTimer > SPELLS_COMBO_FINAL_DISPLAY_DURATION - SPELLS_COMBO_TRANSITION_DURATION) {
+					yscale = (SPELLS_COMBO_FINAL_DISPLAY_DURATION - this.spellComboTimer) / SPELLS_COMBO_TRANSITION_DURATION;
+				}
+				this.comboSpellName.setText(this.comboSpell.getName().toUpperCase());
+				this.comboSpellDescription.setText(this.comboSpell.getDescription().toUpperCase());
+				g.drawImage(this.comboSpell.getImage().getScaledCopy(SPELLS_COMBO_SIZE, (int)(SPELLS_COMBO_SIZE * yscale)), (float)(spellDrawLoc.x), SPELLS_COMBO_FINAL_Y - SPELLS_COMBO_SIZE * (yscale-1)/2);
+				if(StateGame.isServer)
+				this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.comboSpell.getImagePath(), spellDrawLoc.x, SPELLS_COMBO_FINAL_Y - SPELLS_COMBO_SIZE * (yscale-1)/2, SPELLS_COMBO_SIZE, SPELLS_COMBO_SIZE * yscale, 0, 255, 255, 255, 255, 0));
+			}
+		} else { //not comboing
+			this.comboSpellName.setText("");
+			this.comboSpellDescription.setText("");
 		}
 	}
 }

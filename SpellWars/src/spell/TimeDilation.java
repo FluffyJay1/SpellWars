@@ -58,13 +58,11 @@ public class TimeDilation extends Spell {
 	}
 	@Override
 	public void onThink() {
-		for(Panel p : this.getMap().getPanels()) {
-			if(p.unitStandingOnPanel != null) {
-				if(p.unitStandingOnPanel.teamID == this.owner.teamID) {
-					p.unitStandingOnPanel.addStatusEffect(new StatusTimeDilation(p.unitStandingOnPanel, ALLIED_SPEED_MULT, INTERVAL, 1));
-				} else {
-					p.unitStandingOnPanel.addStatusEffect(new StatusTimeDilation(p.unitStandingOnPanel, ENEMY_SPEED_MULT, INTERVAL, 1));
-				}
+		for(Unit u : this.getMap().getUnits()) {
+			if(u.teamID == this.owner.teamID) {
+				u.addStatusEffect(new StatusTimeDilation(u, ALLIED_SPEED_MULT, INTERVAL, 1));
+			} else {
+				u.addStatusEffect(new StatusTimeDilation(u, ENEMY_SPEED_MULT, INTERVAL, 1));
 			}
 		}
 		for(Projectile p : this.getMap().getProjectiles()) {

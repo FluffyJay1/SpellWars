@@ -26,11 +26,11 @@ public class MeiBlizzard extends Spell {
 	}
 	@Override
 	public void onThink() {
+		for(Unit u : this.getMap().getUnitsOfTeam(GameMap.getOppositeDirection((char)this.owner.teamID))) {
+			u.addStatusEffect(new StatusFrostMei(u, 1));
+			u.doDamage(DAMAGE_PER_TICK * this.owner.finalDamageModifier);
+		}
 		for(Panel p : this.getMap().getPanels()) {
-			if(p.unitStandingOnPanel != null && p.unitStandingOnPanel.teamID != this.owner.teamID) {
-				p.unitStandingOnPanel.addStatusEffect(new StatusFrostMei(p.unitStandingOnPanel, 1));
-				p.unitStandingOnPanel.doDamage(DAMAGE_PER_TICK * this.owner.finalDamageModifier);
-			}
 			if(p.teamID != this.owner.teamID) {
 				ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(p.getLoc()), EmitterTypes.POINT_RADIAL, "res/particle_genericBlue.png", true, /*point, emitter type, image path, alphaDecay*/
 						1.5f, 1.5f, /*particle start scale*/

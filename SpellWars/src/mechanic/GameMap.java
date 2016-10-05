@@ -146,7 +146,7 @@ public class GameMap {
 					element.updateRegardsToParent();
 				}
 			}
-			if(element instanceof Unit && ((Unit)element).spellCastIgnorePause) {
+			if(element instanceof Unit && ((Unit)element).spellCastIgnorePause && element.isPaused) {
 				((Unit)element).updateSpellTimers();
 			}
 		}
@@ -259,7 +259,7 @@ public class GameMap {
 					}
 				}
 				for(Projectile p : this.projectiles) {
-					if(Point.equals(p.getGridLoc(), new Point(x,y))) {
+					if(!p.getRemove() && Point.equals(p.getGridLoc(), new Point(x,y))) {
 						p.draw(g);
 						p.hasBeenDrawn = true;
 					}
@@ -690,6 +690,35 @@ public class GameMap {
 			}
 		}
 		return panels;
+	}
+	public ArrayList<Point> getPanelPointsOfTeam(int teamID) {
+		ArrayList<Point> points = new ArrayList<Point>();
+		for(int x = 0; x < this.panelGrid.length; x++) {
+			for(int y = 0; y < this.panelGrid[0].length; y++) {
+				if(this.panelGrid[x][y].teamID == teamID) {
+					points.add(new Point(x, y));
+				}
+			}
+		}
+		return points;
+	}
+	public ArrayList<Unit> getUnits() {
+		ArrayList<Unit> units = new ArrayList<Unit>();
+		for(Panel p : this.getPanels()) {
+			if(p.unitStandingOnPanel != null) {
+				units.add(p.unitStandingOnPanel);
+			}
+		}
+		return units;
+	}
+	public ArrayList<Unit> getUnitsOfTeam(int teamID) {
+		ArrayList<Unit> units = new ArrayList<Unit>();
+		for(Panel p : this.getPanels()) {
+			if(p.unitStandingOnPanel != null && p.unitStandingOnPanel.teamID == teamID) {
+				units.add(p.unitStandingOnPanel);
+			}
+		}
+		return units;
 	}
 	public ArrayList<GameElement> findElementsInArea(Point loc, float radius) {
 		ArrayList<GameElement> elements = new ArrayList<GameElement>();

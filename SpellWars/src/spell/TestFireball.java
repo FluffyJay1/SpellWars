@@ -14,9 +14,9 @@ public class TestFireball extends Spell {
 	Projectile projectile;
 	float spellTimer;
 	int shotsFired;
-	final static int[] DAMAGE_FOR_SHOT = {5,4,3,3,2,2,2,1,1,1,1,1,1,1,1,1};
+	final static int[] DAMAGE_FOR_SHOT = {7,6,5,4,4,3,3,2,2,2,2,1,1,1,1,1};
 	public TestFireball(Unit owner) {
-		super(owner, 0.3f, 1.3f, "Firebreath", "Shoots a bunch of fire, initially dealing 15-30 damage each and then dealing up to 30 extra damage total afterwards", "res/particle_explosion.png", false, true);
+		super(owner, 0.3f, 1.3f, "Firebreath", "Shoots a bunch of fire, initially dealing 15-30 damage each and then dealing up to 45 extra damage total afterwards", "res/particle_explosion.png", false, true);
 		spellTimer = 1.2f;
 		shotsFired = 0;
 	}

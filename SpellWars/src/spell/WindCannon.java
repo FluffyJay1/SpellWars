@@ -6,7 +6,7 @@ import unit.Unit;
 
 public class WindCannon extends Spell {
 	public static final int DAMAGE = 5;
-	public static final int NUM_SHOTS = 9;
+	public static final int NUM_SHOTS = 12;
 	public static final float DURATION = 0.6f;
 	public static final double SPEED = 18;
 	int shotsFired;

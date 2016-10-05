@@ -17,6 +17,7 @@ import ui.SpellSelector;
 
 public class Player extends Unit {
 	ArrayList<Spell> spells = new ArrayList<Spell>();
+	public boolean hasCastFirstSpell;
 	public Player(double hp, double speed, char teamID, Point loc) {
 		super(hp, hp, speed, GameMap.getOppositeDirection(teamID) /*opposite direction*/, loc, "res/idgaf.png", teamID);
 		this.setDrawHeight(20);
@@ -24,6 +25,7 @@ public class Player extends Unit {
 		this.drawSpellCasting = true;
 		this.HPTextColor = Color.black;
 		this.isImportant = true;
+		this.hasCastFirstSpell = false;
 	}
 	public void setSpells(ArrayList<Spell> spells) {
 		this.spells = spells;
@@ -40,6 +42,7 @@ public class Player extends Unit {
 		if(!this.isCasting && this.stunTimer <= 0 && this.spells.size() > 0 && !this.isPaused() && !this.getRemove()) {
 			this.castSpell(this.spells.get(0));
 			this.spells.remove(0); 
+			this.hasCastFirstSpell = true;
 		}
 	}
 	@Override 

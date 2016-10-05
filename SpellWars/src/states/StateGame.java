@@ -63,6 +63,7 @@ public class StateGame extends BasicGameState{
 	Player rightPlayer;
 	SpellSelector rightSelect;
 	boolean pickingPhase;
+	boolean spellComboPhase;
 	static final float READY_TIME = 1.5f;
 	float readyTimer;
 	static final float BATTLE_PHASE_TIME = 15;
@@ -125,10 +126,10 @@ public class StateGame extends BasicGameState{
 			ui.setMap(map);
 			Point leftStartLoc = new Point(0, 0);
 			Point rightStartLoc = new Point(7, 3);
-			leftPlayer = new Player(400, 5, GameMap.ID_LEFT, leftStartLoc);
+			leftPlayer = new Player(500, 5, GameMap.ID_LEFT, leftStartLoc);
 			//this.map.getPanelAt(leftPlayer.gridLoc).unitStandingOnPanel = leftPlayer;
 			leftSelect = new SpellSelector(ui, new Point(0, 0), GameMap.ID_LEFT, leftPlayer);
-			rightPlayer = new Player(400, 5, GameMap.ID_RIGHT, rightStartLoc);
+			rightPlayer = new Player(500, 5, GameMap.ID_RIGHT, rightStartLoc);
 			//this.map.getPanelAt(rightPlayer.gridLoc).unitStandingOnPanel = rightPlayer;
 			rightSelect = new SpellSelector(ui, new Point(Game.WINDOW_WIDTH, 0), GameMap.ID_RIGHT, rightPlayer);
 			if(Game.leftPlayer.equals(PlayerType.PLAYER)) {
@@ -179,6 +180,7 @@ public class StateGame extends BasicGameState{
 			ui.addUIElement(leftSelect);
 			ui.addUIElement(rightSelect);
 			pickingPhase = true;
+			spellComboPhase = false;
 			readyTimer = READY_TIME;
 			battlePhaseTimer = 0;
 			readyText = new Text(ui, new Point(Game.WINDOW_WIDTH/2 - 200, Game.WINDOW_HEIGHT/2), 400, 24, 0, 28, 24, Color.white, "GET READY!", TextFormat.CENTER_JUSTIFIED);
@@ -273,7 +275,22 @@ public class StateGame extends BasicGameState{
 			map.passFrameTime(frametime); //calculates difference in time per frame , and magic number is there since 1 second is 10^9 nanoseconds
 			ui.passFrameTime(frametime);
 			pickingPhase = !(leftSelect.getIsReady() && rightSelect.getIsReady());
-			if(!pickingPhase && this.readyTimer <= 0 && !devPause) {
+			if(spellComboPhase && !devPause) {
+				if(!leftSelect.isComboing() && !rightSelect.isComboing()) {
+					spellComboPhase = false;
+					map.unpauseAll();
+				}
+			}
+			if(!pickingPhase && !spellComboPhase && !devPause) {
+				if(leftSelect.detectSpellCombos()) {
+					spellComboPhase = true;
+					map.pauseAll();
+				} else if (rightSelect.detectSpellCombos()) {
+					spellComboPhase = true;
+					map.pauseAll();
+				}
+			}
+			if(!pickingPhase && !spellComboPhase && this.readyTimer <= 0 && !devPause) {
 				map.update();
 				if(!this.map.isPaused()) {
 					if(Game.leftPlayer.equals(PlayerType.PLAYER) || Game.rightPlayer.equals(PlayerType.PLAYER)) {
@@ -291,7 +308,7 @@ public class StateGame extends BasicGameState{
 				this.readyTimer = READY_TIME;
 				this.battlePhaseText.setRemove(true);
 			}
-			if(!pickingPhase && this.readyTimer >= 0) {
+			if(!pickingPhase && this.readyTimer >= 0 && !spellComboPhase) {
 				if(this.battlePhaseText.getRemove()) {
 					if(Game.leftPlayer.equals(PlayerType.PLAYER) || Game.rightPlayer.equals(PlayerType.PLAYER)) {
 						ui.addUIElement(battlePhaseText);
@@ -309,7 +326,9 @@ public class StateGame extends BasicGameState{
 				battlePhaseText.setColor(Color.white);
 			}
 		}
-		ui.update();
+		if(!devPause) {
+			ui.update();
+		}
 		if(isServer) {
 			int[] keys = Game.serverListenerThread.getKeyInputsFromClient();
 			for(int i = 0; i < keys.length; i++) {

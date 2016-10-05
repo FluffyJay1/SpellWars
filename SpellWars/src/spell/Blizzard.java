@@ -28,10 +28,10 @@ public class Blizzard extends Spell {
 	}
 	@Override
 	public void onThink() {
+		for(Unit u : this.getMap().getUnitsOfTeam(GameMap.getOppositeDirection((char)this.owner.teamID))) {
+			u.addStatusEffect(new StatusFrost(u, SPEED_MODIFIER, DAMAGE_PER_SECOND, DEBUFF_DURATION, DAMAGE_MULT_PER_INSTANCE, 1));
+		}
 		for(Panel p : this.getMap().getPanels()) {
-			if(p.unitStandingOnPanel != null && p.unitStandingOnPanel.teamID != this.owner.teamID) {
-				p.unitStandingOnPanel.addStatusEffect(new StatusFrost(p.unitStandingOnPanel, SPEED_MODIFIER, DAMAGE_PER_SECOND, DEBUFF_DURATION, DAMAGE_MULT_PER_INSTANCE, 1));
-			}
 			if(p.teamID != this.owner.teamID) {
 				ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(p.getLoc()), EmitterTypes.POINT_RADIAL, "res/particle_genericBlue.png", true, /*point, emitter type, image path, alphaDecay*/
 						1.5f, 1.5f, /*particle start scale*/

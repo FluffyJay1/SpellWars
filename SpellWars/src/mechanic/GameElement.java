@@ -503,12 +503,14 @@ public abstract class GameElement {
 	}
 	public void setParent(GameElement parent) {
 		this.parent = parent;
-		this.loc = parent.getLoc();
+		this.loc = Point.add(parent.getLoc(), new Point(0, -parent.drawHeight));
 	}
 	public void updateRegardsToParent() {
 		if(this.getParent() != null) {
 			if(this.getParent().getRemove()) {
 				this.setRemove(true);
+			} else {
+				this.loc = Point.add(parent.getLoc(), new Point(0, -parent.drawHeight));
 			}
 		}
 	}

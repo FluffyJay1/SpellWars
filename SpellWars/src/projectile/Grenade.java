@@ -41,6 +41,7 @@ public class Grenade extends Projectile {
 		this.grenadeDamage = damage;
 		this.hasHitApex = false;
 		this.canDoDamage = false;
+		this.setDrawHeight(this.getHeightAt(this.timeElapsed));
 	}
 	public Grenade(int damage, double duration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
 		super(0, 1/duration, endDisplacement, gridLoc, imagePath, teamID, false, true, true);
@@ -58,6 +59,7 @@ public class Grenade extends Projectile {
 		this.grenadeDamage = damage;
 		this.hasHitApex = false;
 		this.canDoDamage = false;
+		this.setDrawHeight(this.getHeightAt(this.timeElapsed));
 	}
 	@Override
 	public void setDamage(double damage) {
@@ -74,6 +76,10 @@ public class Grenade extends Projectile {
 	@Override
 	public double getFinalDamage() {
 		return this.grenadeDamage * this.finalDamageModifier;
+	}
+	@Override
+	public void onDraw() {
+		this.setDrawHeight(this.getHeightAt(this.timeElapsed));
 	}
 	@Override
 	public void flash() {
@@ -98,10 +104,8 @@ public class Grenade extends Projectile {
 					target.doDamage(this.getFinalDamage(), false, this);
 					this.onGrenadeHitTarget(target);
 				}
-				if(this.timeElapsed >= this.duration) {
-					this.onGrenadeLanded();
-					this.setRemove(true);
-				}
+				this.onGrenadeLanded();
+				this.setRemove(true);
 			}
 		}
 		if(!this.hasHitApex && this.timeElapsed >= ACCELERATION/b/2) {

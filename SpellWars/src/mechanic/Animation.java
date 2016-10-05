@@ -35,6 +35,7 @@ public class Animation {
 		this.height = height;
 		this.loop = loop;
 		this.pause = pause;
+		this.timer = 0;
 		this.color = new Color(255, 255, 255, 255);
 	}
 	public void setImage(String path){
@@ -67,11 +68,17 @@ public class Animation {
 			if(!this.pause) {
 				this.timer += frametime;
 			}
-		} else if(this.loop) {
-			this.timer -= this.animateDuration;
-		} else {
-			this.timer = this.animateDuration;
 		}
+		if(this.timer >= this.animateDuration) {
+			if(this.loop) {
+				this.timer -= this.animateDuration;
+			} else {
+				this.timer = this.animateDuration;
+			}
+		} 
+	}
+	public void resetTimer() {
+		this.timer = 0;
 	}
 	public void draw(Graphics g, GameMap map) {
 		float x = (float) (this.loc.x - this.width/2);
@@ -81,6 +88,9 @@ public class Animation {
 		int currFrame = (int)(this.numFramesWidth * this.numFramesHeight * (this.timer/this.animateDuration));
 		if(this.loop) {
 			currFrame = (int)(this.numFramesWidth * this.numFramesHeight * (this.timer % this.animateDuration) / this.animateDuration);
+		}
+		if(this.timer == this.animateDuration) {
+			currFrame = this.numFramesWidth * numFramesHeight - 1;
 		}
 		float srcx = (currFrame % this.numFramesWidth) * this.frameWidth;
 		float srcx2 = this.frameWidth + (currFrame % this.numFramesWidth) * this.frameWidth;

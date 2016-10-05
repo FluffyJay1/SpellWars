@@ -8,8 +8,8 @@ import projectile.Projectile;
 import unit.Unit;
 
 public class PistolShot extends Spell {
-	public static final int DAMAGE = 40;
-	public static final int SPEED = 24;
+	public static final int DAMAGE = 50;
+	public static final int SPEED = 32;
 	public PistolShot(Unit owner) {
 		super(owner, 0, 0, "Pistol Shot", "Fires a boring, but fast and hard-hitting projectile at the enemy", "res/spell/pistolshot.png", false);
 	}
