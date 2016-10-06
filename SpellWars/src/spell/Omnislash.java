@@ -16,7 +16,7 @@ public class Omnislash extends Spell {
 	public static final float ANIMATION_DURATION = 0.15f;
 	public static final int LENGTH_FINAL = 3;
 	public static final int HEIGHT_FINAL = 2;
-	public static final double DAMAGE_FINAL = 30;
+	public static final double DAMAGE_FINAL = 35;
 	public static final float DELAY_FINAL = 0.6f;
 	public static final float ANIMATION_DURATION_FINAL = 0.3f;
 	//float timer;

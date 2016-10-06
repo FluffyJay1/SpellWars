@@ -702,6 +702,20 @@ public class GameMap {
 		}
 		return points;
 	}
+	public ArrayList<Panel> getPanelsInColumn(int column) {
+		ArrayList<Panel> panels = new ArrayList<Panel>();
+		for(int y = 0; y < this.panelGrid[0].length; y++) {
+			panels.add(this.panelGrid[column][y]);
+		}
+		return panels;
+	}
+	public ArrayList<Panel> getPanelsInRow(int row) {
+		ArrayList<Panel> panels = new ArrayList<Panel>();
+		for(int x = 0; x < this.panelGrid.length; x++) {
+			panels.add(this.panelGrid[x][row]);
+		}
+		return panels;
+	}
 	public ArrayList<Unit> getUnits() {
 		ArrayList<Unit> units = new ArrayList<Unit>();
 		for(Panel p : this.getPanels()) {

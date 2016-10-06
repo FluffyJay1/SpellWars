@@ -10,6 +10,7 @@ import mechanic.GameMap;
 import mechanic.Point;
 import spell.BouncingOrb;
 import spell.ForgeSpirit;
+import spell.SentryGun;
 import spell.Spell;
 import spell.TestFireball;
 import spell.TimeBombDetonate;
@@ -48,7 +49,7 @@ public class Player extends Unit {
 	@Override 
 	public void onDeath() {
 		this.interruptCast();
-		this.castSpell(new ForgeSpirit(this, 8), true, true, true, true);
+		this.castSpell(new SentryGun(this, 8), true, true, true, true);
 	}
 	/*
 	@Override

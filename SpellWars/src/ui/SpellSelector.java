@@ -30,6 +30,7 @@ import spell.PistolShot;
 import spell.RechargingBarrier;
 import spell.ReflectBarrier;
 import spell.Regenerate;
+import spell.SentryGun;
 import spell.Spell;
 import spell.Stun;
 import spell.TestFireball;
@@ -368,7 +369,8 @@ public class SpellSelector extends UIElement {
 				new MudToss(unit),
 				new LavaToss(unit),
 				new FireAndBrimstone(unit),
-				new WishUponALuckyStar(unit)
+				new WishUponALuckyStar(unit),
+				new SentryGun(unit)
 		};
 		double[] weights = {0.45, //TRUMP WALL
 				0.45, //reflect barrier
@@ -386,13 +388,14 @@ public class SpellSelector extends UIElement {
 				0.65, //regenerate
 				0.5, //damage amp
 				0.4, //omnislash
-				0.45, //time dilation
+				0.35, //time dilation
 				0.75, //vacuum cannon
 				0.25, //mystery box
 				0.4, //mud grenade
 				0.35, //lava grenade
 				0.2, //fire and brimstone
 				1.4, //wish upon a lucky star
+				0.5 //sentry gun
 		};
 		if(spells.length != weights.length) {
 			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");

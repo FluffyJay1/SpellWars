@@ -104,8 +104,10 @@ public class Grenade extends Projectile {
 					target.doDamage(this.getFinalDamage(), false, this);
 					this.onGrenadeHitTarget(target);
 				}
-				this.onGrenadeLanded();
-				this.setRemove(true);
+				if(this.timeElapsed >= this.duration) { //IN CASE IT GETS REFLECTED, MAY SEEM REDUNDANT BUT IT'S NOT
+					this.onGrenadeLanded();
+					this.setRemove(true);
+				}
 			}
 		}
 		if(!this.hasHitApex && this.timeElapsed >= ACCELERATION/b/2) {

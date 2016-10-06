@@ -39,6 +39,8 @@ public class Unit extends GameElement {
 	boolean think;
 	float thinkInterval;
 	float thinkTimer;
+	public boolean thinkPausedByStuns;
+	public boolean updatePausedByStuns;
 	
 	public float spellCastTimer;
 	float spellCastMaxTime;
@@ -107,6 +109,8 @@ public class Unit extends GameElement {
 		this.speedHasBeenModified = false;
 		this.speedModifiedTooltipTimer = 0;
 		this.unitControl = 0;
+		this.thinkPausedByStuns = true;
+		this.updatePausedByStuns = false;
 	}
 	public void addShield(Shield shield) {
 		if(!this.shields.contains(shield)) {
@@ -218,6 +222,11 @@ public class Unit extends GameElement {
 			if(this.moveCooldown > 0) {
 				this.moveCooldown -= this.getFrameTime() * this.getFinalSpeed();
 			}
+			if(!this.isPaused()) {
+				this.updateSpellTimers();
+			}
+		}
+		if(this.stunTimer <= 0 || !this.thinkPausedByStuns) {
 			if(this.think) {
 				if(this.thinkWithMove) {
 					this.thinkTimer -= this.getFrameTime() * this.getFinalSpeed();
@@ -233,11 +242,10 @@ public class Unit extends GameElement {
 					}
 				}
 			}
-			if(!this.isPaused()) {
-				this.updateSpellTimers();
-			}
 		}
-		this.onUpdate();
+		if(!(this.updatePausedByStuns && this.stunTimer > 0)) {
+			this.onUpdate();
+		}
 		if(this.speedModifiedTooltipTimer > 0) {
 			this.speedModifiedTooltipTimer -= this.getFrameTime();
 		}
@@ -285,7 +293,7 @@ public class Unit extends GameElement {
 	public void setThinkIntervalWithMove(boolean thinkWithMove){
 		this.thinkWithMove = thinkWithMove;
 		if(thinkWithMove) {
-			this.setThinkInterval((float) (1/this.getFinalSpeed()));
+			this.setThinkInterval(1);
 		}
 	}
 	public void disableThink() {
@@ -502,7 +510,7 @@ public class Unit extends GameElement {
 				&& !(!this.ignoreHoles && map.getPanelAt(loc).getPanelState() == PanelState.HOLE);
 	}
 	public boolean castSpell(Spell spell, boolean ignoreStun, boolean ignoreCast, boolean ignorePause, boolean ignoreUnitControl) {
-		if((!this.isCasting || ignoreCast) && ((!ignoreStun && this.stunTimer <= 0) || ignoreStun) && (this.unitHasControl() || ignoreUnitControl)) {
+		if((!this.isCasting || ignoreCast) && ((!ignoreStun && this.stunTimer <= 0) || ignoreStun) && (this.unitHasControl() || ignoreUnitControl) && (!this.isPaused() || ignorePause)) {
 			if(this.isCasting && ignoreCast) {
 				this.interruptCast();
 			}
