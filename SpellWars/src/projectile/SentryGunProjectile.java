@@ -10,7 +10,7 @@ import unit.Unit;
 public class SentryGunProjectile extends Projectile {
 	public SentryGunProjectile(double damage, double speed, int direction, Point gridLoc, int teamID) {
 		super(damage, speed, direction, gridLoc, "res/projectile/bullet.png", teamID, true, true, true);
-		this.setDrawHeight(60);
+		this.setDrawHeight(60 + (float)(Math.random() - 0.5) * 10);
 		this.setImageScale(0.5f);
 	}
 	@Override

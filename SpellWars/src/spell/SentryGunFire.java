@@ -8,14 +8,15 @@ import projectile.SentryGunProjectile;
 import unit.Unit;
 
 public class SentryGunFire extends Spell {
-	public static final float DAMAGE = 5;
+	float damage;
 	public static final float PROJECTILE_SPEED = 28;
-	public SentryGunFire(Unit owner, float fireInterval) {
+	public SentryGunFire(Unit owner, float fireInterval, float damage) {
 		super(owner, 0, fireInterval, "Sentry Gun Fire", "Shoot a bullet that penetrates one person", "res/projectile/bullet.png", false);
+		this.damage = damage;
 	}
 	@Override
 	public void onActivate() {
-		SentryGunProjectile p = new SentryGunProjectile(DAMAGE * this.owner.finalDamageModifier, PROJECTILE_SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+		SentryGunProjectile p = new SentryGunProjectile(this.damage * this.owner.finalDamageModifier, PROJECTILE_SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 		this.getMap().addGameElement(p);
 		float direction = 0;
 		if(this.owner.direction == GameMap.ID_LEFT) {

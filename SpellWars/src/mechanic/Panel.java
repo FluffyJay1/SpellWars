@@ -22,9 +22,9 @@ public class Panel {
 	public static final float PANEL_FLASH_DURATION = 2;
 	public static final float PANEL_FLASH_INTERVAL = 0.2f;
 	public static final double PANEL_FLASH_SIZE = 0.8;
-	public static final Color PANEL_FLASH_COLOR = new Color(230, 230, 0);
+	public static final Color PANEL_FLASH_COLOR = new Color(230, 230, 0, 200);
 	public static final double PANEL_FLASH_IMPORTANT_SIZE = 0.6;
-	public static final Color PANEL_FLASH_IMPORTANT_COLOR = new Color(220, 20, 0);
+	public static final Color PANEL_FLASH_IMPORTANT_COLOR = new Color(220, 20, 0, 200);
 	public static final float CRACK_RESET_TIME = 15;
 	public static final float HOLE_RESET_TIME = 15;
 	public static final float LAVA_RESET_TIME = 20; //originally 20

@@ -11,6 +11,7 @@ import spell.Spell;
 
 public class SentryGunUnit extends Unit {
 	public static final double HP = 80;
+	public static final float DAMAGE = 5;
 	public static final float FIRE_SPEED = 4;
 	public static final float FIRE_DELAY = 0.5f;
 	float fireDelayTimer;
@@ -72,7 +73,7 @@ public class SentryGunUnit extends Unit {
 	@Override
 	public void onThink() {
 		if(this.detectEnemies()) {
-			this.castSpell(new SentryGunFire(this, 1/(float)this.getFinalSpeed()), false, true, false, true);
+			this.castSpell(new SentryGunFire(this, 1/(float)this.getFinalSpeed(), DAMAGE), false, true, false, true);
 		} else {
 			this.enemyDetected = false;
 			this.isFiring = false;

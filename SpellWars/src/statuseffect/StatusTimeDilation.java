@@ -33,24 +33,24 @@ public class StatusTimeDilation extends StatusEffect {
 			if(this.isBuff) {
 				this.setColorModifier(new Color(200, 220, 255));
 				ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_timedilationgood.png", true, /*point, emitter type, image path, alphaDecay*/
-						1.5f, 1.5f, /*particle start scale*/
-						4.0f, 7.0f, /*particle end scale*/
-						10.5f, /*drag*/
+						0.5f, 1.5f, /*particle start scale*/
+						3.0f, 5.0f, /*particle end scale*/
+						11.5f, /*drag*/
 						0, 0, /*rotational velocity*/
 						0.4f, 0.8f, /*min and max lifetime*/
-						0, 2350, /*min and max launch speed*/
+						0, 2250, /*min and max launch speed*/
 						0, 5, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
 						0, 0, 0, 0); /*keyvalues*/
 				getOwner().getMap().addParticleEmitter(pe);
 			} else {
 				this.setColorModifier(new Color(255, 150, 230));
 				ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_timedilationbad.png", true, /*point, emitter type, image path, alphaDecay*/
-						1.5f, 1.5f, /*particle start scale*/
-						4.0f, 7.0f, /*particle end scale*/
+						0.5f, 1.5f, /*particle start scale*/
+						2.0f, 5.0f, /*particle end scale*/
 						6.5f, /*drag*/
 						0, 0, /*rotational velocity*/
 						0.4f, 0.8f, /*min and max lifetime*/
-						0, 1350, /*min and max launch speed*/
+						0, 1050, /*min and max launch speed*/
 						0, 5, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
 						0, 0, 0, 0); /*keyvalues*/
 				getOwner().getMap().addParticleEmitter(pe);
@@ -73,7 +73,7 @@ public class StatusTimeDilation extends StatusEffect {
 			this.getOwner().getMap().addParticleEmitter(pe);
 		} else {
 			ParticleEmitter pe = new ParticleEmitter(Point.add(this.getOwner().getLoc(), new Point(0, -this.getOwner().getDrawHeight())), EmitterTypes.CIRCLE_RADIAL, "res/particle_timedilationbad.png", true, /*point, emitter type, image path, alphaDecay*/
-					0.6f / (float)Math.pow(this.getMoveSpeedModifier(), 0.5), 0.6f, /*particle start scale*/
+					0.4f, 0.6f, /*particle start scale*/
 					0.2f, 0.2f, /*particle end scale*/
 					2.0f, /*drag*/
 					-50, 50, /*rotational velocity*/

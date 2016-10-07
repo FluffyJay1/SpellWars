@@ -380,10 +380,10 @@ public class SpellSelector extends UIElement {
 				1.2, //forge spirit
 				0.7, //hell rain
 				1.0, //stun
-				1.3, //bouncing orb
-				1.0, //wind cannon
+				1.35, //bouncing orb
+				1.1, //wind cannon
 				1.65, //firebreath
-				1.9, //pistol shot
+				1.8, //pistol shot
 				0.4, //blizzard
 				0.65, //regenerate
 				0.5, //damage amp

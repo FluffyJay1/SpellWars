@@ -24,6 +24,7 @@ public class TimeDilation extends Spell {
 	static Image clockHand;
 	int ticks;
 	float timer;
+	float tickTimer;
 	public TimeDilation(Unit owner) {
 		super(owner, 0, 0, "Time Dilation", "Periodically speeds up allied units and projectiles and slows enemy units and projectiles", "res/spell/timedilation.png", true);
 		if(clock == null) {
@@ -37,6 +38,7 @@ public class TimeDilation extends Spell {
 			}
 		}
 		timer = 0;
+		tickTimer = 0;
 	}
 	@Override
 	public void onActivate() {
@@ -49,7 +51,7 @@ public class TimeDilation extends Spell {
 				25, 25, /*particle end scale*/
 				0.0f, /*drag*/
 				0, 0, /*rotational velocity*/
-				0.5f, 0.5f, /*min and max lifetime*/
+				0.3f, 0.3f, /*min and max lifetime*/
 				0, 0, /*min and max launch speed*/
 				NUM_TICKS * INTERVAL, 1/INTERVAL, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
 				0, 0, 0, 0); /*keyvalues*/
@@ -73,6 +75,7 @@ public class TimeDilation extends Spell {
 			}
 		}
 		this.ticks++;
+		this.tickTimer = 0;
 		if(this.ticks >= NUM_TICKS) {
 			this.finishSpell();
 		}
@@ -80,6 +83,25 @@ public class TimeDilation extends Spell {
 	@Override
 	public void onSpellUpdate() {
 		this.timer += this.getFrameTime();
+		this.tickTimer += this.getFrameTime();
+		for(Unit u : this.getMap().getUnits()) {
+			if(!u.hasStatusEffect(StatusTimeDilation.ID)) {
+				if(u.teamID == this.owner.teamID) {
+					u.addStatusEffect(new StatusTimeDilation(u, ALLIED_SPEED_MULT * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)), INTERVAL - tickTimer, 1));
+				} else {
+					u.addStatusEffect(new StatusTimeDilation(u, ENEMY_SPEED_MULT * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)), INTERVAL - tickTimer, 1));
+				}
+			}
+		}
+		for(Projectile p : this.getMap().getProjectiles()) {
+			if(!p.hasStatusEffect(StatusTimeDilation.ID)) {
+				if(p.teamID == this.owner.teamID) {
+					p.addStatusEffect(new StatusTimeDilation(p, ALLIED_SPEED_MULT * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)), INTERVAL - tickTimer, 1));
+				} else {
+					p.addStatusEffect(new StatusTimeDilation(p, ENEMY_SPEED_MULT * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)), INTERVAL - tickTimer, 1));
+				}
+			}
+		}
 	}
 	@Override
 	public void drawSpecialEffects(Graphics g) {
