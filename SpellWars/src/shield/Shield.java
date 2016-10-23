@@ -39,6 +39,8 @@ public class Shield extends GameElement {
 	float drawOffset; //when layering multiple shields on top of each other
 	boolean drawHP;
 	Text hpText;
+	private float displayHPTimer;
+	private int displayHP;
 	
 	public Shield(Unit owner, double hp, double maxhp, String imagePath) {
 		super(hp, maxhp, 0, 0, owner.getLoc(), 1, 0, imagePath);
@@ -57,6 +59,8 @@ public class Shield extends GameElement {
 		this.hpText.setUseOutline(true);
 		this.hpText.setOutlineColor(this.HPTextColor);
 		this.hpText.setElementToRemoveWith(this);
+		this.displayHP = (int)this.getHP();
+		this.displayHPTimer = 0;
 	}
 	@Override
 	public void onSetMap() {
@@ -135,6 +139,30 @@ public class Shield extends GameElement {
 			}
 		}
 	}
+	public void updateDisplayHP() {
+		if(this.displayHPTimer > 0) {
+			this.displayHPTimer -= this.getActualFrameTime();
+		} else {
+			while(this.displayHPTimer <= 0 && this.displayHP != (int)this.getHP()) {
+				if(this.displayHP > (int)this.getHP()) {
+					this.displayHP--;
+					if(this.displayHP - this.getHP() > Unit.HP_DISPLAY_TICK_INTERVAL_FAST_THRESHOLD) {
+						this.displayHPTimer += Unit.HP_DISPLAY_TICK_INTERVAL_FAST;
+					} else {
+						this.displayHPTimer += Unit.HP_DISPLAY_TICK_INTERVAL;
+					}
+				}
+				if(this.displayHP < (int)this.getHP()) {
+					this.displayHP++;
+					if(this.getHP() - this.displayHP > Unit.HP_DISPLAY_TICK_INTERVAL_FAST_THRESHOLD) {
+						this.displayHPTimer += Unit.HP_DISPLAY_TICK_INTERVAL_FAST;
+					} else {
+						this.displayHPTimer += Unit.HP_DISPLAY_TICK_INTERVAL;
+					}
+				}
+			}
+		}
+	}
 	public void onUpdate() {
 		
 	}
@@ -159,7 +187,14 @@ public class Shield extends GameElement {
 		}
 		if(this.drawHP) {
 			this.hpText.changeLoc(Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET + this.drawOffset)));
-			this.hpText.setText("" + (int)this.getHP());
+			if(this.displayHP > this.getHP()) {
+				double shakeAmount = (this.displayHP - this.getHP()) * Unit.HP_SHAKE_MAGNITUDE_MULTIPLIER;
+				if(Math.abs(shakeAmount) > Unit.HP_SHAKE_MAGNITUDE_MAX) {
+					shakeAmount = Unit.HP_SHAKE_MAGNITUDE_MAX;
+				}
+				hpText.changeLoc(Point.add(hpText.getFinalLoc(), new Point((Math.random() - 0.5) * shakeAmount, (Math.random() - 0.5) * shakeAmount)));			
+			}
+			this.hpText.setText("" + this.displayHP);
 		}
 		this.drawSpecialEffects(g);
 	}

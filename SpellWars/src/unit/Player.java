@@ -40,7 +40,7 @@ public class Player extends Unit {
 		return this.spells.size();
 	}
 	public void castNextAvailableSpell() {
-		if(!this.isCasting && this.stunTimer <= 0 && this.spells.size() > 0 && !this.isPaused() && !this.getRemove()) {
+		if(!this.isCasting && this.stunTimer <= 0 && this.spells.size() > 0 && !this.isPaused() && !this.getRemove() && this.unitHasControl()) {
 			this.castSpell(this.spells.get(0));
 			this.spells.remove(0); 
 			this.hasCastFirstSpell = true;
@@ -48,7 +48,7 @@ public class Player extends Unit {
 	}
 	@Override 
 	public void onDeath() {
-		this.interruptCast();
+		//this.interruptCast();
 		this.castSpell(new SentryGun(this, 8), true, true, true, true);
 	}
 	/*

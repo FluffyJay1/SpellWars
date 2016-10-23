@@ -54,4 +54,21 @@ public class Game extends StateBasedGame {
 		addState(stategame);
 			
 	}
+	public static Image getImage(String path){
+		Image i = null;
+		if(images.containsKey(path)) {
+			i = images.get(path).copy();
+		} else {
+			try {
+				i = new Image(path);
+				images.put(path, i.copy());
+			} catch (SlickException e) {
+				System.out.println("Unable to load: " + path);
+				e.printStackTrace();
+			} finally {
+				System.out.println("loaded into memory: " + path);
+			}
+		}
+		return i;
+	}
 }

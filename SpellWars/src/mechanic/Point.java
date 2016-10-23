@@ -294,6 +294,7 @@ public class Point {
 	public static Point getVector(double distance, double direction) {
 		if (distance < 0) { // You cannot travel negative distance!
 			System.out.println("ERROR: A negative distance was passed to a getVector(distance, direction) function!"); //TODO: Remove debug
+			Thread.dumpStack();
 			//return new Point(); // No traveled vector
 		}
 		/*

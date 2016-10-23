@@ -11,12 +11,13 @@ import mechanic.GameElement;
 import mechanic.GameMap;
 import mechanic.Point;
 import states.StateGame;
+import unit.Unit;
 
 public class StatusEffect {
 	public static final int ICON_SIDE_LENGTH = 16;
 	public static final Color DURATION_INDICATOR_FADED_COLOR = new Color(130, 130, 180);
 	private GameElement owner;
-	boolean remove;
+	private boolean remove;
 	StackingProperty stackingProperty;
 	float interval;
 	float moveSpeedModifier; //as a multiplier
@@ -37,6 +38,7 @@ public class StatusEffect {
 	int numSources; //how many auras are applying this same effect
 	
 	private Color ownerColorModifier;
+	boolean disableUnitControl;
 	
 	public StatusEffect(GameElement owner, StackingProperty stackingProperty, String id, float duration, int level) {
 		super();
@@ -63,6 +65,16 @@ public class StatusEffect {
 		this.muteEffect = false;
 		this.drawIcon = true;
 		this.ownerColorModifier = Color.white;
+		this.disableUnitControl = false;
+	}
+	public void setDisableUnitControl(boolean disableUnitControl) {
+		if(this.owner instanceof Unit && !this.disableUnitControl && disableUnitControl) {
+			((Unit)this.owner).unitControl++;
+		}
+		if(this.owner instanceof Unit && this.disableUnitControl && !disableUnitControl) {
+			((Unit)this.owner).unitControl--;
+		}
+		this.disableUnitControl = disableUnitControl;
 	}
 	public int getLevel() {
 		return this.level;
@@ -185,7 +197,8 @@ public class StatusEffect {
 		if(!this.isPermanent) {
 			this.duration -= frametime;
 			if(this.duration <= 0) {
-				this.remove = true;
+				this.setRemove(true);
+				this.onExpired();
 			}
 		}
 		
@@ -216,6 +229,9 @@ public class StatusEffect {
 	public void onUpdate() {
 		
 	}
+	public void onExpired() {
+		
+	}
 	public StackingProperty getStackingProperty() {
 		return this.stackingProperty;
 	}
@@ -224,6 +240,12 @@ public class StatusEffect {
 	}
 	public void setRemove(boolean remove) {
 		this.remove = remove;
+		if(remove) {
+			if(this.owner instanceof Unit && this.disableUnitControl) {
+				((Unit)this.owner).unitControl--;
+				this.disableUnitControl = false;
+			}
+		}
 	}
 	public void setPermanent(boolean isPermanent){
 		this.isPermanent = true;

@@ -48,6 +48,10 @@ public class UIElement {
 	private UI ui;
 	private double size;
 	double orientation;
+	
+	double temporaryDuration;
+	double temporaryTimer;
+	boolean isTemporary;
 	public UIElement() {
 		this(null, new Point());
 	}
@@ -68,6 +72,7 @@ public class UIElement {
 		this.origin = new Point();
 		this.alpha = 1;
 		this.sendDrawInfo = true;
+		this.isTemporary = false;
 	}
 	public UIElement(UI ui, Point loc) {
 		this.setSize(1);
@@ -81,6 +86,7 @@ public class UIElement {
 		this.loc = loc;
 		this.alpha = 1;
 		this.sendDrawInfo = true;
+		this.isTemporary = false;
 	}
 	/**
 	 * Access instance variable loc
@@ -141,7 +147,14 @@ public class UIElement {
 	public void update(){
 		
 	}
-	
+	public void updateDuration() {
+		if(this.isTemporary) {
+			this.temporaryTimer -= this.getFrameTime();
+			if(this.temporaryTimer <= 0) {
+				this.setRemove(true);
+			}
+		}
+	}
 	public void setImage(String path){
 		if(Game.images.containsKey(path)) {
 			this.pic = Game.images.get(path).copy();
@@ -191,6 +204,11 @@ public class UIElement {
 	}
 	public boolean getRemoveNextFrame() {
 		return this.removeNextFrame;
+	}
+	public void setDuration(double duration) {
+		this.temporaryDuration = duration;
+		this.temporaryTimer = duration;
+		this.isTemporary = true;
 	}
 	public void draw(Graphics g){
 		if(this.getImage() != null){

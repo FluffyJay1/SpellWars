@@ -22,6 +22,7 @@ public class SentryGunUnit extends Unit {
 		this.setDrawHeight(25);
 		this.setSize(0.4);
 		this.updatePausedByStuns = true;
+		this.updateWithMove = true;
 		this.fireDelayTimer = FIRE_DELAY;
 		this.enemyDetected = false;
 		this.isFiring = false;
@@ -73,7 +74,7 @@ public class SentryGunUnit extends Unit {
 	@Override
 	public void onThink() {
 		if(this.detectEnemies()) {
-			this.castSpell(new SentryGunFire(this, 1/(float)this.getFinalSpeed(), DAMAGE), false, true, false, true);
+			this.castSpell(new SentryGunFire(this, 1/FIRE_SPEED, DAMAGE), false, true, false, true);
 		} else {
 			this.enemyDetected = false;
 			this.isFiring = false;

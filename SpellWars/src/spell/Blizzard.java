@@ -18,13 +18,14 @@ public class Blizzard extends Spell {
 	int appliedTicks;
 	public Blizzard(Unit owner) {
 		super(owner, 0, 0, "Blizzard", "Gradually slows all enemy units and projectiles on the map, deals slight damage over time, and reduces some projectile's damage", "res/statuseffect/icon_frost.png", true);
-		this.setThinkInterval(APPLY_INTERVAL);
-		this.appliedTicks = 0;
+		this.registerFieldEffect("blizzard");
 	}
 	@Override
 	public void onActivate() {
 		this.onThink();
 		this.getMap().unpauseAll();
+		this.setThinkInterval(APPLY_INTERVAL);
+		this.appliedTicks = 0;
 	}
 	@Override
 	public void onThink() {

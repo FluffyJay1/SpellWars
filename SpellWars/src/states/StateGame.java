@@ -38,6 +38,7 @@ import spell.Spell;
 import spell.TestFireball;
 import statuseffect.StatusFrost;
 import particlesystem.EmitterTypes;
+import ui.FieldEffectDisplay;
 import ui.SpellSelector;
 import ui.StartButton;
 import ui.Text;
@@ -192,6 +193,7 @@ public class StateGame extends BasicGameState{
 		multiplayerDirectionText.setUseOutline(true);
 		multiplayerDirectionText.sendDrawInfo = false;
 		ui.addUIElement(multiplayerDirectionText);
+		ui.addUIElement(new FieldEffectDisplay(ui));
 		if(isServer) {
 			Game.serverListenerThread.setMap(map);
 			if(serverPlayerDirection == GameMap.ID_LEFT) {
@@ -298,6 +300,10 @@ public class StateGame extends BasicGameState{
 					}
 				}
 			}
+			if(this.map.getForcePickPhase()) {
+				this.forcePickPhase();
+				this.map.stopForcingPickPhase();
+			}
 			if(battlePhaseTimer <= 0){
 				this.pickingPhase = true;
 				leftSelect.removeSelectedSpells();
@@ -339,6 +345,16 @@ public class StateGame extends BasicGameState{
 			if(this.multiplayerDirectionTooltipTimer > 0 && this.hasPressedFirstButton)
 			this.multiplayerDirectionTooltipTimer -= frametime;
 		}
+	}
+	public void forcePickPhase() {
+		this.pickingPhase = true;
+		leftSelect.removeSelectedSpells();
+		leftSelect.setPickingPhase(true);
+		rightSelect.removeSelectedSpells();
+		rightSelect.setPickingPhase(true);
+		this.battlePhaseTimer = BATTLE_PHASE_TIME;
+		this.readyTimer = READY_TIME;
+		this.battlePhaseText.setRemove(true);
 	}
 	@Override
 	public void mousePressed(int button, int x, int y) {

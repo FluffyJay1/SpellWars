@@ -12,9 +12,9 @@ public class Boss extends Unit {
 	public static final double HP = 400;
 	public static final double HP_PER_LEVEL = 50;
 	public static final double SPEED = 1.2;
-	public static final double SPEED_PER_LEVEL = 0.21;
-	public static final int MOVES_PER_FIRE = 6;
-	public static final int MOVES_VARIATION = 3;
+	public static final double SPEED_PER_LEVEL = 0.16;
+	public static final int MOVES_PER_FIRE = 5;
+	public static final int MOVES_VARIATION = 2;
 	int moves;
 	int level;
 	public Boss(Point gridLoc, int teamID, int level) {

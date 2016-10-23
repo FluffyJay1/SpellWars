@@ -15,6 +15,8 @@ public class TrumpWallUnit extends Unit {
 	}
 	@Override
 	public void onThink() {
-		this.changeHP(this.getHP() - DAMAGE_PER_TICK);
+		if(this.unitHasControl()) { //for za warudo pause
+			this.changeHP(this.getHP() - DAMAGE_PER_TICK);
+		}
 	}
 }

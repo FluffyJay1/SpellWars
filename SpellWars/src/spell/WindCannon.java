@@ -6,7 +6,7 @@ import unit.Unit;
 
 public class WindCannon extends Spell {
 	public static final int DAMAGE = 5;
-	public static final int NUM_SHOTS = 12;
+	public static final int NUM_SHOTS = 13;
 	public static final float DURATION = 0.6f;
 	public static final double SPEED = 18;
 	int shotsFired;
@@ -22,7 +22,8 @@ public class WindCannon extends Spell {
 	}
 	@Override
 	public void onThink() {
-		int random = (int)(Math.random() * 3) - 1;
+		//int random = (int)(Math.random() * 3) - 1;
+		int random = (shotsFired + 1) % 3 - 1;
 		WindProjectile projectile = new WindProjectile((int)(DAMAGE * this.owner.finalDamageModifier), SPEED, this.owner.direction, Point.add(this.owner.gridLoc, new Point(0, random)), this.owner.teamID);
 		this.getMap().addGameElement(projectile);
 		this.shotsFired++;

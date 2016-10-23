@@ -14,7 +14,7 @@ public class Trump extends Unit {
 	public static final double HP = 325;
 	public static final double HP_PER_LEVEL = 25;
 	public static final double SPEED = 1.1;
-	public static final double SPEED_PER_LEVEL = 0.22;
+	public static final double SPEED_PER_LEVEL = 0.15;
 	public static final double SPEED_SPECIAL = 3.75;
 	public static final double SPEED_SPECIAL_PER_LEVEL = 0.75;
 	public static final int MOVES_PER_FIRE = 9;

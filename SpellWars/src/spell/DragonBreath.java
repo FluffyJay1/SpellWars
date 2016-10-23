@@ -15,7 +15,7 @@ public class DragonBreath extends Spell {
 	float spellTimer;
 	int shotsFired;
 	final static float SHOT_INTERVAL = 0.075f;
-	final static int NUM_SHOTS = 20;
+	final static int NUM_SHOTS = 25;
 	final static int DAMAGE = 5;
 	public DragonBreath(Unit owner) {
 		super(owner, 0.3f, 0, "Dragon's breath", "Shoot a whole lot of fire, and you can move while you shoot", "res/spell/dragonbreath.png", false, true);

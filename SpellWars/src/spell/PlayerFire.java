@@ -2,7 +2,9 @@ package spell;
 
 import mechanic.GameMap;
 import mechanic.Point;
+import projectile.ElectroBoltProjectile;
 import projectile.Grenade;
+import projectile.KnifeProjectile;
 import projectile.Projectile;
 import unit.Unit;
 

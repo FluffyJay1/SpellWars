@@ -26,6 +26,11 @@ public class Spell extends GameElement {
 	public float backswingTime;
 	boolean pausedByStuns;
 	boolean disableUnitControl;
+	boolean castPause; //different from map pause, this one is usually controlled by spells
+	
+	boolean fieldEffect;
+	String fieldEffectName;
+	
 	static final float TEXT_DURATION = 1.2f;
 	static final float TEXT_Y_OFFSET = 200;
 	Text spellText;
@@ -47,6 +52,8 @@ public class Spell extends GameElement {
 		this.pausedByStuns = false;
 		this.disableUnitControl = false;
 		this.isFinished = false;
+		this.castPause = false;
+		this.fieldEffect = false;
 		this.spellText = new Text(null, Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 18, 30, 22, 30, Color.white, "", TextFormat.CENTER_JUSTIFIED);
 	}
 	/*
@@ -70,7 +77,36 @@ public class Spell extends GameElement {
 	public void setOwner(Unit owner) {
 		this.owner = owner;
 	}
+	public Unit getOwner(){
+		return this.owner;
+	}
+	public void registerFieldEffect(String effect) {
+		this.fieldEffect = !effect.equals("");
+		this.fieldEffectName = effect;
+	}
+	public String getFieldEffectName() {
+		return this.fieldEffectName;
+	}
 	public void activate() {
+		if(this.fieldEffect) {
+			Text queueText = new Text(this.getMap().getUI(), Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 14, 22, 18, 30, Color.white, this.name.toUpperCase() + " has been placed in the field effect queue.", TextFormat.CENTER_JUSTIFIED);
+			queueText.setDuration(2);
+			queueText.setUseOutline(true);
+			queueText.setOutlineColor(new Color(90, 90, 90));
+			if(this.getMap().getActiveFieldEffect() == null || !this.getMap().getActiveFieldEffect().equals(this)) {
+				this.getMap().addFieldEffect(this);
+				this.getMap().getUI().addUIElement(queueText);
+			}
+			if(this.getMap().getActiveFieldEffect().equals(this)) {
+				queueText.setText("");
+				queueText.setRemove(true);
+				this.startSpell();
+			}
+		} else {
+			this.startSpell();
+		}
+	}
+	private void startSpell() {
 		this.activated = true;
 		if(this.disableUnitControl) {
 			this.owner.unitControl++;
@@ -101,7 +137,7 @@ public class Spell extends GameElement {
 			this.onActivate();
 			this.spellExecuted = true;
 		}
-		if(this.spellExecuted) {
+		if(this.spellExecuted && !this.castPause) {
 			if(!(this.owner.isStunned() && this.pausedByStuns)) {
 				this.onSpellUpdate();
 				if(this.think) {
@@ -177,7 +213,7 @@ public class Spell extends GameElement {
 			text.setRemoveNextFrame(true);
 			this.getMap().getUI().addUIElement(text);
 			*/
-		} else {
+		} else if(this.activated) {
 			this.drawSpecialEffects(g);
 		}
 	}
@@ -189,5 +225,11 @@ public class Spell extends GameElement {
 	}
 	public String getDescription() {
 		return this.description;
+	}
+	public void castPause() {
+		this.castPause = true;
+	}
+	public void castUnpause() {
+		this.castPause = false;
 	}
 }

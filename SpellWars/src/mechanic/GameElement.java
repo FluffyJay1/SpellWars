@@ -58,6 +58,7 @@ public abstract class GameElement {
 	protected boolean remove;
 	protected boolean disconnected;
 	private float frametime;
+	private float timescale;
 	boolean isPaused;
 	GameElement parent;
 	public boolean hasBeenDrawn; //IF THE ELEMENT IS A UNIT AND IT HAS BEEN DRAWN SINCE IT WAS ON A LOWER GRID LOC
@@ -84,6 +85,7 @@ public abstract class GameElement {
 		this.finalSpeedModifier = 1;
 		this.finalDamageModifier = 1;
 		this.frametime = 0;
+		this.timescale = 1;
 		this.drawHeight = 0;
 		this.hasBeenDrawn = false;
 		this.drawColorMultiplier = Color.white;
@@ -465,10 +467,19 @@ public abstract class GameElement {
 		}
 	}
 	public double getFrameTime() {
+		return frametime * this.timescale;
+	}
+	public double getActualFrameTime() {
 		return frametime;
 	}
 	public void passFrameTime(float frametime) {
 		this.frametime = frametime;
+	}
+	public void setTimeScale(float timescale) {
+		this.timescale = timescale;
+	}
+	public float getTimeScale() {
+		return this.timescale;
 	}
 	public GameMap getMap() {
 		return this.map;
@@ -661,7 +672,7 @@ public abstract class GameElement {
 	}
 	public void updateStatusEffects() { //each status effect runs its own code
 		for(StatusEffect e : this.statuseffects) {
-			e.update(this.frametime); //update
+			e.update((float)this.getActualFrameTime() * this.getTimeScale()); //update
 			if(e.getRemove()) {
 				this.statuseffectsremovebuffer.add(e); //if it needs to be removed, it gets added to a buffer
 				if(e.getStackingProperty() == StackingProperty.UNSTACKABLE_REFRESH_DURATION //Unmute the next highest level effect

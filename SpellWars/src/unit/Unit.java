@@ -24,6 +24,11 @@ import ui.TextFormat;
 
 public class Unit extends GameElement {
 	public static final int HP_Y_OFFSET = 12;
+	public static final float HP_DISPLAY_TICK_INTERVAL = 0.01f;
+	public static final float HP_DISPLAY_TICK_INTERVAL_FAST_THRESHOLD = 25;
+	public static final float HP_DISPLAY_TICK_INTERVAL_FAST = 0.0005f;
+	public static final float HP_SHAKE_MAGNITUDE_MULTIPLIER = 0.75f; //pixels per hp
+	public static final float HP_SHAKE_MAGNITUDE_MAX = 50; //pixels
 	public static final int SPEED_Y_OFFSET = -2;
 	public static final int CAST_BAR_OFFSET = 35;
 	public static final int CAST_BAR_WIDTH = 60;
@@ -49,12 +54,14 @@ public class Unit extends GameElement {
 	public Spell spellBeingCast;
 	public boolean spellCastIgnorePause;
 	public int unitControl;
+	boolean pauseSpellTimer;
 	
 	public Point gridLoc;
 	public int teamID;
 	public Panel panelStandingOn;
 	public boolean ignoreHoles;
 	public boolean ignoreTeam;
+	boolean updateWithMove;
 	boolean thinkWithMove;
 	boolean drawShadow;
 	
@@ -63,6 +70,7 @@ public class Unit extends GameElement {
 	Color drawColor;
 	
 	float stunTimer;
+	float stunDrawTimer;
 	
 	ArrayList<Shield> shields;
 	ArrayList<Shield> shieldsRemoveBuffer;
@@ -71,6 +79,9 @@ public class Unit extends GameElement {
 	
 	Text hpText;
 	Text speedText;
+	
+	int displayHP;
+	float displayHPTimer;
 	
 	boolean speedHasBeenModified;
 	float speedModifiedTooltipTimer;
@@ -97,6 +108,7 @@ public class Unit extends GameElement {
 		this.spellCastIgnorePause = false;
 		this.drawShadow = true;
 		this.stunTimer = 0;
+		this.stunDrawTimer = 0;
 		this.drawColor = Color.white;
 		this.isCoolingDown = false;
 		this.ignoreTeam = false;
@@ -111,6 +123,9 @@ public class Unit extends GameElement {
 		this.unitControl = 0;
 		this.thinkPausedByStuns = true;
 		this.updatePausedByStuns = false;
+		this.updateWithMove = false;
+		this.displayHP = (int)this.getHP();
+		this.displayHPTimer = 0;
 	}
 	public void addShield(Shield shield) {
 		if(!this.shields.contains(shield)) {
@@ -119,6 +134,14 @@ public class Unit extends GameElement {
 	}
 	public ArrayList<Shield> getShields() {
 		return this.shields;
+	}
+	public boolean hasActivelyProtectingShields() {
+		for(Shield s : this.shields) {
+			if(s.getHP() > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 	@Override
 	public boolean doDamage(double damage){
@@ -220,7 +243,7 @@ public class Unit extends GameElement {
 			this.stunTimer -= this.getFrameTime();
 		} else {
 			if(this.moveCooldown > 0) {
-				this.moveCooldown -= this.getFrameTime() * this.getFinalSpeed();
+				this.moveCooldown -= this.getActualFrameTime() * this.getFinalSpeed() * this.getTimeScale();
 			}
 			if(!this.isPaused()) {
 				this.updateSpellTimers();
@@ -229,9 +252,9 @@ public class Unit extends GameElement {
 		if(this.stunTimer <= 0 || !this.thinkPausedByStuns) {
 			if(this.think) {
 				if(this.thinkWithMove) {
-					this.thinkTimer -= this.getFrameTime() * this.getFinalSpeed();
+					this.thinkTimer -= this.getActualFrameTime() * this.getFinalSpeed() * this.getTimeScale();
 				} else {
-					this.thinkTimer -= this.getFrameTime();
+					this.thinkTimer -= this.getActualFrameTime() * this.getTimeScale();
 				}
 				while(this.thinkTimer <= 0) {
 					this.onThink();
@@ -249,13 +272,43 @@ public class Unit extends GameElement {
 		if(this.speedModifiedTooltipTimer > 0) {
 			this.speedModifiedTooltipTimer -= this.getFrameTime();
 		}
+		
+		if(this.isStunned()) {
+			this.stunDrawTimer += this.getFrameTime();
+		} else {
+			this.stunDrawTimer = 0;
+		}
+	}
+	public void updateDisplayHP() {
+		if(this.displayHPTimer > 0) {
+			this.displayHPTimer -= this.getActualFrameTime();
+		} else {
+			while(this.displayHPTimer <= 0 && this.displayHP != (int)this.getHP()) {
+				if(this.displayHP > (int)this.getHP()) {
+					this.displayHP--;
+					if(this.displayHP - this.getHP() > HP_DISPLAY_TICK_INTERVAL_FAST_THRESHOLD) {
+						this.displayHPTimer += HP_DISPLAY_TICK_INTERVAL_FAST;
+					} else {
+						this.displayHPTimer += HP_DISPLAY_TICK_INTERVAL;
+					}
+				}
+				if(this.displayHP < (int)this.getHP()) {
+					this.displayHP++;
+					if(this.getHP() - this.displayHP > HP_DISPLAY_TICK_INTERVAL_FAST_THRESHOLD) {
+						this.displayHPTimer += HP_DISPLAY_TICK_INTERVAL_FAST;
+					} else {
+						this.displayHPTimer += HP_DISPLAY_TICK_INTERVAL;
+					}
+				}
+			}
+		}
 	}
 	public void updateSpellTimers() {
 		/*
 		 * FLOW:
 		 * Start cast-> CastTime -> Activate Spell -> Backswing time -> End cast
 		 */
-		if(this.isCasting) {
+		if(this.isCasting && !this.pauseSpellTimer) {
 			if(this.spellCastTimer <= 0) {
 				if(!this.getRemove() && this.spellBeingCast != null && !this.isCoolingDown) {
 					this.spellBeingCast.setOwner(this);
@@ -273,11 +326,19 @@ public class Unit extends GameElement {
 					this.isCasting = false;
 					this.isCoolingDown = false;
 					this.spellCastIgnorePause = false;
+					this.spellBeingCast = null;
 				}
 			} else {
 				this.spellCastTimer -= this.getFrameTime();
 			}
 		}
+	}
+	@Override
+	public double getFrameTime() {
+		if(this.updateWithMove) {
+			return this.getActualFrameTime() * this.getFinalSpeed() / this.getSpeed() * this.getTimeScale();
+		}
+		return this.getActualFrameTime() * this.getTimeScale(); 
 	}
 	public void onUpdate() {
 		
@@ -354,7 +415,7 @@ public class Unit extends GameElement {
 				if(StateGame.isServer)
 				this.getMap().addToDrawInfo(GameMap.getDrawDataR(this.getLoc().x - CAST_BAR_WIDTH/2, this.getLoc().y + CAST_BAR_OFFSET, barwidth, CAST_BAR_HEIGHT, g.getColor().getRedByte(), g.getColor().getGreenByte(), g.getColor().getBlueByte(), g.getColor().getAlphaByte()));
 			}
-			if(this.stunTimer > 0 && this.stunTimer % 0.15 > 0.075) {
+			if(this.stunTimer > 0 && this.stunDrawTimer % 0.15 > 0.075) {
 				col = new Color(160, 160, 0);
 			}
 			col = col.multiply(this.drawColor);
@@ -369,7 +430,7 @@ public class Unit extends GameElement {
 		//g.setFont(font);
 		//g.drawString("" + (int)this.getHP(), (float) this.getLoc().x - g.getFont().getWidth("" + (int)this.getHP())/2, (float) this.getLoc().y + HP_Y_OFFSET);
 		//text = new Text(this.getMap().getUI(), Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET)), 400, 12, 18, 14, 22, Color.white, "" + (int)this.getHP(), TextFormat.CENTER_JUSTIFIED);
-		hpText.setText("" + (int)this.getHP());
+		hpText.setText("" + this.displayHP);
 		if(this.finalSpeedModifier != 1) {
 			if(!this.speedHasBeenModified) {
 				this.speedModifiedTooltipTimer = SPEED_MODIFIED_TOOLTIP_TIME;
@@ -395,6 +456,13 @@ public class Unit extends GameElement {
 			this.speedModifiedTooltipText.setText("");
 		}
 		hpText.changeLoc(Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET)));
+		if(this.displayHP > this.getHP()) {
+			double shakeAmount = (this.displayHP - this.getHP()) * Unit.HP_SHAKE_MAGNITUDE_MULTIPLIER;
+			if(Math.abs(shakeAmount) > Unit.HP_SHAKE_MAGNITUDE_MAX) {
+				shakeAmount = Unit.HP_SHAKE_MAGNITUDE_MAX;
+			}
+			hpText.changeLoc(Point.add(hpText.getFinalLoc(), new Point((Math.random() - 0.5) * shakeAmount, (Math.random() - 0.5) * shakeAmount)));			
+		}
 		speedText.changeLoc(Point.add(this.getLoc(), new Point(-200, SPEED_Y_OFFSET)));
 		speedModifiedTooltipText.changeLoc(Point.add(this.getLoc(), new Point(-420, SPEED_Y_OFFSET)));
 		/*
@@ -500,6 +568,9 @@ public class Unit extends GameElement {
 			this.changeLoc(this.getMap().gridToPosition(this.gridLoc)); 
 		}
 	}
+	public void putMoveCooldown() {
+		this.moveCooldown = 1;
+	}
 	public boolean canMoveToLoc(Point loc) {
 		return this.canMoveToLoc(loc, this.getMap());
 		//return this.getMap().pointIsInGrid(loc) && (this.getMap().getPanelAt(loc).teamID == this.teamID || this.ignoreTeam) && this.getMap().getPanelAt(loc).unitStandingOnPanel == null
@@ -520,11 +591,11 @@ public class Unit extends GameElement {
 				this.spellBeingCast = spell;
 				spell.setOwner(this);
 				this.getMap().addGameElement(spell);
-				spell.activate();
 				this.isCasting = true;
 				this.spellCastTimer = spell.backswingTime;
 				this.spellCastMaxTime = spell.backswingTime;
 				this.isCoolingDown = true;
+				spell.activate();
 				if(spell.backswingTime == 0 && !spell.pauseWhenActivated) {
 					this.isCasting = false;
 					this.isCoolingDown = false;
@@ -552,6 +623,13 @@ public class Unit extends GameElement {
 			this.spellCastTimer = 0;
 			this.spellBeingCast = null;
 			this.isCoolingDown = false;
+			this.spellCastIgnorePause = false;
 		}
+	}
+	public void pauseSpellTimer() {
+		this.pauseSpellTimer = true;
+	}
+	public void unpauseSpellTimer() {
+		this.pauseSpellTimer = false;
 	}
 }

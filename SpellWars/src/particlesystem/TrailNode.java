@@ -26,6 +26,7 @@ public class TrailNode {
 		//this.rightControlPoint = Point.getFuturePoint(this.loc, startWidth/2, Math.toRadians(this.orientation - 90));
 		this.reverseAfter = reverseAfter;
 		this.velocity = velocity;
+		this.width = startWidth;
 	}
 	public void update(float frameTime) {
 		this.width = this.endWidth + (this.lifeTime/this.maxLifeTime) * (this.startWidth - this.endWidth);
@@ -37,6 +38,7 @@ public class TrailNode {
 		this.lifeTime -= frameTime;
 		if(lifeTime <= 0) {
 			this.remove = true;
+			this.width = 0;
 		}
 		this.loc.add(Point.scale(this.velocity, frameTime));
 	}

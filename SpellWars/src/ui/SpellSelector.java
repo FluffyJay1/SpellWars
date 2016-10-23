@@ -17,15 +17,19 @@ import spell.Blizzard;
 import spell.BouncingOrb;
 import spell.DamageAmp;
 import spell.DragonBreath;
+import spell.ElectroBolt;
 import spell.FireAndBrimstone;
 import spell.ForgeSpirit;
 import spell.ForgeSpiritFire;
 import spell.HellRain;
 import spell.HopesAndDreams;
+import spell.KnifeThrow;
+import spell.KnifeVolley;
 import spell.LavaToss;
 import spell.MudToss;
 import spell.MysteryBox;
 import spell.Omnislash;
+import spell.PanelClear;
 import spell.PistolShot;
 import spell.RechargingBarrier;
 import spell.ReflectBarrier;
@@ -38,8 +42,10 @@ import spell.TimeBomb;
 import spell.TimeDilation;
 import spell.TrumpWall;
 import spell.VacuumCannon;
+import spell.Vulcan;
 import spell.WindCannon;
 import spell.WishUponALuckyStar;
+import spell.ZaWarudo;
 import states.StateGame;
 import unit.Player;
 import unit.Unit;
@@ -48,13 +54,13 @@ public class SpellSelector extends UIElement {
 	public static final float WIDTH = 800; //originally 800x400
 	public static final float HEIGHT = 400;
 	public static final Color SPELL_BACKGROUND_COLOR = new Color(40, 40, 80);
-	public static final Point SPELL_SELECTOR_DIMENSIONS = new Point(4, 2); //originally 4,2
+	public static final Point SPELL_SELECTOR_DIMENSIONS = new Point(5, 2); //originally 4,2
 	public static final Point SPELLS_DRAWLOC_TOPLEFT = new Point(64, 94); //originally 64,94
-	public static final Point SPELLS_DRAWLOC_BOTTOMRIGHT = new Point(256, 158); //originally 256,158
+	public static final Point SPELLS_DRAWLOC_BOTTOMRIGHT = new Point(320, 158); //originally 256,158
 	public static final Point HIGHLIGHTED_SPELL_DRAWLOC = new Point(20, 180); //originally 20, 180
 	public static final Point HIGHLIGHTED_SPELL_DIMENSIONS = new Point(200, 200);
-	public static final Point SPELLS_SELECTED_DRAWLOC_TOP = new Point(352, 94);
-	public static final Point SPELLS_SELECTED_DRAWLOC_TOP_BATTLE = new Point(64, 94);
+	public static final Point SPELLS_SELECTED_DRAWLOC_TOP = new Point(384, 94); //orignally 352,94
+	public static final Point SPELLS_SELECTED_DRAWLOC_TOP_BATTLE = new Point(64, 94); //originally 64,94
 	public static final float SPELLS_SELECTED_DRAW_HEIGHT = 262; //originally 198
 	public static final Point SPELL_ICON_DIMENSIONS = new Point(48, 48); //originally 48x48
 	public static final Point SPELL_NAME_LOC = new Point(400, 36); //originally 400, 36
@@ -292,12 +298,22 @@ public class SpellSelector extends UIElement {
 				//DRAGON'S BREATH
 				"Firebreath",
 				"Firebreath",
-				"Firebreath"
+				"Firebreath",
+				//ZA WARUDO
+				"Time Dilation",
+				"Time Dilation",
+				"Time Dilation",
+				//KNIFE VOLLEY
+				"Knife Throw",
+				"Knife Throw",
+				"Knife Throw",
 		};
 		Spell[] spells = {
 			new HopesAndDreams(this.player),
 			new AwpShot(this.player),
-			new DragonBreath(this.player)
+			new DragonBreath(this.player),
+			new ZaWarudo(this.player),
+			new KnifeVolley(this.player),
 		};
 		boolean[] spellsDetected = new boolean[combos.length];
 		for(int i = 0; i < spellsDetected.length; i++) {
@@ -370,32 +386,40 @@ public class SpellSelector extends UIElement {
 				new LavaToss(unit),
 				new FireAndBrimstone(unit),
 				new WishUponALuckyStar(unit),
-				new SentryGun(unit)
+				new SentryGun(unit),
+				new PanelClear(unit),
+				new KnifeThrow(unit),
+				new ElectroBolt(unit),
+				new Vulcan(unit),
 		};
 		double[] weights = {0.45, //TRUMP WALL
-				0.45, //reflect barrier
+				0.4, //reflect barrier
 				0.55, //area grab
 				0.5, //recharging barrier
 				0.7, //time bomb
-				1.2, //forge spirit
-				0.7, //hell rain
-				1.0, //stun
+				1.1, //forge spirit
+				0.75, //hell rain
+				0.65, //stun
 				1.35, //bouncing orb
-				1.1, //wind cannon
-				1.65, //firebreath
-				1.8, //pistol shot
+				0.9, //wind cannon
+				1.7, //firebreath
+				1.9, //pistol shot
 				0.4, //blizzard
 				0.65, //regenerate
-				0.5, //damage amp
+				0.3, //damage amp
 				0.4, //omnislash
 				0.35, //time dilation
-				0.75, //vacuum cannon
+				0.6, //vacuum cannon
 				0.25, //mystery box
-				0.4, //mud grenade
-				0.35, //lava grenade
+				0.3, //mud grenade
+				0.3, //lava grenade
 				0.2, //fire and brimstone
 				1.4, //wish upon a lucky star
-				0.5 //sentry gun
+				0.5, //sentry gun
+				0.2, //panel clear
+				1.5, //knife throw
+				1.0, //electro bolt
+				1.4, //vulcan
 		};
 		if(spells.length != weights.length) {
 			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");

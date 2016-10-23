@@ -12,7 +12,7 @@ import projectile.Projectile;
 import unit.Unit;
 
 public class WishUponALuckyStar extends Spell {
-	public static final int DAMAGE = 25;
+	public static final int DAMAGE = 50;
 	public static final int AREA_DAMAGE = 25;
 	public static final float STANDARD_WEIGHT = 6;
 	public static final float SMALL_SHOWER_WEIGHT = 3;
@@ -89,7 +89,12 @@ public class WishUponALuckyStar extends Spell {
 		}
 	}
 	private void launchShower() {
-		Point randomPoint = this.availableLandingPoints.get((int)(Math.random() * (float)this.availableLandingPoints.size()));
+		Point randomPoint;
+		if(this.availableLandingPoints.size() == 0) {
+			randomPoint = this.getMap().getPanelsOfTeam((char)this.owner.direction).get((int)(Math.random() * (float)this.getMap().getPanelsOfTeam((char)this.owner.direction).size())).getLoc();
+		} else {
+			randomPoint = this.availableLandingPoints.get((int)(Math.random() * (float)this.availableLandingPoints.size()));
+		}
 		Point spawnPoint = Point.add(randomPoint, Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.teamID), 4));
 		int distance = 4;
 		while(!this.getMap().pointIsInGrid(spawnPoint)) {

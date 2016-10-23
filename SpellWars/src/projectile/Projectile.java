@@ -25,6 +25,7 @@ public class Projectile extends GameElement {
 	float thinkInterval;
 	float thinkTimer;
 	boolean thinkWithMove;
+	boolean updateWithMove;
 	Point gridLoc;
 	Point futureLoc;
 	Point pastFrameGridLoc;
@@ -59,6 +60,7 @@ public class Projectile extends GameElement {
 			//this.setThinkInterval((float)(1/this.getFinalSpeed()));
 			this.setThinkIntervalWithMove(true);
 		}
+		this.updateWithMove = false;
 		this.destroyOnImpact = destroyOnImpact;
 		this.ignoreHoles = ignoreHoles;
 		unitsHit = new ArrayList<Unit>();
@@ -97,6 +99,7 @@ public class Projectile extends GameElement {
 		if(speed != 0) {
 			this.setThinkInterval((float)(1/this.getFinalSpeed()));
 		}
+		this.changeSpeed(speed);
 	}
 	public void setFlashPanel(boolean flashPanel) {
 		this.flashPanel = flashPanel;
@@ -105,6 +108,13 @@ public class Projectile extends GameElement {
 		if(this.flashPanel && this.getMap().getPanelAt(this.getGridLoc()) != null) {
 			this.getMap().getPanelAt(this.getGridLoc()).panelFlash();
 		}
+	}
+	@Override
+	public double getFrameTime() {
+		if(this.updateWithMove) {
+			return this.getActualFrameTime() * this.getFinalSpeed() / this.getSpeed() * this.getTimeScale();
+		}
+		return this.getActualFrameTime() * this.getTimeScale(); 
 	}
 	@Override
 	public void update() {
@@ -187,6 +197,11 @@ public class Projectile extends GameElement {
 	public void resetUnitsHit() {
 		this.unitsHit.clear();
 	}
+	public void addToUnitsHit(Unit u) {
+		if(!this.unitsHit.contains(u)) {
+			this.unitsHit.add(u);
+		}
+	}
 	public void onThink() {
 		
 	}
@@ -251,6 +266,7 @@ public class Projectile extends GameElement {
 		*/
 		if(this.getImage() != null){
 			Image endPic = this.getImage().getFlippedCopy(this.direction == GameMap.ID_LEFT, false).getScaledCopy(this.imageScale);
+			endPic.rotate(-(float)this.getOrientation());
 			float width = endPic.getWidth();
 			float height = endPic.getHeight();
 			g.drawImage(endPic, (float) this.getLoc().x - width/2, (float) this.getLoc().y - height/2 - this.getDrawHeight());
@@ -259,7 +275,7 @@ public class Projectile extends GameElement {
 				hflipvflip += 2;
 			}
 			if(StateGame.isServer)
-			this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.getImagePath(), this.getLoc().x - width/2, this.getLoc().y - height/2 - this.getDrawHeight(), width, height, 0, 255, 255, 255, 255, hflipvflip));
+			this.getMap().addToDrawInfo(GameMap.getDrawDataI(this.getImagePath(), this.getLoc().x - width/2, this.getLoc().y - height/2 - this.getDrawHeight(), width, height, -this.getOrientation(), 255, 255, 255, 255, hflipvflip));
 		}
 		/*
 		Point loc = Point.subtract(this.getMap().gridToPosition(this.getGridLoc()), new Point(15, 15));

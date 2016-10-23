@@ -11,7 +11,7 @@ import unit.Unit;
 
 public class HopesAndDreams extends Spell {
 	ArrayList<Point> availableLandingPoints;
-	public static final float DAMAGE = 25;
+	public static final float DAMAGE = 50;
 	public static final float AREA_DAMAGE = 25;
 	public static final int NUM_STRIKES = 12;
 	public static final float STRIKE_INTERVAL = 0.1f;

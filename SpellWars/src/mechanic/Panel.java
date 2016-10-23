@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Rectangle;
 import states.StateGame;
 import statuseffect.PanelAura;
 import statuseffect.StatusFrost;
+import statuseffect.StatusLava;
 import statuseffect.StatusMud;
 import unit.Unit;
 
@@ -32,7 +33,6 @@ public class Panel {
 	public static final float LAVA_DAMAGE_PER_SECOND = 10;
 	public static final float MUD_SPEED_MODIFIER = 0.5f;
 	float panelResetTimer;
-	float lavaDamageTimer;
 	PanelAura aura;
 	boolean willBecomeHole; //used when the player stands on the cracked panel, to figure out when to make it a hole
 	public static Image normal;
@@ -51,7 +51,6 @@ public class Panel {
 		this.loc = new Point(x,y);
 		this.teamID = teamID;
 		this.panelResetTimer = 0;
-		this.lavaDamageTimer = 0;
 		this.aura = new PanelAura(map, this);
 		this.setPanelState(state);
 		this.map = map;
@@ -97,6 +96,7 @@ public class Panel {
 			break;
 		case LAVA:
 			this.panelResetTimer = LAVA_RESET_TIME;
+			this.aura.setEffect(new StatusLava(LAVA_DAMAGE_PER_SECOND));
 			break;
 		case MUD:
 			this.panelResetTimer = MUD_RESET_TIME;
@@ -141,13 +141,14 @@ public class Panel {
 			}
 		} else if(this.state == PanelState.LAVA) {
 			this.lava.update(frametime);
-			while(this.lavaDamageTimer <= 0) {
-				if(this.unitStandingOnPanel != null) {
-					this.unitStandingOnPanel.doDamage(1);
-				}
-				this.lavaDamageTimer += 1/LAVA_DAMAGE_PER_SECOND;
-			}
-			this.lavaDamageTimer -= frametime;
+		}
+	}
+	public void updatePanelFlash(float frametime) {
+		if(this.projectileFlashTimer > 0) {
+			this.projectileFlashTimer -= frametime;
+		}
+		if(this.importantFlashTimer > 0) {
+			this.importantFlashTimer -= frametime;
 		}
 	}
 	public Point getLoc() {
@@ -242,12 +243,6 @@ public class Panel {
 			if(StateGame.isServer)
 			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * PANEL_FLASH_IMPORTANT_SIZE, panelSize.y * PANEL_FLASH_IMPORTANT_SIZE, PANEL_FLASH_IMPORTANT_COLOR.getRedByte(), PANEL_FLASH_IMPORTANT_COLOR.getGreenByte(), PANEL_FLASH_IMPORTANT_COLOR.getBlueByte(), 255));
 			this.drawImportantFlash = false;
-		}
-		if(this.projectileFlashTimer > 0) {
-			this.projectileFlashTimer -= this.map.frametime;
-		}
-		if(this.importantFlashTimer > 0) {
-			this.importantFlashTimer -= this.map.frametime;
 		}
 	}
 }

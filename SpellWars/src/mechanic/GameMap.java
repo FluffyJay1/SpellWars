@@ -18,6 +18,7 @@ import particlesystem.Trail;
 import projectile.Grenade;
 import projectile.Projectile;
 import shield.Shield;
+import spell.Spell;
 import states.StateGame;
 import statuseffect.StatusEffect;
 import ui.Text;
@@ -58,12 +59,13 @@ public class GameMap {
 	ArrayList<GameElement> elementList = new ArrayList<GameElement>();
 	ArrayList<GameElement> elementBuffer = new ArrayList<GameElement>();
 	ArrayList<GameElement> elementRemoveBuffer = new ArrayList<GameElement>();
+	ArrayList<Spell> fieldEffectQueue = new ArrayList<Spell>();
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	ArrayList<ParticleBase> particleList = new ArrayList<ParticleBase>();
 	ArrayList<ParticleBase> particleBuffer = new ArrayList<ParticleBase>();
 	ArrayList<ParticleBase> particleRemoveBuffer = new ArrayList<ParticleBase>();
 	boolean isPaused;
-	
+	boolean forcePickPhase;
 	String drawInfo;
 	String lastFullDrawInfo;
 	
@@ -107,6 +109,7 @@ public class GameMap {
 			}
 		}
 		this.isPaused = false;
+		this.forcePickPhase = false;
 	}
 	
 	public void passFrameTime(float frametime) {
@@ -119,6 +122,11 @@ public class GameMap {
 				for(int y = 0; y < this.panelGrid[0].length; y++) {
 					this.panelGrid[x][y].update(this.frametime);
 				}
+			}
+		}
+		for(int x = 0; x < this.panelGrid.length; x++) {
+			for(int y = 0; y < this.panelGrid[0].length; y++) {
+				this.panelGrid[x][y].updatePanelFlash(this.frametime);
 			}
 		}
 		for(int i = 0; i < elementList.size(); i++) {
@@ -149,6 +157,12 @@ public class GameMap {
 			if(element instanceof Unit && ((Unit)element).spellCastIgnorePause && element.isPaused) {
 				((Unit)element).updateSpellTimers();
 			}
+			if(element instanceof Unit) {
+				((Unit)element).updateDisplayHP();
+			}
+			if(element instanceof Shield) {
+				((Shield)element).updateDisplayHP();
+			}
 		}
 		for(int i = 0; i < particleList.size(); i++) {
 			ParticleBase particle = particleList.get(i);
@@ -160,7 +174,28 @@ public class GameMap {
 				}
 			}
 		}
+		if(this.fieldEffectQueue.size() > 0 && this.fieldEffectQueue.get(0).isFinished) {
+			this.fieldEffectQueue.remove(0);
+			if(this.fieldEffectQueue.size() > 0) {
+				this.fieldEffectQueue.get(0).activate();
+			}
+		}
 		this.updateLists();
+	}
+	public boolean hasFieldEffects() {
+		return this.fieldEffectQueue.size() > 0;
+	}
+	public Spell getActiveFieldEffect() {
+		if(this.fieldEffectQueue.size() > 0) {
+			return this.fieldEffectQueue.get(0);
+		}
+		return null;
+	}
+	public ArrayList<Spell> getFieldEffects() {
+		return this.fieldEffectQueue;
+	}
+	public void addFieldEffect(Spell s) {
+		this.fieldEffectQueue.add(s);
 	}
 	public void updateLists() {
 		elementList.addAll(elementBuffer);
@@ -190,6 +225,20 @@ public class GameMap {
 		}
 		this.isPaused = true;
 	}
+	public void pauseSpells() {
+		for(GameElement e : this.elementList) {
+			if(e instanceof Spell) {
+				((Spell)e).castPause();
+			}
+		}
+	}
+	public void unpauseSpells() {
+		for(GameElement e : this.elementList) {
+			if(e instanceof Spell) {
+				((Spell)e).castUnpause();
+			}
+		}
+	}
 	public void unpauseAll() {
 		for(GameElement e : this.elementList) {
 			e.setPause(false);
@@ -207,6 +256,15 @@ public class GameMap {
 	}
 	public boolean isPaused() {
 		return this.isPaused;
+	}
+	public void forcePickPhase() {
+		this.forcePickPhase = true;
+	}
+	public void stopForcingPickPhase() {
+		this.forcePickPhase = false;
+	}
+	public boolean getForcePickPhase() {
+		return this.forcePickPhase;
 	}
 	public void passMousePosition(Point point) {
 		this.mouseLoc = point;
@@ -612,6 +670,12 @@ public class GameMap {
 	public void setUI(UI ui) {
 		this.ui = ui;
 	}
+	public void addGameElement(GameElement e, boolean respectPause) {
+		this.addGameElement(e);
+		if(respectPause) {
+			e.setPause(this.isPaused);
+		}
+	}
 	public void addGameElement(GameElement e) {
 		if(!this.elementList.contains(e) && !this.elementBuffer.contains(e)) {
 			e.setMap(this);
@@ -901,6 +965,9 @@ public class GameMap {
 			break;
 		}
 		return Point.add(p, moveVec);
+	}
+	public static Point getFuturePoint(Point p, char dir, double scale) {
+		return Point.scale(getFuturePoint(p, dir), scale);
 	}
 	public void printPanels() {
 		for(int row = 0; row < this.getGridDimensions().y; row++) {

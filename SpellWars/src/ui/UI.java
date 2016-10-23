@@ -28,6 +28,7 @@ public class UI {
 		for(UIElement u : this.elementList) {
 			u.passFrameTime(this.frametime);
 			u.update();
+			u.updateDuration();
 			u.updateRelationships();
 			if(u.getRemove()) {
 				this.elementListRemoveBuffer.add(u);

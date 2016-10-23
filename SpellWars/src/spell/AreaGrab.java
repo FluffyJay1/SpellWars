@@ -140,6 +140,8 @@ public class AreaGrab extends Spell {
 				Rectangle rect = new Rectangle((float)drawLoc.x, (float)drawLoc.y, (float)this.map.getSizeOfPanel().x, (float)this.map.getSizeOfPanel().y);
 				g.setColor(Color.gray);
 				g.fill(rect);
+				if(StateGame.isServer)
+				this.getMap().addToDrawInfo(GameMap.getDrawDataR(drawLoc.x, drawLoc.y, this.map.getSizeOfPanel().x, this.map.getSizeOfPanel().y, g.getColor().getRedByte(), g.getColor().getGreenByte(), g.getColor().getBlueByte(), g.getColor().getAlphaByte()));
 			}
 		}
 	}

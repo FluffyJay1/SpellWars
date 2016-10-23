@@ -12,6 +12,7 @@ import mechanic.Point;
 import particlesystem.EmitterTypes;
 import particlesystem.ParticleEmitter;
 import projectile.Projectile;
+import states.StateGame;
 import statuseffect.StatusTimeDilation;
 import unit.Unit;
 
@@ -37,6 +38,7 @@ public class TimeDilation extends Spell {
 				e.printStackTrace();
 			}
 		}
+		this.registerFieldEffect("time dilation");
 		timer = 0;
 		tickTimer = 0;
 	}
@@ -111,11 +113,17 @@ public class TimeDilation extends Spell {
 			clockColor = new Color(200, 200, 255);
 		}
 		g.drawImage(clock, (float)(drawLoc.x - clock.getWidth()/2), (float)(drawLoc.y - clock.getHeight()/2), clockColor);
+		if(StateGame.isServer)
+		this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/circle256x256.png", drawLoc.x - clock.getWidth()/2, drawLoc.y - clock.getHeight()/2, clock.getWidth(), clock.getHeight(), 0, clockColor.getRed(), clockColor.getGreen(), clockColor.getBlue(), clock.getAlpha(), 0));
 		for(double rad = -Math.PI/2; rad < Math.PI*3/2; rad += Math.PI*2/(NUM_TICKS - 1)) {
-			g.drawImage(GameMap.particle_genericBlue, (float)(Math.cos(rad) * 120 + drawLoc.x - GameMap.particle_genericBlue.getWidth()/2), (float)(Math.sin(rad) * 120 + drawLoc.y - GameMap.particle_genericBlue.getHeight()/2));
+			g.drawImage(GameMap.particle_genericWhite, (float)(Math.cos(rad) * 120 + drawLoc.x - GameMap.particle_genericWhite.getWidth()/2), (float)(Math.sin(rad) * 120 + drawLoc.y - GameMap.particle_genericWhite.getHeight()/2));
+			if(StateGame.isServer)
+			this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/particle_genericWhite.png", Math.cos(rad) * 120 + drawLoc.x - GameMap.particle_genericWhite.getWidth()/2, Math.sin(rad) * 120 + drawLoc.y - GameMap.particle_genericWhite.getHeight()/2, GameMap.particle_genericWhite.getWidth(), GameMap.particle_genericWhite.getHeight(), 0, 255, 255, 255, 255, 0));
 		}
 		Image temphand = clockHand.copy();
 		temphand.rotate(360 * this.timer/((NUM_TICKS - 1) * INTERVAL));
 		g.drawImage(temphand, (float)(drawLoc.x - temphand.getWidth()/2), (float)(drawLoc.y - temphand.getHeight()/2));
+		if(StateGame.isServer)
+		this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/clockhand.png", drawLoc.x - clockHand.getWidth()/2, drawLoc.y - clockHand.getHeight()/2, clockHand.getWidth(), clockHand.getHeight(), 360 * this.timer/((NUM_TICKS - 1) * INTERVAL), 255, 255, 255, 255, 0));
 	}
 }
