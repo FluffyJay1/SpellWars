@@ -46,6 +46,7 @@ import ui.TextFormat;
 import ui.UI;
 import ui.UIElement;
 import unit.Boss;
+import unit.Dio;
 import unit.Mei;
 import unit.Player;
 import unit.Trump;
@@ -169,6 +170,16 @@ public class StateGame extends BasicGameState{
 			}
 			if(Game.rightPlayer.equals(PlayerType.MEI)) {
 				Unit boss = new Mei(rightStartLoc, (int)GameMap.ID_RIGHT, Game.rightLevel);
+				map.addUnit(boss);
+				//this.setBackgroundImage("res/0074.png");
+			}
+			if(Game.leftPlayer.equals(PlayerType.DIO)) {
+				Unit boss = new Dio(leftStartLoc, (int)GameMap.ID_LEFT, Game.leftLevel);
+				map.addUnit(boss);
+				//this.setBackgroundImage("res/0074.png");
+			}
+			if(Game.rightPlayer.equals(PlayerType.DIO)) {
+				Unit boss = new Dio(rightStartLoc, (int)GameMap.ID_RIGHT, Game.rightLevel);
 				map.addUnit(boss);
 				//this.setBackgroundImage("res/0074.png");
 			}

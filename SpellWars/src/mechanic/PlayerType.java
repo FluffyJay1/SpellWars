@@ -4,5 +4,6 @@ public enum PlayerType {
 	PLAYER,
 	COMPUTER,
 	TRUMP,
-	MEI;
+	MEI,
+	DIO;
 }

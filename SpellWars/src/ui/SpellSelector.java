@@ -42,6 +42,7 @@ import spell.TimeBomb;
 import spell.TimeDilation;
 import spell.TrumpWall;
 import spell.VacuumCannon;
+import spell.VampiricSlash;
 import spell.Vulcan;
 import spell.WindCannon;
 import spell.WishUponALuckyStar;
@@ -391,6 +392,7 @@ public class SpellSelector extends UIElement {
 				new KnifeThrow(unit),
 				new ElectroBolt(unit),
 				new Vulcan(unit),
+				new VampiricSlash(unit),
 		};
 		double[] weights = {0.45, //TRUMP WALL
 				0.4, //reflect barrier
@@ -420,6 +422,7 @@ public class SpellSelector extends UIElement {
 				1.5, //knife throw
 				1.0, //electro bolt
 				1.4, //vulcan
+				0.7, //vampiric slash
 		};
 		if(spells.length != weights.length) {
 			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");

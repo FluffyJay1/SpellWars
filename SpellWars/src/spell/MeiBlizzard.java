@@ -17,6 +17,7 @@ public class MeiBlizzard extends Spell {
 	public MeiBlizzard(Unit owner) {
 		super(owner, 0, 0, "Dong Zhu, Bu xu Zou", "FREEZE DON'T MOVE", "res/statuseffect/icon_frost.png", true);
 		this.setThinkInterval(APPLY_INTERVAL);
+		this.registerFieldEffect("mei blizzard");
 		this.appliedTicks = 0;
 	}
 	@Override

@@ -24,8 +24,8 @@ import ui.TextFormat;
 
 public class Unit extends GameElement {
 	public static final int HP_Y_OFFSET = 12;
-	public static final float HP_DISPLAY_TICK_INTERVAL = 0.01f;
-	public static final float HP_DISPLAY_TICK_INTERVAL_FAST_THRESHOLD = 25;
+	public static final float HP_DISPLAY_TICK_INTERVAL = 0.015f;
+	public static final float HP_DISPLAY_TICK_INTERVAL_FAST_THRESHOLD = 15;
 	public static final float HP_DISPLAY_TICK_INTERVAL_FAST = 0.0005f;
 	public static final float HP_SHAKE_MAGNITUDE_MULTIPLIER = 0.75f; //pixels per hp
 	public static final float HP_SHAKE_MAGNITUDE_MAX = 50; //pixels

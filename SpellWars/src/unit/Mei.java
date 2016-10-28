@@ -31,7 +31,7 @@ public class Mei extends Unit {
 	public static final float AREA_GRAB_COOLDOWN = 55;
 	public static final float AREA_GRAB_CHANCE = 0.15f;
 	public static final float CRYOFREEZE_HP_RATIO_THRESHOLD = 0.4f;
-	public static final float CRYOFREEZE_CHANCE = 0.4f;
+	public static final float CRYOFREEZE_CHANCE = 0.45f;
 	public static final float CRYOFREEZE_COOLDOWN = 35;
 	public static final float ICEWALL_COOLDOWN = 20;
 	public static final float ICEWALL_CHANCE = 0.25f;
