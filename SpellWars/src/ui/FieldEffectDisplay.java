@@ -24,6 +24,7 @@ public class FieldEffectDisplay extends UIElement {
 	}
 	@Override
 	public void draw(Graphics g) {
+		if(this.getMap() != null)
 		for(int i = 0; i < this.getMap().getFieldEffects().size(); i++) {
 			Color c = Color.white;
 			if(this.getMap().hasFieldEffects()) {
