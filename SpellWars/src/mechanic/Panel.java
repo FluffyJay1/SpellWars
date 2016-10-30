@@ -232,7 +232,7 @@ public class Panel {
 			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * (float)PANEL_FLASH_SIZE, (float)panelSize.y * (float)PANEL_FLASH_SIZE);
 			g.fill(rect);
 			if(StateGame.isServer)
-			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * PANEL_FLASH_SIZE, panelSize.y * PANEL_FLASH_SIZE, PANEL_FLASH_COLOR.getRedByte(), PANEL_FLASH_COLOR.getGreenByte(), PANEL_FLASH_COLOR.getBlueByte(), 255));
+			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * PANEL_FLASH_SIZE, panelSize.y * PANEL_FLASH_SIZE, PANEL_FLASH_COLOR.getRedByte(), PANEL_FLASH_COLOR.getGreenByte(), PANEL_FLASH_COLOR.getBlueByte(), PANEL_FLASH_COLOR.getAlphaByte()));
 			this.drawProjectileFlash = false;
 		}
 		if(this.drawImportantFlash || this.importantFlashTimer > 0) {
@@ -241,7 +241,7 @@ public class Panel {
 			Rectangle rect = new Rectangle((float)loc.x, (float)loc.y, (float)panelSize.x * (float)PANEL_FLASH_IMPORTANT_SIZE, (float)panelSize.y * (float)PANEL_FLASH_IMPORTANT_SIZE);
 			g.fill(rect);
 			if(StateGame.isServer)
-			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * PANEL_FLASH_IMPORTANT_SIZE, panelSize.y * PANEL_FLASH_IMPORTANT_SIZE, PANEL_FLASH_IMPORTANT_COLOR.getRedByte(), PANEL_FLASH_IMPORTANT_COLOR.getGreenByte(), PANEL_FLASH_IMPORTANT_COLOR.getBlueByte(), 255));
+			this.map.addToDrawInfo(GameMap.getDrawDataR(loc.x, loc.y, panelSize.x * PANEL_FLASH_IMPORTANT_SIZE, panelSize.y * PANEL_FLASH_IMPORTANT_SIZE, PANEL_FLASH_IMPORTANT_COLOR.getRedByte(), PANEL_FLASH_IMPORTANT_COLOR.getGreenByte(), PANEL_FLASH_IMPORTANT_COLOR.getBlueByte(), PANEL_FLASH_IMPORTANT_COLOR.getAlphaByte()));
 			this.drawImportantFlash = false;
 		}
 	}

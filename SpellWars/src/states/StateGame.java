@@ -185,7 +185,7 @@ public class StateGame extends BasicGameState{
 			}
 			
 			
-			battlePhaseText = new Text(ui, new Point(Game.WINDOW_WIDTH/2 - 200, 24), 400, 16, 24, 18, 26, Color.white, "time until next spell selection: ", TextFormat.CENTER_JUSTIFIED);
+			battlePhaseText = new Text(ui, new Point(Game.WINDOW_WIDTH/2 - 200, 32), 400, 16, 24, 18, 26, Color.white, "time until next spell selection: ", TextFormat.CENTER_JUSTIFIED);
 			battlePhaseText.setUseOutline(true);
 			//ui.addUIElement(battlePhaseText);
 			

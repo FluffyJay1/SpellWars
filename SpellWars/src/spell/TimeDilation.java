@@ -31,7 +31,6 @@ public class TimeDilation extends Spell {
 		if(clock == null) {
 			try {
 				clock = new Image("res/circle256x256.png");
-				clock.setAlpha(0.5f);
 				clockHand = new Image("res/clockhand.png");
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
@@ -108,13 +107,13 @@ public class TimeDilation extends Spell {
 	@Override
 	public void drawSpecialEffects(Graphics g) {
 		Point drawLoc = Point.add(new Point(Game.WINDOW_WIDTH/2, 200), Point.scale(GameMap.getFuturePoint(new Point(), (char)owner.teamID), 256));
-		Color clockColor = new Color(255, 200, 200); //red
+		Color clockColor = new Color(255, 200, 200, 128); //red
 		if(owner.teamID == GameMap.ID_RIGHT) {
-			clockColor = new Color(200, 200, 255);
+			clockColor = new Color(200, 200, 255, 128);
 		}
 		g.drawImage(clock, (float)(drawLoc.x - clock.getWidth()/2), (float)(drawLoc.y - clock.getHeight()/2), clockColor);
 		if(StateGame.isServer)
-		this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/circle256x256.png", drawLoc.x - clock.getWidth()/2, drawLoc.y - clock.getHeight()/2, clock.getWidth(), clock.getHeight(), 0, clockColor.getRed(), clockColor.getGreen(), clockColor.getBlue(), clock.getAlpha(), 0));
+		this.getMap().addToDrawInfo(GameMap.getDrawDataI("res/circle256x256.png", drawLoc.x - clock.getWidth()/2, drawLoc.y - clock.getHeight()/2, clock.getWidth(), clock.getHeight(), 0, clockColor.getRed(), clockColor.getGreen(), clockColor.getBlue(), clockColor.getAlpha(), 0));
 		for(double rad = -Math.PI/2; rad < Math.PI*3/2; rad += Math.PI*2/(NUM_TICKS - 1)) {
 			g.drawImage(GameMap.particle_genericWhite, (float)(Math.cos(rad) * 120 + drawLoc.x - GameMap.particle_genericWhite.getWidth()/2), (float)(Math.sin(rad) * 120 + drawLoc.y - GameMap.particle_genericWhite.getHeight()/2));
 			if(StateGame.isServer)
