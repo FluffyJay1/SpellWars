@@ -411,8 +411,8 @@ public class StateGame extends BasicGameState{
 		}
 		if(!isClient && !isServer) { //if singleplayer
 			if(key == Input.KEY_H) {
-				leftPlayer.doDamage(399);
-				rightPlayer.doDamage(399);
+				leftPlayer.doDamage(-500);
+				rightPlayer.doDamage(-500);
 			}
 			if(this.pickingPhase) {
 				switch(key) {

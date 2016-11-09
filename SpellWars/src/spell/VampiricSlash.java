@@ -60,7 +60,8 @@ public class VampiricSlash extends Spell {
 			for(int x = 1; x <= length; x++) {
 				Point slashLoc = Point.add(this.owner.gridLoc, Point.add(new Point(0, y), Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.direction), x)));
 				if(this.getMap().pointIsInGrid(slashLoc) && this.getMap().getPanelAt(slashLoc).unitStandingOnPanel != null && this.getMap().getPanelAt(slashLoc).unitStandingOnPanel.teamID != this.owner.teamID) {
-					this.getMap().getPanelAt(slashLoc).unitStandingOnPanel.doDamage(this.damage * this.owner.finalDamageModifier);
+					Unit target = this.getMap().getPanelAt(slashLoc).unitStandingOnPanel;
+					target.doDamage(this.damage * this.owner.finalDamageModifier);
 					this.owner.doDamage(-this.damage * this.owner.finalDamageModifier);
 					ParticleEmitter pe = new ParticleEmitter(Point.add(this.owner.getLoc(), new Point(0, -this.owner.getDrawHeight())), EmitterTypes.CIRCLE_DIRECTION, "res/particle_heal.png", true, /*point, emitter type, image path, alphaDecay*/
 							0.4f, 0.6f, /*particle start scale*/
@@ -71,6 +72,18 @@ public class VampiricSlash extends Spell {
 							1000, 1250, /*min and max launch speed*/
 							0, 3, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
 							0, 50, 90, 0); /*keyvalues*/
+					this.getMap().addParticleEmitter(pe);
+					float direction = (float)Point.getDirectionDeg(Point.add(target.getLoc(), new Point(0, -target.getDrawHeight())), Point.add(this.owner.getLoc(), new Point(0, -this.owner.getDrawHeight())));
+					float distance = (float)Point.getDistance(Point.add(target.getLoc(), new Point(0, -target.getDrawHeight())), Point.add(this.owner.getLoc(), new Point(0, -this.owner.getDrawHeight())));
+					pe = new ParticleEmitter(Point.add(target.getLoc(), new Point(0, -target.getDrawHeight())), EmitterTypes.CIRCLE_DIRECTION, "res/particle_genericRed.png", true, /*point, emitter type, image path, alphaDecay*/
+							7.2f, 7.2f, /*particle start scale*/
+							2.4f, 2.4f, /*particle end scale*/
+							0.5f, /*drag*/
+							0, 0, /*rotational velocity*/
+							ANIMATION_DURATION, ANIMATION_DURATION, /*min and max lifetime*/
+							distance / ANIMATION_DURATION, distance / ANIMATION_DURATION, /*min and max launch speed*/
+							0, 3, /*emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles)*/
+							0, 50, direction, 0); /*keyvalues*/
 					this.getMap().addParticleEmitter(pe);
 				}
 			}

@@ -67,7 +67,7 @@ public class Trump extends Unit {
 				this.state = 0;
 			}
 		} else {
-			this.moveRandom4(false, false, true, true, true, false);
+			this.moveRandom4(true, false, true, true, true, false);
 		}
 		if(Math.random() < 0.15 && this.state == 0 && this.trumpWallCooldown <= 0) { //TRUMPS WALL
 			this.castSpell(new AreaGrab(this));

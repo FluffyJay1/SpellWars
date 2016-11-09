@@ -152,9 +152,11 @@ public class Text extends UIElement {
 					float lineWidth = (trimmedLine.length() * this.kerning) + this.letterWidth - this.kerning; //THE WIDTH (IN PIXELS) OF THE LINE
 					if(tempx > this.boxWidth || (i == this.text.length() - 1 && tempx + this.letterWidth > this.boxWidth)) {
 						tempx = -kerning; //TO BALANCE OUT THE SPACE
-						textLines.add(addbuffer);
-						addbuffer = "";
-						numLines++;
+						if(addbuffer.length() > 0) {
+							textLines.add(addbuffer);
+							addbuffer = "";
+							numLines++;
+						}
 					} else {
 						tempx += -kerning * (i - currWordIndex); //go back to start of word's position
 					}

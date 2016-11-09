@@ -77,7 +77,7 @@ public class Mei extends Unit {
 	public void onThink() {
 		this.trackUnit();
 		if(this.state == 1) {
-			this.moveRandom4(false, false, true, true, true, false);
+			this.moveRandom4(true, false, true, true, true, false);
 			if(this.normalSpellTimer <= 0 && Math.random() < NORMAL_SPELL_CHANCE) {
 				this.castSpell(SpellSelector.getRandomSpell(this));
 				this.normalSpellTimer = (float)(NORMAL_SPELL_COOLDOWN * Math.pow(COOLDOWN_MULT_PER_LEVEL, this.level));
@@ -176,23 +176,23 @@ public class Mei extends Unit {
 		if(this.unitToTrack != null) {
 			if(this.unitToTrack.gridLoc.y < this.gridLoc.y) { //move up
 				if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(0, -1)))) {
-					this.move(GameMap.ID_UP, false, false, true, true, true, false);
+					this.move(GameMap.ID_UP, true, false, true, true, true, false);
 				} else if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(-1, -1)))) { //look into the future, see if there's obstruction
-					this.move(GameMap.ID_LEFT, false, false, true, true, true, false); //move off to the side
+					this.move(GameMap.ID_LEFT, true, false, true, true, true, false); //move off to the side
 				} else if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(1, -1)))) {
-					this.move(GameMap.ID_RIGHT, false, false, true, true, true, false);
+					this.move(GameMap.ID_RIGHT, true, false, true, true, true, false);
 				} else {
-					this.moveRandom4(false, false, true, true, true, false);
+					this.moveRandom4(true, false, true, true, true, false);
 				}
 			} else if(this.unitToTrack.gridLoc.y > this.gridLoc.y) { //move down
 				if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(0, 1)))) {
-					this.move(GameMap.ID_DOWN, false, false, true, true, true, false);
+					this.move(GameMap.ID_DOWN, true, false, true, true, true, false);
 				} else if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(-1, 1)))) { //look into the future, see if there's obstruction
-					this.move(GameMap.ID_LEFT, false, false, true, true, true, false); //move off to the side
+					this.move(GameMap.ID_LEFT, true, false, true, true, true, false); //move off to the side
 				} else if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(1, 1)))) {
-					this.move(GameMap.ID_RIGHT, false, false, true, true, true, false);
+					this.move(GameMap.ID_RIGHT, true, false, true, true, true, false);
 				} else {
-					this.moveRandom4(false, false, true, true, true, false);
+					this.moveRandom4(true, false, true, true, true, false);
 				}
 			}
 		}

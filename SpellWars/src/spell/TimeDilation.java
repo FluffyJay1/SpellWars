@@ -88,18 +88,18 @@ public class TimeDilation extends Spell {
 		for(Unit u : this.getMap().getUnits()) {
 			if(!u.hasStatusEffect(StatusTimeDilation.ID)) {
 				if(u.teamID == this.owner.teamID) {
-					u.addStatusEffect(new StatusTimeDilation(u, ALLIED_SPEED_MULT * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)), INTERVAL - tickTimer, 1));
+					u.addStatusEffect(new StatusTimeDilation(u, (ALLIED_SPEED_MULT - 1) * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)) + 1, INTERVAL - tickTimer, 1));
 				} else {
-					u.addStatusEffect(new StatusTimeDilation(u, ENEMY_SPEED_MULT * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)), INTERVAL - tickTimer, 1));
+					u.addStatusEffect(new StatusTimeDilation(u, (ENEMY_SPEED_MULT - 1) * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)) + 1, INTERVAL - tickTimer, 1));
 				}
 			}
 		}
 		for(Projectile p : this.getMap().getProjectiles()) {
 			if(!p.hasStatusEffect(StatusTimeDilation.ID)) {
 				if(p.teamID == this.owner.teamID) {
-					p.addStatusEffect(new StatusTimeDilation(p, ALLIED_SPEED_MULT * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)), INTERVAL - tickTimer, 1));
+					p.addStatusEffect(new StatusTimeDilation(p, (ALLIED_SPEED_MULT - 1) * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)) + 1, INTERVAL - tickTimer, 1));
 				} else {
-					p.addStatusEffect(new StatusTimeDilation(p, ENEMY_SPEED_MULT * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)), INTERVAL - tickTimer, 1));
+					p.addStatusEffect(new StatusTimeDilation(p, (ENEMY_SPEED_MULT - 1) * (float)Math.pow(StatusTimeDilation.SPEED_DECAY_PER_INTERVAL, (tickTimer/StatusTimeDilation.UPDATE_INTERVAL)) + 1, INTERVAL - tickTimer, 1));
 				}
 			}
 		}

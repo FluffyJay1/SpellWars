@@ -8,7 +8,7 @@ import statuseffect.StatusBleed;
 import unit.Unit;
 
 public class KnifeProjectile extends Projectile {
-	public static final double SPEED = 18;
+	public static final double SPEED = 20;
 	public KnifeProjectile(double damage, int direction, Point gridLoc, int teamID) {
 		super(damage, SPEED, direction, gridLoc, "res/projectile/knife.png", teamID, true, true, true);
 		this.setDrawHeight(40);

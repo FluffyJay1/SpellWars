@@ -26,6 +26,7 @@ public class ReflectShield extends Shield {
 		p.teamID = this.owner.teamID;
 		p.direction = GameMap.getOppositeDirection((char)p.direction);
 		p.vel = Point.scale(p.vel, -1);
+		//p.vel.x *= -1;
 		p.setRemove(false);
 		if(p instanceof Grenade) {
 			((Grenade)p).timeElapsed = 0;

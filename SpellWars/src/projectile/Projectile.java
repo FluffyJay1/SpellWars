@@ -228,9 +228,9 @@ public class Projectile extends GameElement {
 	}
 	public Point getGridLoc() {
 		if(1 - this.thinkTimer < 0) {
-			return this.gridLoc;
+			return Point.roundToNearestInteger(this.gridLoc);
 		} else if(1 - this.thinkTimer > 1) {
-			return this.futureLoc;
+			return Point.roundToNearestInteger(this.futureLoc);
 		} else {
 			return Point.roundToNearestInteger(Point.interpolate(this.gridLoc, this.futureLoc, 1 - this.thinkTimer));
 		}
@@ -336,7 +336,7 @@ public class Projectile extends GameElement {
 			default:
 				break;
 			}
-			Point futurepoint = Point.add(this.getGridLoc(), moveVec);
+			Point futurepoint = Point.add(this.futureLoc, moveVec); //this.futureLoc was once this.getGridLoc()
 			//if(this.getMap().pointIsInGrid(futurepoint)) {
 				this.futureLoc = futurepoint;
 				if(putCooldown) {
@@ -352,7 +352,7 @@ public class Projectile extends GameElement {
 	}
 	public void move(Point moveVec, boolean respectCooldown, boolean putCooldown) {
 		if(((respectCooldown && this.moveCooldown <= 0) || !respectCooldown) && !this.isPaused()) {
-			Point futurepoint = Point.add(this.getGridLoc(), moveVec);
+			Point futurepoint = Point.add(this.futureLoc, moveVec);
 			//if(this.getMap().pointIsInGrid(futurepoint)) {
 				this.futureLoc = futurepoint;
 				if(putCooldown) {

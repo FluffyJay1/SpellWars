@@ -35,6 +35,7 @@ import spell.RechargingBarrier;
 import spell.ReflectBarrier;
 import spell.Regenerate;
 import spell.SentryGun;
+import spell.ShotgunBlast;
 import spell.Spell;
 import spell.Stun;
 import spell.TestFireball;
@@ -393,11 +394,12 @@ public class SpellSelector extends UIElement {
 				new ElectroBolt(unit),
 				new Vulcan(unit),
 				new VampiricSlash(unit),
+				new ShotgunBlast(unit),
 		};
 		double[] weights = {0.45, //TRUMP WALL
-				0.4, //reflect barrier
+				0.3, //reflect barrier
 				0.55, //area grab
-				0.5, //recharging barrier
+				0.45, //recharging barrier
 				0.7, //time bomb
 				1.1, //forge spirit
 				0.75, //hell rain
@@ -423,6 +425,7 @@ public class SpellSelector extends UIElement {
 				1.0, //electro bolt
 				1.4, //vulcan
 				0.7, //vampiric slash
+				0.8, //shotgun blast
 		};
 		if(spells.length != weights.length) {
 			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");

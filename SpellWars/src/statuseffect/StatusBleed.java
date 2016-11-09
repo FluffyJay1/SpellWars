@@ -9,7 +9,7 @@ public class StatusBleed extends StatusEffect {
 	public static final String ID = "bleed"; //for stacking
 	public static final float DURATION = 10;
 	public static final float DAMAGE_PER_SECOND = 1;
-	public static final float SPEED_MODIFIER = 0.9f;
+	public static final float SPEED_MODIFIER = 0.95f;
 	public StatusBleed(GameElement owner) {
 		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, DURATION, 1);
 		this.setMoveSpeedModifier(SPEED_MODIFIER);

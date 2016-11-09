@@ -14,7 +14,7 @@ public class Dio extends Unit {
 	public static final double HP_PER_LEVEL = 75;
 	public static final double SPEED = 1.2;
 	public static final double SPEED_PER_LEVEL = 0.10;
-	public static final int MOVES_PER_FIRE = 10;
+	public static final int MOVES_PER_FIRE = 9;
 	public static final int MOVES_VARIATION = 5;
 	public static final float FIRE_FOLLOW_CHANCE = 0.5f;
 	public static final float COOLDOWN_MULT_PER_LEVEL = 0.99f;
@@ -84,6 +84,7 @@ public class Dio extends Unit {
 				this.aimAtTrackedUnit();
 				this.castSpell(new ZaWarudo(this));
 				this.zaWarudoTimer = (float)(ZA_WARUDO_COOLDOWN * Math.pow(COOLDOWN_MULT_PER_LEVEL, this.level)) + ZaWarudo.STOP_TIME;
+				this.knifeThrowTimer = 0;
 			}
 		} else {
 			if(this.knifeThrowTimer <= 0 && Math.random() < KNIFE_THROW_CHANCE_ZA_WARUDO) {
@@ -98,6 +99,7 @@ public class Dio extends Unit {
 			}
 			else if(Math.random() < ZA_WARUDO_FOLLOW_CHANCE) {
 				this.aimAtTrackedUnit();
+				this.putMoveCooldown();
 			}
 		}
 		if(this.moves <= 0) {
@@ -107,7 +109,7 @@ public class Dio extends Unit {
 			this.castSpell(SpellSelector.getRandomSpell(this));
 			this.refreshMoves();
 		} else {
-			this.moveRandom4(false, false, true, true, true, false);
+			this.moveRandom4(true, false, true, true, true, false);
 		}
 	}
 	@Override
@@ -150,23 +152,23 @@ public class Dio extends Unit {
 		if(this.unitToTrack != null) {
 			if(this.unitToTrack.gridLoc.y < this.gridLoc.y) { //move up
 				if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(0, -1)))) {
-					this.move(GameMap.ID_UP, false, false, true, true, true, false);
+					this.move(GameMap.ID_UP, true, false, true, true, true, false);
 				} else if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(-1, -1)))) { //look into the future, see if there's obstruction
-					this.move(GameMap.ID_LEFT, false, false, true, true, true, false); //move off to the side
+					this.move(GameMap.ID_LEFT, true, false, true, true, true, false); //move off to the side
 				} else if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(1, -1)))) {
-					this.move(GameMap.ID_RIGHT, false, false, true, true, true, false);
+					this.move(GameMap.ID_RIGHT, true, false, true, true, true, false);
 				} else {
-					this.moveRandom4(false, false, true, true, true, false);
+					this.moveRandom4(true, false, true, true, true, false);
 				}
 			} else if(this.unitToTrack.gridLoc.y > this.gridLoc.y) { //move down
 				if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(0, 1)))) {
-					this.move(GameMap.ID_DOWN, false, false, true, true, true, false);
+					this.move(GameMap.ID_DOWN, true, false, true, true, true, false);
 				} else if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(-1, 1)))) { //look into the future, see if there's obstruction
-					this.move(GameMap.ID_LEFT, false, false, true, true, true, false); //move off to the side
+					this.move(GameMap.ID_LEFT, true, false, true, true, true, false); //move off to the side
 				} else if(this.canMoveToLoc(Point.add(this.gridLoc, new Point(1, 1)))) {
-					this.move(GameMap.ID_RIGHT, false, false, true, true, true, false);
+					this.move(GameMap.ID_RIGHT, true, false, true, true, true, false);
 				} else {
-					this.moveRandom4(false, false, true, true, true, false);
+					this.moveRandom4(true, false, true, true, true, false);
 				}
 			}
 		}

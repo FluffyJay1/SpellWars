@@ -14,7 +14,7 @@ public class Vulcan extends Spell {
 	public static final float STUN_DURATION = 1f;
 	public static final int NUM_SHOTS = 5;
 	public static final float DURATION = 0.5f;
-	public static final double SPEED = 24;
+	public static final double SPEED = 28;
 	int shotsFired;
 	public Vulcan(Unit owner) {
 		super(owner, 0, DURATION, "Vulcan", "Shoot a rapid-fire volley of bullets, and if the enemy is casting, it deals extra damage and stuns", "res/spell/vulcan.png", false, true);

@@ -7,7 +7,7 @@ import unit.Unit;
 
 public class KnifeVolley extends Spell {
 	public static final int DAMAGE = 10;
-	public static final int NUM_SHOTS = 13;
+	public static final int NUM_SHOTS = 10;
 	public static final float DURATION = 0.6f;
 	int shotsFired;
 	public KnifeVolley(Unit owner) {
