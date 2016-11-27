@@ -12,8 +12,8 @@ import projectile.Projectile;
 import unit.Unit;
 
 public class WishUponALuckyStar extends Spell {
-	public static final int DAMAGE = 50;
-	public static final int AREA_DAMAGE = 25;
+	public static final double DAMAGE = 50;
+	public static final double AREA_DAMAGE = 25;
 	public static final float STANDARD_WEIGHT = 6;
 	public static final float SMALL_SHOWER_WEIGHT = 3;
 	public static final float BIG_SHOWER_WEIGHT = 2;
@@ -28,7 +28,7 @@ public class WishUponALuckyStar extends Spell {
 	int extraStarsReleased;
 	ArrayList<Point> availableLandingPoints;
 	public WishUponALuckyStar(Unit owner) {
-		super(owner, 0.1f, BIG_SHOWER_DURATION, "Wish upon a lucky star", "A star lands 4 panels ahead, more things may happen depending on your luck", "res/projectile/luckystar.png", false);
+		super(owner, 0.1f, BIG_SHOWER_DURATION, "Wish upon a lucky star", "A star lands 4 panels ahead, penetrating and obliterating all shields and barriers, more things may happen depending on your luck", "res/projectile/luckystar.png", false);
 	}
 	@Override
 	public void onActivate() {
@@ -38,21 +38,21 @@ public class WishUponALuckyStar extends Spell {
 		this.availableLandingPoints = new ArrayList<Point>();
 		double random = Math.random() * (STANDARD_WEIGHT + SMALL_SHOWER_WEIGHT + BIG_SHOWER_WEIGHT + BIG_STAR_WEIGHT);
 		if(random < STANDARD_WEIGHT) {
-			Projectile p = new LuckyStarGrenadeSmall((int)(DAMAGE * this.owner.finalDamageModifier), 4, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+			Projectile p = new LuckyStarGrenadeSmall(DAMAGE * this.owner.finalDamageOutputModifier, 4, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 			this.getMap().addGameElement(p);
 			this.finishSpell();
 		} else if(random < STANDARD_WEIGHT + SMALL_SHOWER_WEIGHT) {
-			Projectile p = new LuckyStarGrenadeSmall((int)(DAMAGE * this.owner.finalDamageModifier), 4, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+			Projectile p = new LuckyStarGrenadeSmall(DAMAGE * this.owner.finalDamageOutputModifier, 4, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 			this.getMap().addGameElement(p);
 			this.type = 1;
 			this.getAvailableLandingPoints();
 		} else if(random < STANDARD_WEIGHT + SMALL_SHOWER_WEIGHT + BIG_SHOWER_WEIGHT) {
-			Projectile p = new LuckyStarGrenadeSmall((int)(DAMAGE * this.owner.finalDamageModifier), 4, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+			Projectile p = new LuckyStarGrenadeSmall(DAMAGE * this.owner.finalDamageOutputModifier, 4, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 			this.getMap().addGameElement(p);
 			this.type = 2;
 			this.getAvailableLandingPoints();
 		} else {
-			Projectile p = new LuckyStarGrenadeBig((int)(DAMAGE * this.owner.finalDamageModifier), (int)(AREA_DAMAGE * this.owner.finalDamageModifier), this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+			Projectile p = new LuckyStarGrenadeBig(DAMAGE * this.owner.finalDamageOutputModifier, AREA_DAMAGE * this.owner.finalDamageOutputModifier, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 			this.getMap().addGameElement(p);
 			this.finishSpell();
 		}
@@ -101,7 +101,7 @@ public class WishUponALuckyStar extends Spell {
 			distance--;
 			spawnPoint = Point.add(randomPoint, Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.teamID), distance));
 		}
-		Projectile p = new LuckyStarGrenadeSmall((int)(DAMAGE * this.owner.finalDamageModifier), distance, this.owner.direction, spawnPoint, this.owner.teamID);
+		Projectile p = new LuckyStarGrenadeSmall(DAMAGE * this.owner.finalDamageOutputModifier, distance, this.owner.direction, spawnPoint, this.owner.teamID);
 		this.getMap().addGameElement(p);
 	}
 }

@@ -23,9 +23,12 @@ public class StatusEffect {
 	float moveSpeedModifier; //as a multiplier
 	float attackSpeedModifier; //as a percent
 	float attackDamageModifier; //as a multiplier
+	float damageInputModifier;
+	float healInputModifier;
 	float maxDuration;
 	float duration; //in seconds
 	boolean isPermanent;
+	public boolean isBuff, isPurgable;
 	float damagePerInterval;
 	String id;
 	Image icon;
@@ -40,7 +43,7 @@ public class StatusEffect {
 	private Color ownerColorModifier;
 	boolean disableUnitControl;
 	
-	public StatusEffect(GameElement owner, StackingProperty stackingProperty, String id, float duration, int level) {
+	public StatusEffect(GameElement owner, StackingProperty stackingProperty, String id, float duration, boolean isBuff, boolean isPurgable, int level) {
 		super();
 		this.setOwner(owner);
 		this.stackingProperty = stackingProperty;
@@ -51,6 +54,8 @@ public class StatusEffect {
 		this.attackDamageModifier = 1;
 		this.attackSpeedModifier = 0;
 		this.moveSpeedModifier = 1;
+		this.damageInputModifier = 1;
+		this.healInputModifier = 1;
 		this.interval = 1;
 		this.damagePerInterval = 0;
 		this.remove = false;
@@ -66,13 +71,20 @@ public class StatusEffect {
 		this.drawIcon = true;
 		this.ownerColorModifier = Color.white;
 		this.disableUnitControl = false;
+		this.isBuff = isBuff;
+		this.isPurgable = isPurgable;
+	}
+	public StatusEffect() {
+		this(null, StackingProperty.STACKABLE_INDEPENDENT, "", 0, true, true, 0);
 	}
 	public void setDisableUnitControl(boolean disableUnitControl) {
-		if(this.owner instanceof Unit && !this.disableUnitControl && disableUnitControl) {
-			((Unit)this.owner).unitControl++;
-		}
-		if(this.owner instanceof Unit && this.disableUnitControl && !disableUnitControl) {
-			((Unit)this.owner).unitControl--;
+		if(this.owner != null) {
+			if(this.owner instanceof Unit && !this.disableUnitControl && disableUnitControl) {
+				((Unit)this.owner).unitControl++;
+			}
+			if(this.owner instanceof Unit && this.disableUnitControl && !disableUnitControl) {
+				((Unit)this.owner).unitControl--;
+			}
 		}
 		this.disableUnitControl = disableUnitControl;
 	}
@@ -100,19 +112,35 @@ public class StatusEffect {
 	public boolean getDrawIcon() {
 		return this.drawIcon;
 	}
-	public StatusEffect clone(){
-		StatusEffect effect = new StatusEffect(this.getOwner(), this.stackingProperty, this.id, this.maxDuration, this.level);
-		effect.damagetimer = damagetimer;
-		effect.attackDamageModifier = attackDamageModifier;
-		effect.attackSpeedModifier = attackSpeedModifier;
-		effect.moveSpeedModifier = moveSpeedModifier;
-		effect.interval = interval;
-		effect.damagePerInterval = damagePerInterval;
-		effect.isPermanent = isPermanent;
-		effect.icon = this.icon;
-		effect.numSources = this.numSources;
-		effect.drawIcon = this.drawIcon;
-		effect.muteEffect = this.muteEffect;
+	public static StatusEffect copyFromTo(StatusEffect from, StatusEffect to){
+		//StatusEffect effect = new StatusEffect(e.getOwner(), e.stackingProperty, e.id, e.maxDuration, e.level);
+		to.setOwner(from.getOwner());
+		to.stackingProperty = from.stackingProperty;
+		to.id = from.id;
+		to.duration = from.duration;
+		to.maxDuration = from.maxDuration;
+		to.level = from.level;
+		to.damagetimer = from.damagetimer;
+		to.attackDamageModifier = from.attackDamageModifier;
+		to.attackSpeedModifier = from.attackSpeedModifier;
+		to.moveSpeedModifier = from.moveSpeedModifier;
+		to.damageInputModifier = from.damageInputModifier;
+		to.healInputModifier = from.healInputModifier;
+		to.interval = from.interval;
+		to.damagePerInterval = from.damagePerInterval;
+		to.isPermanent = from.isPermanent;
+		to.icon = from.icon;
+		to.numSources = from.numSources;
+		to.drawIcon = from.drawIcon;
+		to.muteEffect = from.muteEffect;
+		to.setDisableUnitControl(from.disableUnitControl);
+		to.isBuff = from.isBuff;
+		to.isPurgable = from.isPurgable;
+		return to;
+	}
+	public StatusEffect clone() {
+		StatusEffect effect = new StatusEffect();
+		StatusEffect.copyFromTo(this, effect);
 		return effect;
 	}
 	public void update(float frametime) { //updates w/ time between frames
@@ -232,6 +260,12 @@ public class StatusEffect {
 	public void onExpired() {
 		
 	}
+	public void onOwnerDamaged(double damage) {
+		
+	}
+	public void onOwnerHealed(double heal) {
+		
+	}
 	public StackingProperty getStackingProperty() {
 		return this.stackingProperty;
 	}
@@ -289,6 +323,30 @@ public class StatusEffect {
 			this.getOwner().statusFinalModifierValueUpdate = true;
 		}
 	}
+	public float getDamageInputModifier() {
+		if(!this.muteEffect) {
+			return this.damageInputModifier;
+		}
+		return 1;
+	}
+	public void setDamageInputModifier(float mod) {
+		this.damageInputModifier = mod;
+		if(getOwner() != null) {
+			this.getOwner().statusFinalModifierValueUpdate = true;
+		}
+	}
+	public float getHealInputModifier() {
+		if(!this.muteEffect) {
+			return this.healInputModifier;
+		}
+		return 1;
+	}
+	public void setHealInputModifier(float mod) {
+		this.healInputModifier = mod;
+		if(getOwner() != null) {
+			this.getOwner().statusFinalModifierValueUpdate = true;
+		}
+	}
 	public void setDuration(float duration) {
 		this.duration = duration;
 	}
@@ -306,6 +364,7 @@ public class StatusEffect {
 	}
 	public void setOwner(GameElement owner) {
 		this.owner = owner;
+		this.setDisableUnitControl(this.disableUnitControl);
 	}
 	public void setColorModifier(Color color) {
 		this.ownerColorModifier = color;

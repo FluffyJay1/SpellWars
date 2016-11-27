@@ -4,14 +4,23 @@ import mechanic.PanelState;
 import mechanic.Point;
 import particlesystem.EmitterTypes;
 import particlesystem.ParticleEmitter;
+import shield.Shield;
+import unit.Unit;
 
 public class LuckyStarGrenadeSmall extends Grenade {
 	public static final float AIR_DURATION = 0.2f;
 	public static final float START_HEIGHT = 1200;
 	public static final float END_HEIGHT = 40;
-	public LuckyStarGrenadeSmall(int damage, int distance, int direction, Point gridLoc, int teamID) {
+	public LuckyStarGrenadeSmall(double damage, int distance, int direction, Point gridLoc, int teamID) {
 		super(damage, AIR_DURATION, distance, START_HEIGHT, END_HEIGHT, direction, gridLoc, "res/projectile/luckystar.png", teamID);
 		this.drawShadow = false;
+		this.setPenetrateShields(true);
+	}
+	@Override
+	public void onGrenadeTargetHit(Unit target) {
+		for(Shield s : target.getShields()) {
+			s.isDead = true;
+		}
 	}
 	@Override
 	public void onGrenadeLanded() {

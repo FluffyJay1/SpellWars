@@ -9,7 +9,7 @@ import projectile.WindProjectile;
 import unit.Unit;
 
 public class Vulcan extends Spell {
-	public static final int DAMAGE = 10;
+	public static final double DAMAGE = 10;
 	public static final int BONUS_DAMAGE = 5;
 	public static final float STUN_DURATION = 1f;
 	public static final int NUM_SHOTS = 5;
@@ -27,7 +27,7 @@ public class Vulcan extends Spell {
 	}
 	@Override
 	public void onThink() {
-		VulcanProjectile projectile = new VulcanProjectile(DAMAGE * this.owner.finalDamageModifier, BONUS_DAMAGE * this.owner.finalDamageModifier, STUN_DURATION, SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+		VulcanProjectile projectile = new VulcanProjectile(DAMAGE * this.owner.finalDamageOutputModifier, BONUS_DAMAGE * this.owner.finalDamageOutputModifier, STUN_DURATION, SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 		this.getMap().addGameElement(projectile);
 		this.shotsFired++;
 		float direction = 0;

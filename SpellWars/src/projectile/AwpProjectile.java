@@ -16,6 +16,7 @@ public class AwpProjectile extends Projectile {
 		this.setFlashPanel(false);
 		this.setDrawHeight(32);
 		this.setImageScale(2);
+		this.setPenetrateShields(true);
 	}
 	@Override
 	public void onProjectileSetMap() {

@@ -24,7 +24,7 @@ public class HopesAndDreams extends Spell {
 	}
 	@Override
 	public void onActivate() {
-		last = new LuckyStarGrenadeBig((int)(DAMAGE * this.owner.finalDamageModifier), (int)(AREA_DAMAGE * this.owner.finalDamageModifier), this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+		last = new LuckyStarGrenadeBig(DAMAGE * this.owner.finalDamageOutputModifier, AREA_DAMAGE * this.owner.finalDamageOutputModifier, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 		this.hasLaunchedAtUnits = false;
 		this.timer = 0;
 		this.strikes = 0;
@@ -55,7 +55,7 @@ public class HopesAndDreams extends Spell {
 			distance--;
 			spawnPoint = Point.add(destination, Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.teamID), distance));
 		}
-		Projectile p = new LuckyStarGrenadeSmall((int)(DAMAGE * this.owner.finalDamageModifier), distance, this.owner.direction, spawnPoint, this.owner.teamID);
+		Projectile p = new LuckyStarGrenadeSmall(DAMAGE * this.owner.finalDamageOutputModifier, distance, this.owner.direction, spawnPoint, this.owner.teamID);
 		this.getMap().addGameElement(p);
 	}
 	private void launchShower() {
@@ -66,7 +66,7 @@ public class HopesAndDreams extends Spell {
 			distance--;
 			spawnPoint = Point.add(randomPoint, Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.teamID), distance));
 		}
-		Projectile p = new LuckyStarGrenadeSmall((int)(DAMAGE * this.owner.finalDamageModifier), distance, this.owner.direction, spawnPoint, this.owner.teamID);
+		Projectile p = new LuckyStarGrenadeSmall(DAMAGE * this.owner.finalDamageOutputModifier, distance, this.owner.direction, spawnPoint, this.owner.teamID);
 		this.getMap().addGameElement(p);
 	}
 }

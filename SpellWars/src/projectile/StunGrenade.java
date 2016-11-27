@@ -10,7 +10,7 @@ public class StunGrenade extends Grenade {
 	public static final Point[] AFFECTED_POINTS = {new Point(), new Point(1, 0), new Point(0, 1), new Point(0, -1), new Point(-1, 0)};
 	float maxStunDuration;
 	float minStunDuration;
-	public StunGrenade(int damage, float maxStunDuration, float minStunDuration, int direction, Point gridLoc, int teamID) {
+	public StunGrenade(double damage, float maxStunDuration, float minStunDuration, int direction, Point gridLoc, int teamID) {
 		super(damage, AIR_DURATION, 4, 70, 10, direction, gridLoc, "res/particle_genericBlue.png", teamID);
 		this.setImageScale(3);
 		this.maxStunDuration = maxStunDuration;

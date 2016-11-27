@@ -8,14 +8,14 @@ import projectile.Projectile;
 import unit.Unit;
 
 public class PistolShot extends Spell {
-	public static final int DAMAGE = 50;
+	public static final double DAMAGE = 50;
 	public static final int SPEED = 32;
 	public PistolShot(Unit owner) {
 		super(owner, 0, 0, "Pistol Shot", "Fires a boring, but fast and hard-hitting projectile at the enemy", "res/spell/pistolshot.png", false);
 	}
 	@Override
 	public void onActivate() {
-		Projectile projectile = new Projectile(DAMAGE * this.owner.finalDamageModifier, SPEED, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), this.owner.gridLoc, "res/particle_genericRed.png", this.owner.teamID, true, true, true);
+		Projectile projectile = new Projectile(DAMAGE * this.owner.finalDamageOutputModifier, SPEED, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), this.owner.gridLoc, "res/particle_genericRed.png", this.owner.teamID, true, true, true);
 		this.map.addGameElement(projectile);
 		projectile.setDrawHeight(28);
 		projectile.setImageScale(5);

@@ -30,6 +30,7 @@ public class ElectroBoltProjectile extends Projectile {
 	@Override
 	public void onTargetHit(Unit target) {
 		target.stun(this.stunDuration);
+		target.purgeBuffs();
 		ParticleEmitter pe = new ParticleEmitter(Point.add(target.getLoc(), new Point(0, -50)), EmitterTypes.CIRCLE_DIRECTION, "res/particle_genericYellow.png", false, //point/parent, emitter type, image path, alphaDecay
 				2.5f, 3.5f, //particle start scale
 				0.0f, 0.0f, //particle end scale

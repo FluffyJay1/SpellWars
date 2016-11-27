@@ -4,7 +4,7 @@ import projectile.MeiFrostProjectile;
 import unit.Unit;
 
 public class EndothermicBlasterPrimary extends Spell {
-	public static final int DAMAGE = 2;
+	public static final double DAMAGE = 2;
 	public static final int MIN_SHOTS = 3;
 	public static final int MAX_SHOTS = 6;
 	public static final float SHOT_INTERVAL = 0.1f;
@@ -19,7 +19,7 @@ public class EndothermicBlasterPrimary extends Spell {
 		this.onThink();
 	}
 	public void onThink() {
-		MeiFrostProjectile p = new MeiFrostProjectile(DAMAGE * this.owner.finalDamageModifier, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+		MeiFrostProjectile p = new MeiFrostProjectile(DAMAGE * this.owner.finalDamageOutputModifier, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 		this.getMap().addGameElement(p);
 		this.numShots--;
 		if(this.numShots <= 0) {

@@ -17,6 +17,7 @@ import projectile.Projectile;
 import shield.Shield;
 import spell.Spell;
 import states.StateGame;
+import statuseffect.StatusEffect;
 import ui.Text;
 import ui.TextFormat;
 
@@ -135,6 +136,15 @@ public class Unit extends GameElement {
 	public ArrayList<Shield> getShields() {
 		return this.shields;
 	}
+	public ArrayList<Shield> getActiveShields() {
+		ArrayList<Shield> shields = new ArrayList<Shield>();
+		for(Shield s : this.shields) {
+			if(!s.isDead) {
+				shields.add(s);
+			}
+		}
+		return shields;
+	}
 	public boolean hasActivelyProtectingShields() {
 		for(Shield s : this.shields) {
 			if(s.getHP() > 0) {
@@ -145,12 +155,12 @@ public class Unit extends GameElement {
 	}
 	@Override
 	public boolean doDamage(double damage){
-		return this.doDamage(damage, false, null);
+		return this.doDamage(damage, true, false, null);
 	}
 	
-	public boolean doDamage(double damage, boolean ignoreShields, Projectile source){ //now with damage source
+	public boolean doDamage(double damage, boolean respectDamageInputModifier, boolean ignoreShields, Projectile source){ //now with damage source
 		boolean isKillingBlow = false;
-		if(damage > 0) {
+		if((respectDamageInputModifier && damage * this.finalDamageInputModifier > 0) || (!respectDamageInputModifier && damage > 0)) {
 			boolean damageBlocked = false;
 			if(!ignoreShields) {
 				for(int index = this.shields.size() - 1; index >= 0; index--) {
@@ -165,18 +175,58 @@ public class Unit extends GameElement {
 				}
 			}
 			if(!damageBlocked) {
-				isKillingBlow = this.changeHP(this.getHP() - damage);
-				if(source != null) {
-					this.onHitByProjectile(source);
-				}
-				for(Shield s : this.shields) {
-					s.onOwnerDamaged(damage);
+				if(respectDamageInputModifier) {
+					for(StatusEffect s : this.getStatusEffects()) {
+						s.onOwnerDamaged(damage * this.finalDamageInputModifier);
+					}
+					for(Shield s : this.getActiveShields()) {
+						s.onOwnerDamaged(damage * this.finalDamageInputModifier);
+					}
+					isKillingBlow = this.changeHP(this.getHP() - damage * this.finalDamageInputModifier);
+					if(source != null) {
+						this.onHitByProjectile(source);
+					}
+				} else {
+					for(StatusEffect s : this.getStatusEffects()) {
+						s.onOwnerDamaged(damage);
+					}
+					for(Shield s : this.getActiveShields()) {
+						s.onOwnerDamaged(damage);
+					}
+					isKillingBlow = this.changeHP(this.getHP() - damage);
+					if(source != null) {
+						this.onHitByProjectile(source);
+					}
 				}
 			}
 		} else {
 			this.changeHP(this.getHP() - damage); //heal
 		}
 		return isKillingBlow;
+	}
+	@Override
+	public boolean doHeal(double heal, boolean respectHealInputModifier) {
+		if(respectHealInputModifier) {
+			if(heal * this.finalHealInputModifier > 0) {
+				for(StatusEffect s : this.getStatusEffects()) {
+					s.onOwnerHealed(heal * this.finalHealInputModifier);
+				}
+				for(Shield s : this.getActiveShields()) {
+					s.onOwnerHealed(heal * this.finalHealInputModifier);
+				}
+			}
+			return this.doDamage(-heal * this.finalHealInputModifier, false);
+		} else {
+			if(heal > 0) {
+				for(StatusEffect s : this.getStatusEffects()) {
+					s.onOwnerHealed(heal);
+				}
+				for(Shield s : this.getActiveShields()) {
+					s.onOwnerHealed(heal);
+				}
+			}
+			return this.doDamage(-heal, false);
+		}
 	}
 	public void onHitByProjectile(Projectile source) {
 		
@@ -578,7 +628,7 @@ public class Unit extends GameElement {
 	}
 	public boolean canMoveToLoc(Point loc, GameMap map) {
 		return map.pointIsInGrid(loc) && (map.getPanelAt(loc).teamID == this.teamID || this.ignoreTeam) && map.getPanelAt(loc).unitStandingOnPanel == null
-				&& !(!this.ignoreHoles && map.getPanelAt(loc).getPanelState() == PanelState.HOLE);
+				&& !(!this.ignoreHoles && map.getPanelAt(loc).getPanelState() == PanelState.HOLE) || Point.equals(this.gridLoc, loc);
 	}
 	public boolean castSpell(Spell spell, boolean ignoreStun, boolean ignoreCast, boolean ignorePause, boolean ignoreUnitControl) {
 		if((!this.isCasting || ignoreCast) && ((!ignoreStun && this.stunTimer <= 0) || ignoreStun) && (this.unitHasControl() || ignoreUnitControl) && (!this.isPaused() || ignorePause)) {

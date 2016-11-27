@@ -16,7 +16,7 @@ public class BrimstoneGrenade extends Grenade {
 	Trail trail;
 	float fireDamage;
 	float fireDuration;
-	public BrimstoneGrenade(int damage, double duration, float fireDamage, float fireDuration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
+	public BrimstoneGrenade(double damage, double duration, float fireDamage, float fireDuration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
 		super(damage, duration, endDisplacement, initialHeight, endHeight, gridLoc, imagePath, teamID);
 		this.setImage("res/projectile/lavagrenade.png");
 		this.fireDuration = fireDuration;
@@ -50,7 +50,7 @@ public class BrimstoneGrenade extends Grenade {
 		this.getMap().addParticleEmitter(pe);
 	}
 	@Override
-	public void onGrenadeHitTarget(Unit target) {
+	public void onGrenadeTargetHit(Unit target) {
 		target.addStatusEffect(new StatusFire(target, this.fireDamage, this.fireDuration));
 	}
 	@Override

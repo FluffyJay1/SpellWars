@@ -13,6 +13,5 @@ public class CryoFreeze extends Spell {
 	public void onActivate() {
 		CryoFreezeShield shield = new CryoFreezeShield(this.owner, HEALING/DURATION, DURATION);
 		this.getMap().addGameElement(shield);
-		this.owner.stun(DURATION);
 	}
 }

@@ -33,7 +33,9 @@ public abstract class GameElement {
 	private double speed;
 	
 	public float finalSpeedModifier;
-	public float finalDamageModifier;
+	public float finalDamageOutputModifier;
+	public float finalDamageInputModifier;
+	public float finalHealInputModifier;
 	
 	private double orientation; // in degrees
 	private Point loc;
@@ -83,7 +85,9 @@ public abstract class GameElement {
 		this.setImage(imagePath);
 		this.remove = false;
 		this.finalSpeedModifier = 1;
-		this.finalDamageModifier = 1;
+		this.finalDamageOutputModifier = 1;
+		this.finalDamageInputModifier = 1;
+		this.finalHealInputModifier = 1;
 		this.frametime = 0;
 		this.timescale = 1;
 		this.drawHeight = 0;
@@ -367,12 +371,49 @@ public abstract class GameElement {
 	 * @param damageType The type of damage to deal
 	 * @return Whether or not that was the killing blow
 	 */
-	public boolean doDamage(double damage){
-		boolean isKillingBlow = this.changeHP(this.hp - damage);
-		if(damage > 0) {
-			this.onDamaged(damage);
+	public boolean doDamage(double damage, boolean respectDamageInputModifier){
+		boolean isKillingBlow;
+		if(respectDamageInputModifier) { //amplify damage, not healing
+			if(damage * this.finalDamageInputModifier > 0) {
+				for(StatusEffect s : this.getStatusEffects()) {
+					s.onOwnerDamaged(damage * this.finalDamageInputModifier);
+				}
+				this.onDamaged(damage * this.finalDamageInputModifier);
+			}
+			isKillingBlow = this.changeHP(this.hp - damage * this.finalDamageInputModifier);
+		} else {
+			if(damage > 0) {
+				for(StatusEffect s : this.getStatusEffects()) {
+					s.onOwnerDamaged(damage);
+				}
+				this.onDamaged(damage);
+			}
+			isKillingBlow = this.changeHP(this.hp - damage);
 		}
 		return isKillingBlow;
+	}
+	public boolean doDamage(double damage) {
+		return this.doDamage(damage, true);
+	}
+	public boolean doHeal(double heal, boolean respectHealInputModifier) {
+		if(respectHealInputModifier) {
+			if(heal > 0) {
+				for(StatusEffect s : this.getStatusEffects()) {
+					s.onOwnerHealed(heal * this.finalHealInputModifier);
+				}
+			}
+			return this.doDamage(-heal * this.finalHealInputModifier, false);
+		} else {
+			if(heal > 0) {
+				for(StatusEffect s : this.getStatusEffects()) {
+					s.onOwnerHealed(heal);
+				}
+			}
+			return this.doDamage(-heal, false);
+		}
+	}
+	public boolean doHeal(double heal) {
+		return this.doHeal(heal, true);
 	}
 	/**
 	 * Called when damage is dealt
@@ -381,6 +422,9 @@ public abstract class GameElement {
 	 * @param type The type of damage
 	 */
 	public void onDamaged(double damage) {
+		
+	}
+	public void onHealed(double heal) {
 		
 	}
 	public void setPause(boolean pause) {
@@ -602,16 +646,17 @@ public abstract class GameElement {
 			this.statuseffects.add(effect); //adds the effect in the end
 			this.statusFinalModifierValueUpdate = true; //flags for concantonating all the bonuses
 		}
+		effect.setOwner(this);
 	}
 	public void removeStatusEffect(String id) {
-		for(StatusEffect e : this.statuseffects) { //goes through all status effects
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
 			if(e.getStatusType() == id) { //if it finds an existing status effect with the same type
 				e.setRemove(true);
 			}
 		}
 	}
 	public boolean hasStatusEffect(String id) {
-		for(StatusEffect e : this.statuseffects) { //goes through all status effects
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
 			if(e.getStatusType() == id && !e.getRemove()) { //if it finds an existing status effect with the same type
 				return true;
 			}
@@ -619,7 +664,7 @@ public abstract class GameElement {
 		return false;
 	}
 	public boolean hasStatusEffect(String id, int level) {
-		for(StatusEffect e : this.statuseffects) { //goes through all status effects
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
 			if(e.getStatusType() == id && !e.getRemove() && e.getLevel() == level) { //if it finds an existing status effect with the same type
 				return true;
 			}
@@ -627,7 +672,7 @@ public abstract class GameElement {
 		return false;
 	}
 	public StatusEffect getFirstStatusEffect(String id) {
-		for(StatusEffect e : this.statuseffects) { //goes through all status effects
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
 			if(e.getStatusType() == id && !e.getRemove()) { //if it finds an existing status effect with the same type
 				return e;
 			}
@@ -635,7 +680,7 @@ public abstract class GameElement {
 		return null;
 	}
 	public StatusEffect getFirstStatusEffect(String id, int level) {
-		for(StatusEffect e : this.statuseffects) { //goes through all status effects
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
 			if(e.getStatusType() == id && !e.getRemove() && e.getLevel() == level) { //if it finds an existing status effect with the same type
 				return e;
 			}
@@ -644,7 +689,7 @@ public abstract class GameElement {
 	}
 	public ArrayList<StatusEffect> getStatusEffects(String id) {
 		ArrayList<StatusEffect> effects = new ArrayList<StatusEffect>();
-		for(StatusEffect e : this.statuseffects) { //goes through all status effects
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
 			if(e.getStatusType() == id && !e.getRemove()) { //if it finds an existing status effect with the same type
 				effects.add(e);
 			}
@@ -653,8 +698,82 @@ public abstract class GameElement {
 	}
 	public int getStatusEffectCount(String type) {
 		int count = 0;
-		for(StatusEffect e : this.statuseffects) { //goes through all status effects
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
 			if(e.getStatusType() == type && !e.getRemove()) { //if it finds an existing status effect with the same type
+				count++;
+			}
+		}
+		return count;
+	}
+	public ArrayList<StatusEffect> getBuffs() {
+		ArrayList<StatusEffect> buffs = new ArrayList<StatusEffect>();
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
+			if(e.isBuff) {
+				buffs.add(e);
+			}
+		}
+		return buffs;
+	}
+	public ArrayList<StatusEffect> getDebuffs() {
+		ArrayList<StatusEffect> debuffs = new ArrayList<StatusEffect>();
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
+			if(!e.isBuff) {
+				debuffs.add(e);
+			}
+		}
+		return debuffs;
+	}
+	public ArrayList<StatusEffect> getPurgableBuffs() {
+		ArrayList<StatusEffect> buffs = new ArrayList<StatusEffect>();
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
+			if(e.isBuff && e.isPurgable) {
+				buffs.add(e);
+			}
+		}
+		return buffs;
+	}
+	public ArrayList<StatusEffect> getPurgableDebuffs() {
+		ArrayList<StatusEffect> debuffs = new ArrayList<StatusEffect>();
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
+			if(!e.isBuff && e.isPurgable) {
+				debuffs.add(e);
+			}
+		}
+		return debuffs;
+	}
+	public int getBuffCount() {
+		int count = 0;
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
+			if(e.isBuff) {
+				count++;
+			}
+		}
+		return count;
+	}
+	public int getDebuffCount() {
+		int count = 0;
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
+			if(!e.isBuff) {
+				count++;
+			}
+		}
+		return count;
+	}
+	public int purgeBuffs() { //returns the number of buffs purged
+		int count = 0;
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
+			if(e.isBuff && e.isPurgable) { //if it finds a purgable buff
+				e.setRemove(true);
+				count++;
+			}
+		}
+		return count;
+	}
+	public int purgeDebuffs() { //returns the number of debuffs purged
+		int count = 0;
+		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects
+			if(!e.isBuff && e.isPurgable) { //if it finds a purgable debuff
+				e.setRemove(true);
 				count++;
 			}
 		}
@@ -663,12 +782,20 @@ public abstract class GameElement {
 	public void updateFinalModifiers() {//updates the final speed and damage and resistance modifiers
 		float sModifier = 1;
 		float aModifier = 1;
-		for(StatusEffect e : this.statuseffects) { //Concantonates all the bonuses into one value
-			sModifier *= e.getMoveSpeedModifier();
-			aModifier *= e.getAttackDamageModifier();
+		float iModifier = 1;
+		float hModifier = 1;
+		for(StatusEffect e : this.getStatusEffects()) { //Cocantonates all the bonuses into one value
+			if(!e.getRemove()) {
+				sModifier *= e.getMoveSpeedModifier();
+				aModifier *= e.getAttackDamageModifier();
+				iModifier *= e.getDamageInputModifier();
+				hModifier *= e.getHealInputModifier();
+			}
 		}
 		this.finalSpeedModifier = sModifier;
-		this.finalDamageModifier = aModifier;
+		this.finalDamageOutputModifier = aModifier;
+		this.finalDamageInputModifier = iModifier;
+		this.finalHealInputModifier = hModifier;
 	}
 	public void updateStatusEffects() { //each status effect runs its own code
 		for(StatusEffect e : this.statuseffects) {

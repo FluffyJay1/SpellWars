@@ -10,7 +10,7 @@ public class StatusShock extends StatusEffect {
 	static Image icon;
 	static boolean imageLoaded = false;
 	public StatusShock(GameElement owner, float duration, float impactResistanceModifier, int level) {
-		super(owner, StackingProperty.UNSTACKABLE_REPLACE, ID, duration, level);
+		super(owner, StackingProperty.UNSTACKABLE_REPLACE, ID, duration, false, true, level);
 		//this.setResistanceModifier(DamageType.IMPACT, impactResistanceModifier);
 		if(imageLoaded == false) {
 			try {

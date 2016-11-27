@@ -10,7 +10,7 @@ public class KnifeThrow extends Spell {
 	}
 	@Override
 	public void onActivate() {
-		this.map.addGameElement(new KnifeProjectile(DAMAGE * this.owner.finalDamageModifier, this.owner.direction, this.owner.gridLoc, this.owner.teamID));
+		this.map.addGameElement(new KnifeProjectile(DAMAGE * this.owner.finalDamageOutputModifier, this.owner.direction, this.owner.gridLoc, this.owner.teamID));
 		this.finishSpell();
 	}
 }

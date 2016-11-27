@@ -19,11 +19,9 @@ public class StatusTimeDilation extends StatusEffect {
 	public static final float UPDATE_INTERVAL = 0.25f;
 	public static final float SPEED_DECAY_PER_INTERVAL = 0.82f;
 	//public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
-	boolean isBuff;
 	//float damageChange;
 	public StatusTimeDilation(GameElement owner, float speedModifier, float duration, int level) {
-		super(owner, StackingProperty.UNSTACKABLE_REPLACE, ID, duration, level);
-		this.isBuff = speedModifier >= 1;
+		super(owner, StackingProperty.UNSTACKABLE_REPLACE, ID, duration, speedModifier >= 1, true, level);
 		this.setIcon("res/statuseffect/icon_timedilation.png");
 		this.interval = UPDATE_INTERVAL;
 		this.setMoveSpeedModifier(speedModifier);
@@ -57,7 +55,12 @@ public class StatusTimeDilation extends StatusEffect {
 			}
 		}
 	}
-	
+	@Override
+	public StatusEffect clone() {
+		StatusEffect effect = new StatusTimeDilation(this.getOwner(), 0, 0, 0);
+		StatusEffect.copyFromTo(this, effect);
+		return effect;
+	}
 	@Override
 	public void onInterval() {
 		if(this.isBuff) {

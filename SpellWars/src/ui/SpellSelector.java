@@ -15,7 +15,10 @@ import spell.AreaGrab;
 import spell.AwpShot;
 import spell.Blizzard;
 import spell.BouncingOrb;
+import spell.Chronosphere;
+import spell.CryoFreeze;
 import spell.DamageAmp;
+import spell.DebuffTransfer;
 import spell.DragonBreath;
 import spell.ElectroBolt;
 import spell.FireAndBrimstone;
@@ -34,6 +37,7 @@ import spell.PistolShot;
 import spell.RechargingBarrier;
 import spell.ReflectBarrier;
 import spell.Regenerate;
+import spell.Sanctuary;
 import spell.SentryGun;
 import spell.ShotgunBlast;
 import spell.Spell;
@@ -309,6 +313,10 @@ public class SpellSelector extends UIElement {
 				"Knife Throw",
 				"Knife Throw",
 				"Knife Throw",
+				//CHRONOSPHERE
+				"Stun Grenade",
+				"Stun Grenade",
+				"Stun Grenade"
 		};
 		Spell[] spells = {
 			new HopesAndDreams(this.player),
@@ -316,6 +324,7 @@ public class SpellSelector extends UIElement {
 			new DragonBreath(this.player),
 			new ZaWarudo(this.player),
 			new KnifeVolley(this.player),
+			new Chronosphere(this.player),
 		};
 		boolean[] spellsDetected = new boolean[combos.length];
 		for(int i = 0; i < spellsDetected.length; i++) {
@@ -395,6 +404,8 @@ public class SpellSelector extends UIElement {
 				new Vulcan(unit),
 				new VampiricSlash(unit),
 				new ShotgunBlast(unit),
+				new DebuffTransfer(unit),
+				new Sanctuary(unit),
 		};
 		double[] weights = {0.45, //TRUMP WALL
 				0.3, //reflect barrier
@@ -403,7 +414,7 @@ public class SpellSelector extends UIElement {
 				0.7, //time bomb
 				1.1, //forge spirit
 				0.75, //hell rain
-				0.65, //stun
+				0.85, //stun
 				1.35, //bouncing orb
 				0.9, //wind cannon
 				1.7, //firebreath
@@ -418,7 +429,7 @@ public class SpellSelector extends UIElement {
 				0.3, //mud grenade
 				0.3, //lava grenade
 				0.2, //fire and brimstone
-				1.4, //wish upon a lucky star
+				1.35, //wish upon a lucky star
 				0.5, //sentry gun
 				0.2, //panel clear
 				1.5, //knife throw
@@ -426,6 +437,8 @@ public class SpellSelector extends UIElement {
 				1.4, //vulcan
 				0.7, //vampiric slash
 				0.8, //shotgun blast
+				0.4, //debuff transfer
+				0.2, //sanctuary
 		};
 		if(spells.length != weights.length) {
 			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");

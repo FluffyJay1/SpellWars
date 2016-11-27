@@ -41,6 +41,7 @@ public class Projectile extends GameElement {
 	
 	double damage;
 	public boolean canDoDamage;
+	boolean penetratesShields;
 	
 	public Projectile(double damage, double speed, int direction, Point gridLoc, String imagePath, int teamID, boolean destroyOnImpact, boolean simpleProjectile, boolean ignoreHoles) {
 		super(0, 0, speed, 0, new Point(), 1, 0, imagePath);
@@ -70,6 +71,7 @@ public class Projectile extends GameElement {
 		this.drawShadow = false;
 		this.damage = damage;
 		this.canDoDamage = true;
+		this.penetratesShields = false;
 	}
 	public Projectile(double damage, double speed, Point moveVec, Point gridLoc, String imagePath, int teamID, boolean destroyOnImpact, boolean simpleProjectile, boolean ignoreHoles) {
 		this(damage, speed, GameMap.ID_NEUTRAL, gridLoc, imagePath, teamID, destroyOnImpact, simpleProjectile, ignoreHoles);
@@ -81,6 +83,9 @@ public class Projectile extends GameElement {
 	}
 	public void setVel(Point vel) {
 		this.vel = vel;
+	}
+	public void setPenetrateShields(boolean penetratesShields) {
+		this.penetratesShields = penetratesShields;
 	}
 	@Override
 	public void onSetMap() {
@@ -158,19 +163,19 @@ public class Projectile extends GameElement {
 						this.setRemove(true);
 						this.unitsHit.clear();
 						if(this.canDoDamage) {
-							target.doDamage(this.getFinalDamage(), false, this);
-						}
-						if(this.teamID != target.teamID) {
-							this.onTargetHit(target);
+							target.doDamage(this.getFinalDamage(), true, this.penetratesShields, this);
+							if(this.teamID != target.teamID) {
+								this.onTargetHit(target);
+							}
 						}
 						break;
 					} else {
 						if(this.canDoDamage) {
-							target.doDamage(this.getFinalDamage(), false, this);
-						}
-						if(this.teamID != target.teamID) {
-							this.onTargetHit(target);
-							this.unitsHit.add(target);
+							target.doDamage(this.getFinalDamage(), true, this.penetratesShields, this);
+							if(this.teamID != target.teamID) {
+								this.onTargetHit(target);
+								this.unitsHit.add(target);
+							}
 						}
 					}
 				}
@@ -224,7 +229,7 @@ public class Projectile extends GameElement {
 		return this.damage;
 	}
 	public double getFinalDamage() {
-		return this.damage * this.finalDamageModifier;
+		return this.damage * this.finalDamageOutputModifier;
 	}
 	public Point getGridLoc() {
 		if(1 - this.thinkTimer < 0) {

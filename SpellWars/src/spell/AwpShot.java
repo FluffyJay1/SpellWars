@@ -13,11 +13,11 @@ public class AwpShot extends Spell {
 	public static final double PENETRATION_MODIFIER = 0.5;
 	AwpProjectile projectile;
 	public AwpShot(Unit owner) {
-		super(owner, 0, 0, "Awp Shot", "Shoot a bullet with deadly damage, bullet pierces with reduced damage", "res/spell/awpshot.png", true);
+		super(owner, 0, 0, "Awp Shot", "Shoot a bullet with deadly damage which penetrates shields and barriers, bullet pierces with reduced damage", "res/spell/awpshot.png", true);
 	}
 	@Override
 	public void onActivate() {
-		projectile = new AwpProjectile(DAMAGE * this.owner.finalDamageModifier, PENETRATION_MODIFIER, SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+		projectile = new AwpProjectile(DAMAGE * this.owner.finalDamageOutputModifier, PENETRATION_MODIFIER, SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 		this.getMap().addGameElement(projectile);
 		float direction = 0;
 		if(this.owner.direction == GameMap.ID_LEFT) {

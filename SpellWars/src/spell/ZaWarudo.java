@@ -30,7 +30,7 @@ public class ZaWarudo extends Spell {
 		this.timer = STOP_TIME;
 		for(Unit u : this.getMap().getUnits()) {
 			if(!u.hasStatusEffect("zawarudo") && !u.equals(this.owner)) {
-				StatusEffect s = new StatusEffect(u, StackingProperty.UNSTACKABLE_REPLACE, "zawarudo", 0.001f, 1);
+				StatusEffect s = new StatusEffect(u, StackingProperty.UNSTACKABLE_REPLACE, "zawarudo", 0.001f, false, false, 1);
 				//s.setMoveSpeedModifier(0);
 				s.setDisableUnitControl(true);
 				u.addStatusEffect(s);
@@ -43,7 +43,7 @@ public class ZaWarudo extends Spell {
 		}
 		for(Projectile p : this.getMap().getProjectiles()) {
 			if(!p.hasStatusEffect("zawarudo")) {
-				StatusEffect s = new StatusEffect(p, StackingProperty.UNSTACKABLE_REPLACE, "zawarudo", timer, 1);
+				StatusEffect s = new StatusEffect(p, StackingProperty.UNSTACKABLE_REPLACE, "zawarudo", timer, false, false, 1);
 				s.setMoveSpeedModifier(0);
 				p.addStatusEffect(s);
 			}
@@ -65,7 +65,7 @@ public class ZaWarudo extends Spell {
 			this.timerText.setText("time left:|" + (int)(this.timer + 1));
 			for(Unit u : this.getMap().getUnits()) {
 				if(!u.hasStatusEffect("zawarudo") && !u.equals(this.owner)) {
-					StatusEffect s = new StatusEffect(u, StackingProperty.UNSTACKABLE_REPLACE, "zawarudo", 0, 1);
+					StatusEffect s = new StatusEffect(u, StackingProperty.UNSTACKABLE_REPLACE, "zawarudo", 0, false, false, 1);
 					s.setMoveSpeedModifier(0);
 					s.setDisableUnitControl(true);
 					u.setTimeScale(0);

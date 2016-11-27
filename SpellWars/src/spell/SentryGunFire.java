@@ -16,7 +16,7 @@ public class SentryGunFire extends Spell {
 	}
 	@Override
 	public void onActivate() {
-		SentryGunProjectile p = new SentryGunProjectile(this.damage * this.owner.finalDamageModifier, PROJECTILE_SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+		SentryGunProjectile p = new SentryGunProjectile(this.damage * this.owner.finalDamageOutputModifier, PROJECTILE_SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 		this.getMap().addGameElement(p);
 		float direction = 0;
 		if(this.owner.direction == GameMap.ID_LEFT) {

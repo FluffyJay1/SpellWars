@@ -14,7 +14,7 @@ public class PlayerFire extends Spell {
 	}
 	@Override
 	public void onActivate() {
-		Projectile projectile = new Projectile(5 * this.owner.finalDamageModifier, 9, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), this.owner.gridLoc, "res/particle_genericWhite.png", this.owner.teamID, true, true, true);
+		Projectile projectile = new Projectile(5 * this.owner.finalDamageOutputModifier, 9, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), this.owner.gridLoc, "res/particle_genericWhite.png", this.owner.teamID, true, true, true);
 		//Projectile projectile = new Grenade(20, 0.5, Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.direction), 4), 80, 10, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
 		projectile.setDrawHeight(10);
 		projectile.setImageScale(2);

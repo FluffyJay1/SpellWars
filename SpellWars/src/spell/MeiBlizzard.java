@@ -29,7 +29,7 @@ public class MeiBlizzard extends Spell {
 	public void onThink() {
 		for(Unit u : this.getMap().getUnitsOfTeam(GameMap.getOppositeDirection((char)this.owner.teamID))) {
 			u.addStatusEffect(new StatusFrostMei(u, 1));
-			u.doDamage(DAMAGE_PER_TICK * this.owner.finalDamageModifier);
+			u.doDamage(DAMAGE_PER_TICK * this.owner.finalDamageOutputModifier);
 		}
 		for(Panel p : this.getMap().getPanels()) {
 			if(p.teamID != this.owner.teamID) {

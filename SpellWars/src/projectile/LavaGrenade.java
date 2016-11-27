@@ -11,7 +11,7 @@ import particlesystem.ParticleEmitter;
 public class LavaGrenade extends Grenade {
 	public static final float AIR_DURATION = 1.4f;
 	public static final ArrayList<Point> AFFECTED_POINTS = Point.getIntegerPointsInCircle(1.5);
-	public LavaGrenade(int damage, int direction, Point gridLoc, int teamID) {
+	public LavaGrenade(double damage, int direction, Point gridLoc, int teamID) {
 		super(damage, AIR_DURATION, 4, 70, 10, direction, gridLoc, "res/projectile/lavagrenade.png", teamID);
 	}
 	@Override

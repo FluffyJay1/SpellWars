@@ -5,7 +5,7 @@ import unit.Unit;
 
 public class WindProjectile extends Projectile {
 	public static final float STUN_DURATION = 0.4f;
-	public WindProjectile(int damage, double speed, int direction, Point gridLoc, int teamID) {
+	public WindProjectile(double damage, double speed, int direction, Point gridLoc, int teamID) {
 		super(damage, speed, direction, gridLoc, "res/projectile/wind.png", teamID, true, true, true);
 		this.setDrawHeight(32);
 	}

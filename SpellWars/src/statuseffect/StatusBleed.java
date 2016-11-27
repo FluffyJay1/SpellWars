@@ -11,11 +11,17 @@ public class StatusBleed extends StatusEffect {
 	public static final float DAMAGE_PER_SECOND = 1;
 	public static final float SPEED_MODIFIER = 0.95f;
 	public StatusBleed(GameElement owner) {
-		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, DURATION, 1);
+		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, DURATION, false, true, 1);
 		this.setMoveSpeedModifier(SPEED_MODIFIER);
 		this.setIcon("res/statuseffect/icon_bleed.png");
 		this.damagePerInterval = DAMAGE_PER_SECOND;
 		this.interval = 1;
+	}
+	@Override
+	public StatusEffect clone() {
+		StatusEffect effect = new StatusBleed(this.getOwner());
+		StatusEffect.copyFromTo(this, effect);
+		return effect;
 	}
 	@Override
 	public void onInterval() {

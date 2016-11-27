@@ -17,6 +17,8 @@ public class Grenade extends Projectile {
 	//float a;
 	float b;
 	float c;
+	float initialHeight;
+	float endHeight;
 	float duration; //set upon construction, used to calculate how high the grenade is
 	public float timeElapsed; //time elapsed since start
 	public Point startLoc;
@@ -25,7 +27,7 @@ public class Grenade extends Projectile {
 	double grenadeDamage;
 	boolean hasHitApex;
 	public boolean flashDestinationPanel;
-	public Grenade(int damage, double duration, int distance, float initialHeight, float endHeight, int direction, Point gridLoc, String imagePath, int teamID) {
+	public Grenade(double damage, double duration, int distance, float initialHeight, float endHeight, int direction, Point gridLoc, String imagePath, int teamID) {
 		super(0, distance/duration, direction, gridLoc, imagePath, teamID, false, true, true);
 		this.distance = distance;
 		this.duration = (float)duration;
@@ -34,6 +36,8 @@ public class Grenade extends Projectile {
 		//this.a = (float) -(Math.pow((distance - initialHeight/distance), 2)/(4 * maxHeight - initialHeight)); //this is wrong 
 		this.b = (float) (ACCELERATION * duration - (initialHeight - endHeight)/duration);
 		this.c = initialHeight;
+		this.initialHeight = initialHeight;
+		this.endHeight = endHeight;
 		this.timeElapsed = 0;
 		this.flashPanel = false;
 		this.flashDestinationPanel = true;
@@ -43,7 +47,7 @@ public class Grenade extends Projectile {
 		this.canDoDamage = false;
 		this.setDrawHeight(this.getHeightAt(this.timeElapsed));
 	}
-	public Grenade(int damage, double duration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
+	public Grenade(double damage, double duration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
 		super(0, 1/duration, endDisplacement, gridLoc, imagePath, teamID, false, true, true);
 		this.distance = (int) Point.getDistance(new Point(), endDisplacement);
 		this.duration = (float)duration;
@@ -51,6 +55,8 @@ public class Grenade extends Projectile {
 		this.endLoc = Point.add(gridLoc, endDisplacement);
 		this.b = (float) (ACCELERATION * duration - (initialHeight - endHeight)/duration);
 		this.c = initialHeight;
+		this.initialHeight = initialHeight;
+		this.endHeight = endHeight;
 		this.setDrawHeight(initialHeight);
 		this.timeElapsed = 0;
 		this.flashPanel = false;
@@ -60,6 +66,21 @@ public class Grenade extends Projectile {
 		this.hasHitApex = false;
 		this.canDoDamage = false;
 		this.setDrawHeight(this.getHeightAt(this.timeElapsed));
+	}
+	public void setInitialHeight(float initialHeight) {
+		this.initialHeight = initialHeight;
+		this.b = (float) (ACCELERATION * this.duration - (initialHeight - this.endHeight)/this.duration);
+		this.c = initialHeight;
+	}
+	public void setEndHeight(float endHeight) {
+		this.endHeight = endHeight;
+		this.b = (float) (ACCELERATION * duration - (this.initialHeight - endHeight)/this.duration);
+	}
+	public float getInitialHeight() {
+		return this.initialHeight;
+	}
+	public float getEndHeight() {
+		return this.endHeight;
 	}
 	@Override
 	public void setDamage(double damage) {
@@ -75,7 +96,7 @@ public class Grenade extends Projectile {
 	}
 	@Override
 	public double getFinalDamage() {
-		return this.grenadeDamage * this.finalDamageModifier;
+		return this.grenadeDamage * this.finalDamageOutputModifier;
 	}
 	@Override
 	public void onDraw() {
@@ -101,8 +122,10 @@ public class Grenade extends Projectile {
 			if(this.getMap().pointIsInGrid(this.endLoc)) {
 				Unit target = this.getMap().getPanelAt(this.endLoc).unitStandingOnPanel;
 				if(target != null && target.teamID != this.teamID && !this.getRemove()){
-					target.doDamage(this.getFinalDamage(), false, this);
-					this.onGrenadeHitTarget(target);
+					target.doDamage(this.getFinalDamage(), true, this.penetratesShields, this);
+					if(this.timeElapsed >= this.duration) { //IN CASE IT GETS REFLECTED, MAY SEEM REDUNDANT BUT IT'S NOT
+						this.onGrenadeTargetHit(target);
+					}
 				}
 				if(this.timeElapsed >= this.duration) { //IN CASE IT GETS REFLECTED, MAY SEEM REDUNDANT BUT IT'S NOT
 					this.onGrenadeLanded();
@@ -135,7 +158,7 @@ public class Grenade extends Projectile {
 				0, 0, 0, 0); //keyvalues
 		this.getMap().addParticleEmitter(pe);
 	}
-	public void onGrenadeHitTarget(Unit target) {
+	public void onGrenadeTargetHit(Unit target) {
 		
 	}
 	public float getHeightAt(float time) {

@@ -14,7 +14,7 @@ import unit.Unit;
 public class CrackGrenade extends Grenade {
 	float crackChance;
 	Trail trail;
-	public CrackGrenade(int damage, float crackChance, double duration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
+	public CrackGrenade(double damage, float crackChance, double duration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
 		super(damage, duration, endDisplacement, initialHeight, endHeight, gridLoc, imagePath, teamID);
 		this.crackChance = crackChance;
 	}

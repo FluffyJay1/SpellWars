@@ -6,7 +6,7 @@ import unit.Unit;
 
 public class VacuumProjectile extends Projectile {
 	public static final float STUN_DURATION = 0.4f;
-	public VacuumProjectile(int damage, double speed, int direction, Point gridLoc, int teamID) {
+	public VacuumProjectile(double damage, double speed, int direction, Point gridLoc, int teamID) {
 		super(damage, speed, direction, gridLoc, "res/projectile/vacuum.png", teamID, false, true, true);
 		this.setDrawHeight(32);
 	}

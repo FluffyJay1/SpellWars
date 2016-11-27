@@ -16,7 +16,7 @@ public class DragonBreath extends Spell {
 	int shotsFired;
 	final static float SHOT_INTERVAL = 0.075f;
 	final static int NUM_SHOTS = 25;
-	final static int DAMAGE = 5;
+	final static double DAMAGE = 5;
 	public DragonBreath(Unit owner) {
 		super(owner, 0.3f, 0, "Dragon's breath", "Shoot a whole lot of fire, and you can move while you shoot", "res/spell/dragonbreath.png", false, true);
 		spellTimer = 1.2f;
@@ -31,7 +31,7 @@ public class DragonBreath extends Spell {
 	@Override
 	public void onThink() {
 		for(int i = -1; i <= 1; i++) {
-			projectile = new Projectile(DAMAGE * this.owner.finalDamageModifier, 16, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), Point.add(this.owner.gridLoc, new Point(0, i)), "res/particle_explosion.png", this.owner.teamID, true, true, true);
+			projectile = new Projectile(DAMAGE * this.owner.finalDamageOutputModifier, 16, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), Point.add(this.owner.gridLoc, new Point(0, i)), "res/particle_explosion.png", this.owner.teamID, true, true, true);
 			projectile.setDrawHeight(10);
 			this.map.addGameElement(projectile);
 		}

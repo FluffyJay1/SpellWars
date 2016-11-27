@@ -14,12 +14,18 @@ import unit.Unit;
 public class StatusDamageAmplification extends StatusEffect {
 	public static final String ID = "damageamp";
 	public StatusDamageAmplification(GameElement owner, float damageChange, float duration, int level) {
-		super(owner, StackingProperty.UNSTACKABLE_REFRESH_DURATION, ID, duration, level);
+		super(owner, StackingProperty.UNSTACKABLE_REFRESH_DURATION, ID, duration, true, true, level);
 		this.setIcon("res/spell/damageamp.png");
 		this.interval = 0.1f;
 		if(this.getOwner() instanceof Unit) {
 			this.setAttackDamageModifier(damageChange);
 		}
+	}
+	@Override
+	public StatusEffect clone() {
+		StatusEffect effect = new StatusDamageAmplification(this.getOwner(), 0, 0, 0);
+		StatusEffect.copyFromTo(this, effect);
+		return effect;
 	}
 	@Override
 	public void onInterval() {

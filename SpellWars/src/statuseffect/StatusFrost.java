@@ -18,7 +18,7 @@ public class StatusFrost extends StatusEffect {
 	//public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
 	//float damageChange;
 	public StatusFrost(GameElement owner, float speedModifier, float damagePerSecond, float duration, float damageChange, int level) {
-		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, duration, level);
+		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, duration, false, true, level);
 		this.setIcon("res/statuseffect/icon_frost.png");
 		this.damagePerInterval = damagePerSecond;
 		this.interval = 1;
@@ -29,7 +29,12 @@ public class StatusFrost extends StatusEffect {
 		}
 		//this.setDamageType(DAMAGE_TYPE);
 	}
-	
+	@Override
+	public StatusEffect clone() {
+		StatusEffect effect = new StatusFrost(this.getOwner(), 0, 0, 0, 0, 0);
+		StatusEffect.copyFromTo(this, effect);
+		return effect;
+	}
 	@Override
 	public void onInterval() {
 		

@@ -25,7 +25,7 @@ public class Blizzard extends Spell {
 		this.onThink();
 		this.getMap().unpauseAll();
 		this.setThinkInterval(APPLY_INTERVAL);
-		this.appliedTicks = 0;
+		this.appliedTicks = 1;
 	}
 	@Override
 	public void onThink() {

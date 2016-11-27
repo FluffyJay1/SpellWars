@@ -61,8 +61,8 @@ public class VampiricSlash extends Spell {
 				Point slashLoc = Point.add(this.owner.gridLoc, Point.add(new Point(0, y), Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.direction), x)));
 				if(this.getMap().pointIsInGrid(slashLoc) && this.getMap().getPanelAt(slashLoc).unitStandingOnPanel != null && this.getMap().getPanelAt(slashLoc).unitStandingOnPanel.teamID != this.owner.teamID) {
 					Unit target = this.getMap().getPanelAt(slashLoc).unitStandingOnPanel;
-					target.doDamage(this.damage * this.owner.finalDamageModifier);
-					this.owner.doDamage(-this.damage * this.owner.finalDamageModifier);
+					target.doDamage(this.damage * this.owner.finalDamageOutputModifier);
+					this.owner.doHeal(this.damage * this.owner.finalDamageOutputModifier);
 					ParticleEmitter pe = new ParticleEmitter(Point.add(this.owner.getLoc(), new Point(0, -this.owner.getDrawHeight())), EmitterTypes.CIRCLE_DIRECTION, "res/particle_heal.png", true, /*point, emitter type, image path, alphaDecay*/
 							0.4f, 0.6f, /*particle start scale*/
 							0.4f, 0.6f, /*particle end scale*/

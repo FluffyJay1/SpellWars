@@ -56,7 +56,7 @@ public class Slash extends Spell {
 			for(int x = 1; x <= length; x++) {
 				Point slashLoc = Point.add(this.owner.gridLoc, Point.add(new Point(0, y), Point.scale(GameMap.getFuturePoint(new Point(), (char)this.owner.direction), x)));
 				if(this.getMap().pointIsInGrid(slashLoc) && this.getMap().getPanelAt(slashLoc).unitStandingOnPanel != null && this.getMap().getPanelAt(slashLoc).unitStandingOnPanel.teamID != this.owner.teamID) {
-					this.getMap().getPanelAt(slashLoc).unitStandingOnPanel.doDamage(this.damage * this.owner.finalDamageModifier);
+					this.getMap().getPanelAt(slashLoc).unitStandingOnPanel.doDamage(this.damage * this.owner.finalDamageOutputModifier);
 				}
 			}
 		}

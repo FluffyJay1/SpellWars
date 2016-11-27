@@ -28,13 +28,18 @@ public class StatusFrostMei extends StatusEffect {
 	//public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
 	//float damageChange;
 	public StatusFrostMei(GameElement owner, int level) {
-		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, DURATION, level);
+		super(owner, StackingProperty.STACKABLE_INDEPENDENT, ID, DURATION, false, true, level);
 		this.setIcon("res/statuseffect/icon_frost.png");
 		this.damagePerInterval = 0;
 		this.interval = CHECK_INTERVAL;
 		this.setMoveSpeedModifier(SPEED_MODIFIER);
 	}
-	
+	@Override
+	public StatusEffect clone() {
+		StatusEffect effect = new StatusFrostMei(this.getOwner(), 0);
+		StatusEffect.copyFromTo(this, effect);
+		return effect;
+	}
 	@Override
 	public void onInterval() {
 		this.setColorModifier(new Color(180, 180, 255));

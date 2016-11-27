@@ -33,6 +33,7 @@ public class ReflectShield extends Shield {
 			Point temploc = Point.clone(((Grenade)p).startLoc);
 			((Grenade)p).startLoc = Point.clone(((Grenade)p).endLoc);
 			((Grenade)p).endLoc = temploc;
+			((Grenade)p).setInitialHeight(((Grenade)p).getEndHeight());
 			//because a grenade does this after it moves, we have to move backwards twice
 			if(p.useMoveVec) {
 				p.move(p.vel, false, false);

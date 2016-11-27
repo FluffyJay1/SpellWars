@@ -8,7 +8,7 @@ import projectile.Projectile;
 import unit.Unit;
 
 public class TimeBombDetonate extends Spell {
-	public static final int DAMAGE = 75;
+	public static final double DAMAGE = 75;
 	/*
 	public static final Point[] AFFECTED_POINTS = {new Point(0,4),
 			new Point(-1,3), new Point(0,3), new Point(1,3),
@@ -30,7 +30,7 @@ public class TimeBombDetonate extends Spell {
 	public void onActivate() {
 		for(Point p : AFFECTED_POINTS) {
 			//Point f = Point.add(p, this.owner.gridLoc);
-			Projectile projectile = new Grenade((int)(DAMAGE * this.owner.finalDamageModifier), 1.25, p, 10, 10, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
+			Projectile projectile = new Grenade(DAMAGE * this.owner.finalDamageOutputModifier, 1.25, p, 10, 10, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
 			projectile.setImageScale(2);
 			this.map.addGameElement(projectile);
 		}

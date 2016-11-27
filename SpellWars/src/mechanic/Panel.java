@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Rectangle;
 import states.StateGame;
 import statuseffect.PanelAura;
 import statuseffect.StatusFrost;
+import statuseffect.StatusHoly;
 import statuseffect.StatusLava;
 import statuseffect.StatusMud;
 import unit.Unit;
@@ -30,8 +31,11 @@ public class Panel {
 	public static final float HOLE_RESET_TIME = 15;
 	public static final float LAVA_RESET_TIME = 20; //originally 20
 	public static final float MUD_RESET_TIME = 40;
+	public static final float HOLY_RESET_TIME = 30;
 	public static final float LAVA_DAMAGE_PER_SECOND = 10;
 	public static final float MUD_SPEED_MODIFIER = 0.5f;
+	public static final float HOLY_DAMAGE_INPUT_MODIFIER = 0.5f;
+	public static final float HOLY_HEAL_INPUT_MODIFIER = 2;
 	float panelResetTimer;
 	PanelAura aura;
 	boolean willBecomeHole; //used when the player stands on the cracked panel, to figure out when to make it a hole
@@ -41,6 +45,7 @@ public class Panel {
 	public static Image blueoutline;
 	public static Image redoutline;
 	public static Image mud;
+	public static Image holy;
 	Animation lava;
 	public static boolean imagesLoaded = false;
 	boolean drawProjectileFlash;
@@ -64,6 +69,7 @@ public class Panel {
 				blueoutline = new Image("res/panel/blueoutline.png", false, Image.FILTER_NEAREST);
 				//lavaAnimation = new Image("res/panel/lava_animation.png", false, Image.FILTER_NEAREST);
 				mud = new Image("res/panel/mud.png", false, Image.FILTER_NEAREST);
+				holy = new Image("res/panel/holy.png", false, Image.FILTER_NEAREST);
 				imagesLoaded = true;
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
@@ -101,6 +107,10 @@ public class Panel {
 		case MUD:
 			this.panelResetTimer = MUD_RESET_TIME;
 			this.aura.setEffect(new StatusMud(MUD_SPEED_MODIFIER));
+			break;
+		case HOLY:
+			this.panelResetTimer = HOLY_RESET_TIME;
+			this.aura.setEffect(new StatusHoly(HOLY_DAMAGE_INPUT_MODIFIER, HOLY_HEAL_INPUT_MODIFIER));
 			break;
 		default:
 				break;
@@ -211,6 +221,11 @@ public class Panel {
 			g.drawImage(mud.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
 			if(StateGame.isServer)
 			this.map.addToDrawInfo(GameMap.getDrawDataFN("res/panel/mud.png", this.map.gridToPosition(loc).x - panelSize.x/2, this.map.gridToPosition(loc).y - panelSize.y/2, panelSize.x, panelSize.y, 0, 255, 255, 255, 255, 0));
+			break;
+		case HOLY:
+			g.drawImage(holy.getScaledCopy((int)panelSize.x,(int)panelSize.y), (float)(this.map.gridToPosition(loc).x - panelSize.x/2),(float)(this.map.gridToPosition(loc).y - panelSize.y/2));
+			if(StateGame.isServer)
+			this.map.addToDrawInfo(GameMap.getDrawDataFN("res/panel/holy.png", this.map.gridToPosition(loc).x - panelSize.x/2, this.map.gridToPosition(loc).y - panelSize.y/2, panelSize.x, panelSize.y, 0, 255, 255, 255, 255, 0));
 			break;
 		default:
 			break;

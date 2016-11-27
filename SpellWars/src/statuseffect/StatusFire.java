@@ -18,12 +18,18 @@ public class StatusFire extends StatusEffect {
 	//public static final DamageType DAMAGE_TYPE = DamageType.MAGIC;
 	//float damageChange;
 	public StatusFire(GameElement owner, float damagePerSecond, float duration) {
-		super(owner, StackingProperty.UNSTACKABLE_REFRESH_DURATION, ID, duration, 1);
+		super(owner, StackingProperty.UNSTACKABLE_REFRESH_DURATION, ID, duration, false, true, 1);
 		this.setIcon("res/statuseffect/icon_fire.png");
 		this.damagePerInterval = 1;
 		this.interval = 1/damagePerSecond;
 		//this.damageChange = damageReduction;
 		//this.setDamageType(DAMAGE_TYPE);
+	}
+	@Override
+	public StatusEffect clone() {
+		StatusEffect effect = new StatusFire(this.getOwner(), 0, 0);
+		StatusEffect.copyFromTo(this, effect);
+		return effect;
 	}
 	@Override
 	public void onInterval() {

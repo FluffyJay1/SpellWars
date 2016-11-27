@@ -70,7 +70,7 @@ public class Shield extends GameElement {
 		this.drawOffset = y;
 	}
 	@Override
-	public boolean doDamage(double damage){
+	public boolean doDamage(double damage, boolean respectDamageModifier){
 		boolean isKillingBlow = this.changeHP(this.hp - damage);
 		if(damage > 0) {
 			this.onDamaged(damage);
@@ -208,6 +208,9 @@ public class Shield extends GameElement {
 		
 	}
 	public void onOwnerDamaged(double damage) {
+		
+	}
+	public void onOwnerHealed(double heal) {
 		
 	}
 	public void setThinkInterval(float interval) {

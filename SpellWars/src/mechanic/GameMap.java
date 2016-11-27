@@ -967,7 +967,7 @@ public class GameMap {
 		return Point.add(p, moveVec);
 	}
 	public static Point getFuturePoint(Point p, char dir, double scale) {
-		return Point.scale(getFuturePoint(p, dir), scale);
+		return Point.add(Point.scale(GameMap.getFuturePoint(new Point(), dir), scale), p);
 	}
 	public void printPanels() {
 		for(int row = 0; row < this.getGridDimensions().y; row++) {

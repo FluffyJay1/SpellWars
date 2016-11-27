@@ -17,7 +17,7 @@ import unit.Unit;
 public class FireAndBrimstone extends Spell {
 	public static final float DURATION = 5.0f;
 	public static final int NUM_STRIKES = 12;
-	public static final int DAMAGE = 5;
+	public static final double DAMAGE = 5;
 	public static final float DAMAGE_PER_SECOND = 2;
 	public static final int DAMAGE_DURATION = 20;
 	public static final float AIR_TIME = 1.00f;
@@ -63,7 +63,7 @@ public class FireAndBrimstone extends Spell {
 	public void fire() {
 		int randomIndex = (int)(Math.random()*this.affectedPanels.size() - 0.0000001);
 		Point loc = this.affectedPanels.get(randomIndex).getLoc();
-		Projectile projectile = new BrimstoneGrenade((int)(DAMAGE * this.owner.finalDamageModifier), AIR_TIME, DAMAGE_PER_SECOND, DAMAGE_DURATION, Point.subtract(loc, this.owner.gridLoc), INITIAL_HEIGHT, FINAL_HEIGHT, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
+		Projectile projectile = new BrimstoneGrenade(DAMAGE * this.owner.finalDamageOutputModifier, AIR_TIME, DAMAGE_PER_SECOND, DAMAGE_DURATION, Point.subtract(loc, this.owner.gridLoc), INITIAL_HEIGHT, FINAL_HEIGHT, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
 		projectile.setImageScale(0.75f);
 		this.map.addGameElement(projectile);
 		this.shotsFired++;

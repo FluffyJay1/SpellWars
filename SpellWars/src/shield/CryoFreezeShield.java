@@ -14,6 +14,7 @@ public class CryoFreezeShield extends Shield {
 	@Override
 	public void onThink() {
 		this.owner.doDamage(-1);
+		this.owner.stun(this.thinkInterval);
 	}
 	@Override
 	public void onUpdate() {

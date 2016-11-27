@@ -26,7 +26,7 @@ public class ShotgunBlast extends Spell {
 			if(this.owner.direction == GameMap.ID_LEFT) {
 				moveVec.x *= -1;
 			}
-			Projectile p = new ShotgunBlastProjectile(DAMAGE * this.owner.finalDamageModifier, SPEED / Point.getDistance(new Point(), moveVec), moveVec, this.owner.gridLoc, this.owner.teamID, DAMAGE_REDUCTION_PER_THINK);
+			Projectile p = new ShotgunBlastProjectile(DAMAGE * this.owner.finalDamageOutputModifier, SPEED / Point.getDistance(new Point(), moveVec), moveVec, this.owner.gridLoc, this.owner.teamID, DAMAGE_REDUCTION_PER_THINK);
 			this.getMap().addGameElement(p);
 		}
 		float direction = 0;
@@ -43,5 +43,6 @@ public class ShotgunBlast extends Spell {
 				0, 18, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
 				direction, 40, 0, 0); //keyvalues
 		this.getMap().addParticleEmitter(pe);
+		this.finishSpell();
 	}
 }
