@@ -15,7 +15,7 @@ public class RechargingShield extends Shield {
 	float damageCooldown;
 	float damageCooldownTimer;
 	Animation rechargeAnimation;
-	public RechargingShield(Unit owner, int initialAmount, int finalAmount, float duration, float rechargePerSec, float damageCooldown) {
+	public RechargingShield(Unit owner, double initialAmount, double finalAmount, float duration, float rechargePerSec, float damageCooldown) {
 		super(owner, initialAmount, finalAmount, "res/shield/rechargingshield.png");
 		this.drawHP = true;
 		this.setDrawHeight(owner.getDrawHeight());

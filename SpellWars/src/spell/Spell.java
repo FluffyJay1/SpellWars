@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import mechanic.GameElement;
 import mechanic.GameMap;
 import mechanic.Point;
+import statuseffect.StatusCorrupt;
 import ui.Text;
 import ui.TextFormat;
 import unit.Unit;
@@ -130,6 +131,11 @@ public class Spell extends GameElement {
 			this.map.unpauseAll();
 		}
 		this.setRemove(true);
+	}
+	public void corrupt() {
+		if(this.owner.getStatusEffectCount("corrupt") < 3) {
+			this.owner.addStatusEffect(new StatusCorrupt(this.owner));
+		}
 	}
 	@Override
 	public void update() {

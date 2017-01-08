@@ -19,7 +19,7 @@ public class LuckyStarGrenadeBig extends Grenade {
 		this.areaDamage = areaDamage;
 		this.drawShadow = false;
 		this.setImageScale(2.5f);
-		this.setPenetrateShields(true);
+		this.setShieldBehavior(Shield.SHIELD_IGNORE);
 	}
 	@Override
 	public void flash() {
@@ -44,7 +44,7 @@ public class LuckyStarGrenadeBig extends Grenade {
 			if(this.getMap().pointIsInGrid(f)) {
 				this.getMap().getPanelAt(f).crackLight();
 				if(this.getMap().getPanelAt(f).unitStandingOnPanel != null && this.getMap().getPanelAt(f).unitStandingOnPanel.teamID != this.teamID) {
-					this.getMap().getPanelAt(f).unitStandingOnPanel.doDamage(this.areaDamage, true, this.penetratesShields, null);
+					this.getMap().getPanelAt(f).unitStandingOnPanel.doDamage(this.areaDamage, true, this.shieldbehavior, null);
 					for(Shield s : this.getMap().getPanelAt(f).unitStandingOnPanel.getShields()) {
 						s.isDead = true;
 					}

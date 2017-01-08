@@ -5,6 +5,7 @@ import mechanic.Point;
 import particlesystem.EmitterTypes;
 import particlesystem.ParticleEmitter;
 import particlesystem.Trail;
+import shield.Shield;
 import unit.Unit;
 
 public class AwpProjectile extends Projectile {
@@ -16,7 +17,7 @@ public class AwpProjectile extends Projectile {
 		this.setFlashPanel(false);
 		this.setDrawHeight(32);
 		this.setImageScale(2);
-		this.setPenetrateShields(true);
+		this.setShieldBehavior(Shield.SHIELD_PENETRATE);
 	}
 	@Override
 	public void onProjectileSetMap() {

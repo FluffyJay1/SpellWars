@@ -13,6 +13,8 @@ import mechanic.GameMap;
 import mechanic.Panel;
 import mechanic.PanelState;
 import mechanic.Point;
+import particlesystem.EmitterTypes;
+import particlesystem.ParticleEmitter;
 import projectile.Projectile;
 import shield.Shield;
 import spell.Spell;
@@ -34,11 +36,12 @@ public class Unit extends GameElement {
 	public static final int CAST_BAR_OFFSET = 35;
 	public static final int CAST_BAR_WIDTH = 60;
 	public static final int CAST_BAR_HEIGHT = 10;
-	public static final double SHADOW_SCALE = 0.9;
+	public static final double SHADOW_SCALE = 0.8;
 	public static final float EXTRA_SHIELDS_Y_OFFSET = -18;
 	public static final float EXTRA_SHIELDS_SCALE_BONUS = 0.28f;
 	public static final float SPEED_MODIFIED_TOOLTIP_TIME = 5;
 	public static final float SPEED_MODIFIED_TOOLTIP_FADE_TIME = 2;
+	public static final double STUN_FLASH_INTERVAL = 0.075;
 	//public static final Font HP_FONT = new UnicodeFont();
 	public int direction;
 	float moveCooldown;
@@ -65,6 +68,7 @@ public class Unit extends GameElement {
 	boolean updateWithMove;
 	boolean thinkWithMove;
 	boolean drawShadow;
+	double shadowScale;
 	
 	boolean drawMoveCooldown;
 	boolean drawSpellCasting;
@@ -108,6 +112,7 @@ public class Unit extends GameElement {
 		this.spellBeingCast = null;
 		this.spellCastIgnorePause = false;
 		this.drawShadow = true;
+		this.shadowScale = 1;
 		this.stunTimer = 0;
 		this.stunDrawTimer = 0;
 		this.drawColor = Color.white;
@@ -155,14 +160,15 @@ public class Unit extends GameElement {
 	}
 	@Override
 	public boolean doDamage(double damage){
-		return this.doDamage(damage, true, false, null);
+		return this.doDamage(damage, true, 0, null);
 	}
 	
-	public boolean doDamage(double damage, boolean respectDamageInputModifier, boolean ignoreShields, Projectile source){ //now with damage source
+	public boolean doDamage(double damage, boolean respectDamageInputModifier, int shieldBehavior, Projectile source){ //now with damage source
 		boolean isKillingBlow = false;
 		if((respectDamageInputModifier && damage * this.finalDamageInputModifier > 0) || (!respectDamageInputModifier && damage > 0)) {
 			boolean damageBlocked = false;
-			if(!ignoreShields) {
+			double finaldamage = damage;
+			if(shieldBehavior == Shield.SHIELD_RESPECT) {
 				for(int index = this.shields.size() - 1; index >= 0; index--) {
 					if(this.shields.get(index).blockDamage && this.shields.get(index).getHP() > 0) { //if there is at least one shield, blocks the whole instance of damage
 						this.shields.get(index).doDamage(damage); //damages the most recent shield
@@ -173,27 +179,39 @@ public class Unit extends GameElement {
 						break;
 					}
 				}
+			} else if(shieldBehavior == Shield.SHIELD_PENETRATE) {
+				for(int index = this.shields.size() - 1; index >= 0; index--) {
+					if(this.shields.get(index).blockDamage && this.shields.get(index).getHP() > 0) { //if there is at least one shield, blocks the whole instance of damage
+						double spill = finaldamage - this.shields.get(index).getHP();
+						this.shields.get(index).doDamage(finaldamage); //damages the most recent shield
+						finaldamage = spill;
+						if(spill <= 0) {
+							damageBlocked = true;
+							break;
+						}
+					}
+				}
 			}
 			if(!damageBlocked) {
 				if(respectDamageInputModifier) {
 					for(StatusEffect s : this.getStatusEffects()) {
-						s.onOwnerDamaged(damage * this.finalDamageInputModifier);
+						s.onOwnerDamaged(finaldamage * this.finalDamageInputModifier);
 					}
 					for(Shield s : this.getActiveShields()) {
-						s.onOwnerDamaged(damage * this.finalDamageInputModifier);
+						s.onOwnerDamaged(finaldamage * this.finalDamageInputModifier);
 					}
-					isKillingBlow = this.changeHP(this.getHP() - damage * this.finalDamageInputModifier);
+					isKillingBlow = this.changeHP(this.getHP() - finaldamage * this.finalDamageInputModifier);
 					if(source != null) {
 						this.onHitByProjectile(source);
 					}
 				} else {
 					for(StatusEffect s : this.getStatusEffects()) {
-						s.onOwnerDamaged(damage);
+						s.onOwnerDamaged(finaldamage);
 					}
 					for(Shield s : this.getActiveShields()) {
-						s.onOwnerDamaged(damage);
+						s.onOwnerDamaged(finaldamage);
 					}
-					isKillingBlow = this.changeHP(this.getHP() - damage);
+					isKillingBlow = this.changeHP(this.getHP() - finaldamage);
 					if(source != null) {
 						this.onHitByProjectile(source);
 					}
@@ -287,7 +305,11 @@ public class Unit extends GameElement {
 			}
 		}
 		this.shields.removeAll(shieldsRemoveBuffer);
-		
+		if(this.isStunned()) {
+			this.stunDrawTimer += this.getFrameTime();
+		} else {
+			this.stunDrawTimer = 0;
+		}
 		this.changeLoc(this.getMap().gridToPosition(this.gridLoc));
 		if(this.stunTimer > 0) {
 			this.stunTimer -= this.getFrameTime();
@@ -321,12 +343,6 @@ public class Unit extends GameElement {
 		}
 		if(this.speedModifiedTooltipTimer > 0) {
 			this.speedModifiedTooltipTimer -= this.getFrameTime();
-		}
-		
-		if(this.isStunned()) {
-			this.stunDrawTimer += this.getFrameTime();
-		} else {
-			this.stunDrawTimer = 0;
 		}
 	}
 	public void updateDisplayHP() {
@@ -395,6 +411,32 @@ public class Unit extends GameElement {
 	}
 	public void onThink() {
 		
+	}
+	@Override
+	public void onHPSet0() {
+		ParticleEmitter pe = new ParticleEmitter(Point.add(this.getLoc(), new Point(0, -this.getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_explosion.png", true, //point/parent, emitter type, image path, alphaDecay
+				0.4f, 0.6f, //particle start scale
+				1.0f, 1.2f, //particle end scale
+				6.5f, //drag
+				-700, 700, //rotational velocity
+				0.2f, 0.65f, //min and max lifetime
+				200, 1400, //min and max launch speed
+				0.1f, 160, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
+				0, 0, 0, 0); //keyvalues
+		this.getMap().addParticleEmitter(pe);
+	}
+	@Override
+	public void onDeath() {
+		ParticleEmitter pe = new ParticleEmitter(Point.add(this.getLoc(), new Point(0, -this.getDrawHeight())), EmitterTypes.POINT_RADIAL, "res/particle_genericWhite.png", true, //point/parent, emitter type, image path, alphaDecay
+				3.5f, 4.6f, //particle start scale
+				12.2f, 16.5f, //particle end scale
+				8.5f, //drag
+				-700, 700, //rotational velocity
+				0.6f, 1.0f, //min and max lifetime
+				500, 1900, //min and max launch speed
+				0, 7, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
+				0, 0, 0, 0); //keyvalues
+		this.getMap().addParticleEmitter(pe);
 	}
 	public void setThinkInterval(float interval) {
 		this.think = true;
@@ -465,7 +507,7 @@ public class Unit extends GameElement {
 				if(StateGame.isServer)
 				this.getMap().addToDrawInfo(GameMap.getDrawDataR(this.getLoc().x - CAST_BAR_WIDTH/2, this.getLoc().y + CAST_BAR_OFFSET, barwidth, CAST_BAR_HEIGHT, g.getColor().getRedByte(), g.getColor().getGreenByte(), g.getColor().getBlueByte(), g.getColor().getAlphaByte()));
 			}
-			if(this.stunTimer > 0 && this.stunDrawTimer % 0.15 > 0.075) {
+			if(this.stunTimer > 0 && this.stunDrawTimer % (STUN_FLASH_INTERVAL * 2) > STUN_FLASH_INTERVAL) {
 				col = new Color(160, 160, 0);
 			}
 			col = col.multiply(this.drawColor);
@@ -534,9 +576,9 @@ public class Unit extends GameElement {
 			float width = endPic.getWidth();
 			float shadowRatio = (float) (this.getMap().getSizeOfPanel().x / this.getMap().getSizeOfPanel().y);
 			g.setColor(GameMap.SHADOW_COLOR);
-			g.fillOval((float) (this.getLoc().x - SHADOW_SCALE * width/2), (float) (this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio)), (float)(width * SHADOW_SCALE), (float)(SHADOW_SCALE * width/shadowRatio));
+			g.fillOval((float) (this.getLoc().x - SHADOW_SCALE * this.shadowScale * width/2), (float) (this.getLoc().y - SHADOW_SCALE * this.shadowScale * width/(2 * shadowRatio)), (float)(width * SHADOW_SCALE * this.shadowScale), (float)(SHADOW_SCALE * this.shadowScale * width/shadowRatio));
 			if(StateGame.isServer)
-			this.getMap().addToDrawInfo(GameMap.getDrawDataE(this.getLoc().x - SHADOW_SCALE * width/2, this.getLoc().y - SHADOW_SCALE * width/(2 * shadowRatio), width * SHADOW_SCALE, SHADOW_SCALE * width/shadowRatio, GameMap.SHADOW_COLOR.getRedByte(), GameMap.SHADOW_COLOR.getGreenByte(), GameMap.SHADOW_COLOR.getBlueByte(), GameMap.SHADOW_COLOR.getAlphaByte()));
+			this.getMap().addToDrawInfo(GameMap.getDrawDataE(this.getLoc().x - SHADOW_SCALE * this.shadowScale * width/2, this.getLoc().y - SHADOW_SCALE * this.shadowScale * width/(2 * shadowRatio), width * SHADOW_SCALE * this.shadowScale, SHADOW_SCALE * this.shadowScale * width/shadowRatio, GameMap.SHADOW_COLOR.getRedByte(), GameMap.SHADOW_COLOR.getGreenByte(), GameMap.SHADOW_COLOR.getBlueByte(), GameMap.SHADOW_COLOR.getAlphaByte()));
 		}
 	}
 	public void drawSpecialEffects(Graphics g) {
@@ -627,8 +669,8 @@ public class Unit extends GameElement {
 				//&& !(!this.ignoreHoles && this.getMap().getPanelAt(loc).getPanelState() == PanelState.HOLE);
 	}
 	public boolean canMoveToLoc(Point loc, GameMap map) {
-		return map.pointIsInGrid(loc) && (map.getPanelAt(loc).teamID == this.teamID || this.ignoreTeam) && map.getPanelAt(loc).unitStandingOnPanel == null
-				&& !(!this.ignoreHoles && map.getPanelAt(loc).getPanelState() == PanelState.HOLE) || Point.equals(this.gridLoc, loc);
+		return map.pointIsInGrid(loc) && (map.getPanelAt(loc).teamID == this.teamID || this.ignoreTeam) && (map.getPanelAt(loc).unitStandingOnPanel == null || map.getPanelAt(loc).unitStandingOnPanel.equals(this))
+				&& !(!this.ignoreHoles && map.getPanelAt(loc).getPanelState() == PanelState.HOLE);
 	}
 	public boolean castSpell(Spell spell, boolean ignoreStun, boolean ignoreCast, boolean ignorePause, boolean ignoreUnitControl) {
 		if((!this.isCasting || ignoreCast) && ((!ignoreStun && this.stunTimer <= 0) || ignoreStun) && (this.unitHasControl() || ignoreUnitControl) && (!this.isPaused() || ignorePause)) {

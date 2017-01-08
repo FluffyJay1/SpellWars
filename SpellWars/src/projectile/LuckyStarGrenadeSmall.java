@@ -14,7 +14,7 @@ public class LuckyStarGrenadeSmall extends Grenade {
 	public LuckyStarGrenadeSmall(double damage, int distance, int direction, Point gridLoc, int teamID) {
 		super(damage, AIR_DURATION, distance, START_HEIGHT, END_HEIGHT, direction, gridLoc, "res/projectile/luckystar.png", teamID);
 		this.drawShadow = false;
-		this.setPenetrateShields(true);
+		this.setShieldBehavior(Shield.SHIELD_IGNORE);
 	}
 	@Override
 	public void onGrenadeTargetHit(Unit target) {

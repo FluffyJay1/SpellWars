@@ -10,48 +10,7 @@ import org.newdawn.slick.geom.Rectangle;
 
 import mechanic.GameMap;
 import mechanic.Point;
-import projectile.StunGrenade;
-import spell.AreaGrab;
-import spell.AwpShot;
-import spell.Blizzard;
-import spell.BouncingOrb;
-import spell.Chronosphere;
-import spell.CryoFreeze;
-import spell.DamageAmp;
-import spell.DebuffTransfer;
-import spell.DragonBreath;
-import spell.ElectroBolt;
-import spell.FireAndBrimstone;
-import spell.ForgeSpirit;
-import spell.ForgeSpiritFire;
-import spell.HellRain;
-import spell.HopesAndDreams;
-import spell.KnifeThrow;
-import spell.KnifeVolley;
-import spell.LavaToss;
-import spell.MudToss;
-import spell.MysteryBox;
-import spell.Omnislash;
-import spell.PanelClear;
-import spell.PistolShot;
-import spell.RechargingBarrier;
-import spell.ReflectBarrier;
-import spell.Regenerate;
-import spell.Sanctuary;
-import spell.SentryGun;
-import spell.ShotgunBlast;
-import spell.Spell;
-import spell.Stun;
-import spell.TestFireball;
-import spell.TimeBomb;
-import spell.TimeDilation;
-import spell.TrumpWall;
-import spell.VacuumCannon;
-import spell.VampiricSlash;
-import spell.Vulcan;
-import spell.WindCannon;
-import spell.WishUponALuckyStar;
-import spell.ZaWarudo;
+import spell.*;
 import states.StateGame;
 import unit.Player;
 import unit.Unit;
@@ -285,7 +244,7 @@ public class SpellSelector extends UIElement {
 	}
 	public void refillSpells() {
 		for(int i = this.availableSpells.size(); i < SPELL_SELECTOR_DIMENSIONS.x * SPELL_SELECTOR_DIMENSIONS.y; i++) {
-			this.availableSpells.add(getRandomSpell(this.player));
+			this.availableSpells.add(getRandomSpell(this.player, 0.02 + 0.04 * this.player.getStatusEffectCount("corrupt")));
 		}
 	}
 	public boolean isComboing() {
@@ -316,7 +275,11 @@ public class SpellSelector extends UIElement {
 				//CHRONOSPHERE
 				"Stun Grenade",
 				"Stun Grenade",
-				"Stun Grenade"
+				"Stun Grenade",
+				//TEMPSET
+				"Wind Cannon",
+				"Vacuum Cannon",
+				"Hurricane Cannon",
 		};
 		Spell[] spells = {
 			new HopesAndDreams(this.player),
@@ -325,6 +288,7 @@ public class SpellSelector extends UIElement {
 			new ZaWarudo(this.player),
 			new KnifeVolley(this.player),
 			new Chronosphere(this.player),
+			new Tempest(this.player),
 		};
 		boolean[] spellsDetected = new boolean[combos.length];
 		for(int i = 0; i < spellsDetected.length; i++) {
@@ -406,39 +370,47 @@ public class SpellSelector extends UIElement {
 				new ShotgunBlast(unit),
 				new DebuffTransfer(unit),
 				new Sanctuary(unit),
+				new Berserk(unit),
+				new HurricaneCannon(unit),
+				new EarthCracker(unit),
+				new AegisBarrier(unit),
 		};
 		double[] weights = {0.45, //TRUMP WALL
 				0.3, //reflect barrier
 				0.55, //area grab
 				0.45, //recharging barrier
 				0.7, //time bomb
-				1.1, //forge spirit
+				1.0, //forge spirit
 				0.75, //hell rain
 				0.85, //stun
 				1.35, //bouncing orb
-				0.9, //wind cannon
-				1.7, //firebreath
-				1.9, //pistol shot
+				1.0, //wind cannon
+				1.8, //firebreath
+				1.95, //pistol shot
 				0.4, //blizzard
 				0.65, //regenerate
 				0.3, //damage amp
 				0.4, //omnislash
 				0.35, //time dilation
-				0.6, //vacuum cannon
+				0.75, //vacuum cannon
 				0.25, //mystery box
 				0.3, //mud grenade
 				0.3, //lava grenade
 				0.2, //fire and brimstone
 				1.35, //wish upon a lucky star
-				0.5, //sentry gun
+				0.45, //sentry gun
 				0.2, //panel clear
 				1.5, //knife throw
 				1.0, //electro bolt
 				1.4, //vulcan
-				0.7, //vampiric slash
-				0.8, //shotgun blast
-				0.4, //debuff transfer
+				0.5, //vampiric slash
+				0.7, //shotgun blast
+				0.45, //debuff transfer
 				0.2, //sanctuary
+				0.2, //berserk
+				0.55, //hurricane cannon
+				1.0, //earth cracker
+				0.45, //aegis barrier
 		};
 		if(spells.length != weights.length) {
 			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");
@@ -489,6 +461,44 @@ public class SpellSelector extends UIElement {
 			return new TestFireball(unit);
 		}
 		*/
+	}
+	public static Spell getRandomCorruptSpell(Unit unit) {
+		Spell[] spells = {
+				new CorruptPistolShot(unit),
+				new CorruptVulcan(unit),
+				new CorruptHellRain(unit),
+				new CorruptElectroBolt(unit),
+		};
+		double[] weights = {
+				1.0, //corrupt pistol shot
+				1.1, //corrupt vulcan
+				0.8, //corrupt hell rain
+				0.7, //corrupt electro bolt
+		};
+		if(spells.length != weights.length) {
+			System.out.println("WARNING: CORRUPT SPELLS AND WEIGHTS MISMATCH");
+			System.out.println("size of spells: " + spells.length + ". size of weights: " + weights.length);
+		}
+		double totalWeight = 0;
+		for(int i = 0; i < weights.length; i++) {
+			totalWeight += weights[i];
+		}
+		double random = Math.random() * totalWeight;
+		double runningTotal = 0;
+		for(int i = 0; i < weights.length; i++) {
+			if(random < weights[i] + runningTotal) {
+				return spells[i];
+			} else {
+				runningTotal += weights[i];
+			}
+		}
+		return new TestFireball(unit);
+	}
+	public static Spell getRandomSpell(Unit unit, double corruptchance) {
+		if(Math.random() < corruptchance) {
+			return getRandomCorruptSpell(unit);
+		}
+		return getRandomSpell(unit);
 	}
 	@Override
 	public void draw(Graphics g) {

@@ -245,6 +245,9 @@ public class StatusEffect {
 	public void onCreate() {
 		
 	}
+	public void onApplied() {
+		
+	}
 	/*
 	 * This runs once every second, to be overridden by special status effects
 	 */

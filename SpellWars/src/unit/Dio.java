@@ -40,7 +40,7 @@ public class Dio extends Unit {
 	public Dio(Point gridLoc, int teamID, int level) {
 		super(HP + HP_PER_LEVEL * level, HP + HP_PER_LEVEL * level, SPEED + SPEED_PER_LEVEL * level, GameMap.getOppositeDirection((char)teamID), gridLoc, "res/unit/dio.png", teamID);
 		this.level = level;
-		this.setSize(0.3);
+		this.setSize(0.25);
 		this.setDrawHeight(90);
 		this.setThinkIntervalWithMove(true);
 		this.refreshMoves();

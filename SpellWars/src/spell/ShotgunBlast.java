@@ -14,7 +14,7 @@ public class ShotgunBlast extends Spell {
 									new Point(1, -2.0/3),
 									new Point(1, 1.0/5),
 									new Point(1, -1.0/5)};
-	public static final double DAMAGE = 20;
+	public static final double DAMAGE = 25;
 	public static final double DAMAGE_REDUCTION_PER_THINK = 5;
 	public static final double SPEED = 18;
 	public ShotgunBlast(Unit owner) {
