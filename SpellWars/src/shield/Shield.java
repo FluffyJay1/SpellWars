@@ -24,6 +24,9 @@ public class Shield extends GameElement {
 	private static final double SHIELD_ENABLE_FLASH_DURATION = 0.5;
 	private static final double SHIELD_DIE_FLASH_DURATION = 0.3;
 
+	public static final int SHIELD_RESPECT = 0;
+	public static final int SHIELD_PENETRATE = 1;
+	public static final int SHIELD_IGNORE = 2;
 	Unit owner;
 	
 	boolean think;
@@ -56,8 +59,6 @@ public class Shield extends GameElement {
 		this.opacity = SHIELD_DISABLED_OPACITY;
 		this.isDead = false;
 		this.hpText = new Text(null, Point.add(this.getLoc(), new Point(-200, HP_Y_OFFSET + this.drawOffset)), 400, 10, 16, 12, 20, Color.white, "", TextFormat.CENTER_JUSTIFIED);
-		this.hpText.setUseOutline(true);
-		this.hpText.setOutlineColor(this.HPTextColor);
 		this.hpText.setElementToRemoveWith(this);
 		this.displayHP = (int)this.getHP();
 		this.displayHPTimer = 0;
@@ -65,6 +66,8 @@ public class Shield extends GameElement {
 	@Override
 	public void onSetMap() {
 		this.getMap().getUI().addUIElement(hpText);
+		this.hpText.setUseOutline(true);
+		this.hpText.setOutlineColor(this.HPTextColor);
 	}
 	public void setDrawOffset(float y) {
 		this.drawOffset = y;

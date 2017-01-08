@@ -8,7 +8,7 @@ import unit.Unit;
 public class BouncingOrb extends Spell {
 	public static final float DAMAGE = 10;
 	public static final float SPEED = 10;
-	public static final int NUM_SQUARES = 32;
+	public static final int NUM_SQUARES = 36;
 	//float timer;
 	public BouncingOrb(Unit owner) {
 		super(owner, 0.05f, 0.25f, "Bouncing Orb", "Shoots an orb that bounces in the enemy territory, which is able to hit the same unit multiple times",

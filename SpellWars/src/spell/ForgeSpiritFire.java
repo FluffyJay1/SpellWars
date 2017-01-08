@@ -36,6 +36,7 @@ public class ForgeSpiritFire extends Spell {
 		this.getMap().addParticleEmitter(pe);
 		*/
 		Projectile projectile = new Projectile(25 * this.owner.finalDamageOutputModifier, 8, GameMap.clampDirection((char) (GameMap.getOppositeDirection((char)this.owner.teamID))), this.owner.gridLoc, "res/particle_explosion.png", this.owner.teamID, true, true, true);
+		projectile.setDrawHeight(32);
 		this.map.addGameElement(projectile);
 		//projectile = new Grenade(50, 3, 4, 80, this.owner.direction, this.owner.gridLoc, "res/particle_genericRed.png", this.owner.teamID);
 		//this.map.addGameElement(projectile);

@@ -138,6 +138,9 @@ public abstract class GameElement {
 	 */
 	public boolean changeHP(double hp) {
 		if (hp <= 0) {
+			if(this.hp > 0) {
+				this.onHPSet0();
+			}
 			this.hp = 0;
 			if(this.remove == false) {
 				if(!this.isPaused && !(this instanceof Projectile)) {
@@ -266,6 +269,9 @@ public abstract class GameElement {
 	 * Called when hp < 0
 	 */
 	public void onDeath() {
+		
+	}
+	public void onHPSet0(){
 		
 	}
 	public void onSetMap() {
@@ -647,6 +653,7 @@ public abstract class GameElement {
 			this.statusFinalModifierValueUpdate = true; //flags for concantonating all the bonuses
 		}
 		effect.setOwner(this);
+		effect.onApplied();
 	}
 	public void removeStatusEffect(String id) {
 		for(StatusEffect e : this.getStatusEffects()) { //goes through all status effects

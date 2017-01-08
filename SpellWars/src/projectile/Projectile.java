@@ -12,6 +12,7 @@ import mechanic.GameMap;
 import mechanic.Panel;
 import mechanic.PanelState;
 import mechanic.Point;
+import shield.Shield;
 import states.StateGame;
 import unit.Unit;
 
@@ -41,7 +42,7 @@ public class Projectile extends GameElement {
 	
 	double damage;
 	public boolean canDoDamage;
-	boolean penetratesShields;
+	int shieldbehavior;
 	
 	public Projectile(double damage, double speed, int direction, Point gridLoc, String imagePath, int teamID, boolean destroyOnImpact, boolean simpleProjectile, boolean ignoreHoles) {
 		super(0, 0, speed, 0, new Point(), 1, 0, imagePath);
@@ -71,7 +72,7 @@ public class Projectile extends GameElement {
 		this.drawShadow = false;
 		this.damage = damage;
 		this.canDoDamage = true;
-		this.penetratesShields = false;
+		this.shieldbehavior = Shield.SHIELD_RESPECT;
 	}
 	public Projectile(double damage, double speed, Point moveVec, Point gridLoc, String imagePath, int teamID, boolean destroyOnImpact, boolean simpleProjectile, boolean ignoreHoles) {
 		this(damage, speed, GameMap.ID_NEUTRAL, gridLoc, imagePath, teamID, destroyOnImpact, simpleProjectile, ignoreHoles);
@@ -84,8 +85,8 @@ public class Projectile extends GameElement {
 	public void setVel(Point vel) {
 		this.vel = vel;
 	}
-	public void setPenetrateShields(boolean penetratesShields) {
-		this.penetratesShields = penetratesShields;
+	public void setShieldBehavior(int shieldBehavior) {
+		this.shieldbehavior = shieldBehavior;
 	}
 	@Override
 	public void onSetMap() {
@@ -163,7 +164,7 @@ public class Projectile extends GameElement {
 						this.setRemove(true);
 						this.unitsHit.clear();
 						if(this.canDoDamage) {
-							target.doDamage(this.getFinalDamage(), true, this.penetratesShields, this);
+							target.doDamage(this.getFinalDamage(), true, this.shieldbehavior, this);
 							if(this.teamID != target.teamID) {
 								this.onTargetHit(target);
 							}
@@ -171,7 +172,7 @@ public class Projectile extends GameElement {
 						break;
 					} else {
 						if(this.canDoDamage) {
-							target.doDamage(this.getFinalDamage(), true, this.penetratesShields, this);
+							target.doDamage(this.getFinalDamage(), true, this.shieldbehavior, this);
 							if(this.teamID != target.teamID) {
 								this.onTargetHit(target);
 								this.unitsHit.add(target);

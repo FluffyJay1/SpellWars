@@ -41,9 +41,9 @@ public class ElectroBoltProjectile extends Projectile {
 				0, 6, //emitter lifetime, emission rate (if emitter lifetime is 0, then it becomes instant and emission rate becomes number of particles, if emitter lifetime is -1, then it lasts forever)
 				0, (float)this.getMap().getSizeOfPanel().x/3, 90, 20); //keyvalues
 		this.getMap().addParticleEmitter(pe);
-		if(this.getFinalDamage() > DAMAGE_REDUCTION) {
+		if(this.getDamage() > DAMAGE_REDUCTION) {
 			for(int direction = 0; direction < 8; direction += 2) {
-				ElectroBoltProjectile p = new ElectroBoltProjectile(this.getFinalDamage() - DAMAGE_REDUCTION, this.initialSpeed, direction, target.gridLoc, this.teamID, this.stunDuration * STUN_DURATION_MULTIPLIER);
+				ElectroBoltProjectile p = new ElectroBoltProjectile(this.getDamage() - DAMAGE_REDUCTION, this.initialSpeed, direction, target.gridLoc, this.teamID, this.stunDuration * STUN_DURATION_MULTIPLIER);
 				p.addToUnitsHit(target);
 				this.getMap().addGameElement(p, true);
 			}

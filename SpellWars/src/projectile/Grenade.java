@@ -122,7 +122,7 @@ public class Grenade extends Projectile {
 			if(this.getMap().pointIsInGrid(this.endLoc)) {
 				Unit target = this.getMap().getPanelAt(this.endLoc).unitStandingOnPanel;
 				if(target != null && target.teamID != this.teamID && !this.getRemove()){
-					target.doDamage(this.getFinalDamage(), true, this.penetratesShields, this);
+					target.doDamage(this.getFinalDamage(), true, this.shieldbehavior, this);
 					if(this.timeElapsed >= this.duration) { //IN CASE IT GETS REFLECTED, MAY SEEM REDUNDANT BUT IT'S NOT
 						this.onGrenadeTargetHit(target);
 					}

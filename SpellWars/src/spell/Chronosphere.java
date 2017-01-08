@@ -42,7 +42,7 @@ public class Chronosphere extends Spell {
 					s.setDamageInputModifier(DAMAGE_AMP);
 					target.addStatusEffect(s);
 					target.updateFinalModifiers();
-					target.stun(INTERVAL);
+					target.stun(INTERVAL * 2);
 					target.doDamage(INTERVAL * DAMAGE_PER_SECOND);
 				}
 				ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(p), EmitterTypes.CIRCLE_DIRECTION, "res/particle_genericBlue.png", false, //point/parent, emitter type, image path, alphaDecay

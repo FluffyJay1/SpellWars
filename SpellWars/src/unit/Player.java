@@ -22,6 +22,17 @@ public class Player extends Unit {
 	public Player(double hp, double speed, char teamID, Point loc) {
 		super(hp, hp, speed, GameMap.getOppositeDirection(teamID) /*opposite direction*/, loc, "res/idgaf.png", teamID);
 		this.setDrawHeight(20);
+		if(teamID == GameMap.ID_LEFT) {
+			this.setImage("res/unit/player1.png");
+			this.setSize(0.5);
+			this.setDrawHeight(55);
+			this.shadowScale = 0.8;
+		} else if(teamID == GameMap.ID_RIGHT) {
+			this.setImage("res/unit/player2.png");
+			this.setSize(0.5);
+			this.setDrawHeight(55);
+			this.shadowScale = 0.8;
+		}
 		this.drawMoveCooldown = true;
 		this.drawSpellCasting = true;
 		this.HPTextColor = Color.black;
