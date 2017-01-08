@@ -11,7 +11,7 @@ public class EarthCracker extends Spell {
 	}
 	@Override
 	public void onActivate() {
-		EarthCrackerProjectile p = new EarthCrackerProjectile(DAMAGE, SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
+		EarthCrackerProjectile p = new EarthCrackerProjectile(DAMAGE * this.owner.finalDamageOutputModifier, SPEED, this.owner.direction, this.owner.gridLoc, this.owner.teamID);
 		this.getMap().addGameElement(p);
 	}
 }
