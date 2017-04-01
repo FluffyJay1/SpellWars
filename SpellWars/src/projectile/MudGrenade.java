@@ -12,7 +12,7 @@ public class MudGrenade extends Grenade {
 	public static final float AIR_DURATION = 0.9f;
 	public static final ArrayList<Point> AFFECTED_POINTS = Point.getIntegerPointsInCircle(1.5);
 	public MudGrenade(double damage, int direction, Point gridLoc, int teamID) {
-		super(damage, AIR_DURATION, 4, 70, 10, direction, gridLoc, "res/projectile/mudgrenade.png", teamID);
+		super(damage, AIR_DURATION, 4, 70, 10, direction, gridLoc, "res/projectile/mudgrenade.png", teamID, true);
 	}
 	@Override
 	public void flash() {

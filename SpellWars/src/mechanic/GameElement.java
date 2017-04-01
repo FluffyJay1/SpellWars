@@ -591,6 +591,7 @@ public abstract class GameElement {
 		 */
 		if(effect.getStackingProperty() == StackingProperty.UNSTACKABLE_REFRESH_DURATION) {
 			//boolean foundExistingStack = false;
+			boolean add = true;
 			for(StatusEffect e : this.statuseffects) { //goes through all status effects
 				if(e.getStatusType() == effect.getStatusType()) { //if it finds an existing status effect with the same type
 					if(e.getLevel() > effect.getLevel()) {
@@ -598,8 +599,11 @@ public abstract class GameElement {
 						effect.setDrawIcon(false);
 					} else if (e.getLevel() == effect.getLevel()) {
 						e.setDuration(e.getMaxDuration()); //resets the duration to the new one
+						add = false;
+						/*
 						effect.setMute(true);
 						effect.setDrawIcon(false);
+						*/
 					} else {
 						e.setMute(true);
 						e.setDrawIcon(false);
@@ -607,7 +611,9 @@ public abstract class GameElement {
 					//foundExistingStack = true;
 				}
 			}
-			this.statuseffects.add(effect); //adds the effect if there isn't already one
+			if(add) {
+				this.statuseffects.add(effect);
+			}
 			this.statusFinalModifierValueUpdate = true; //flags for concantonating all the bonuses
 		}
 		/*
@@ -628,7 +634,7 @@ public abstract class GameElement {
 					}
 				}
 			}
-			this.statuseffects.add(effect); //adds the effect in the end
+			this.statuseffects.add(effect);
 			this.statusFinalModifierValueUpdate = true; //flags for concantonating all the bonuses
 		}
 		/*

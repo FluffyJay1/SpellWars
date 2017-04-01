@@ -35,6 +35,8 @@ public class Spell extends GameElement {
 	static final float TEXT_DURATION = 1.2f;
 	static final float TEXT_Y_OFFSET = 200;
 	Text spellText;
+	
+	public double sortWeight;
 	public Spell(Unit owner, float castTime, float backswingTime, String name, String description, String imagepath, boolean pauseWhenActivated) {
 		super();
 		this.owner = owner;
@@ -55,6 +57,7 @@ public class Spell extends GameElement {
 		this.isFinished = false;
 		this.castPause = false;
 		this.fieldEffect = false;
+		this.sortWeight = 0;
 		this.spellText = new Text(null, Point.add(this.owner.getLoc(), new Point(-200, -215)), 400, 18, 30, 22, 30, Color.white, "", TextFormat.CENTER_JUSTIFIED);
 	}
 	/*

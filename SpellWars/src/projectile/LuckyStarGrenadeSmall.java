@@ -12,7 +12,7 @@ public class LuckyStarGrenadeSmall extends Grenade {
 	public static final float START_HEIGHT = 1200;
 	public static final float END_HEIGHT = 40;
 	public LuckyStarGrenadeSmall(double damage, int distance, int direction, Point gridLoc, int teamID) {
-		super(damage, AIR_DURATION, distance, START_HEIGHT, END_HEIGHT, direction, gridLoc, "res/projectile/luckystar.png", teamID);
+		super(damage, AIR_DURATION, distance, START_HEIGHT, END_HEIGHT, direction, gridLoc, "res/projectile/luckystar.png", teamID, false);
 		this.drawShadow = false;
 		this.setShieldBehavior(Shield.SHIELD_IGNORE);
 	}

@@ -4,7 +4,7 @@ import mechanic.Panel;
 import mechanic.Point;
 import particlesystem.EmitterTypes;
 import particlesystem.ParticleEmitter;
-import projectile.CrackGrenade;
+import projectile.HellRainGrenade;
 import projectile.Grenade;
 import projectile.Projectile;
 
@@ -17,7 +17,7 @@ public class CorruptHellRain extends Spell {
 	public static final float DURATION = 4.5f;
 	public static final int NUM_STRIKES = 120;
 	public static final double DAMAGE = 20;
-	public static final float CHANCE_TO_CRACK = 0.13f;
+	public static final float CHANCE_TO_CRACK = 0.14f;
 	public static final float AIR_TIME = 1.25f;
 	public static final float INITIAL_HEIGHT = 2500;
 	public static final float FINAL_HEIGHT = 10;
@@ -67,7 +67,7 @@ public class CorruptHellRain extends Spell {
 	public void fire() {
 		int randomIndex = (int)(Math.random()*this.affectedPanels.size() - 0.0000001);
 		Point loc = this.affectedPanels.get(randomIndex).getLoc();
-		Projectile projectile = new CrackGrenade(DAMAGE * this.owner.finalDamageOutputModifier, CHANCE_TO_CRACK, AIR_TIME, Point.subtract(loc, this.owner.gridLoc), INITIAL_HEIGHT, FINAL_HEIGHT, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
+		Projectile projectile = new HellRainGrenade(DAMAGE * this.owner.finalDamageOutputModifier, CHANCE_TO_CRACK, AIR_TIME, Point.subtract(loc, this.owner.gridLoc), INITIAL_HEIGHT, FINAL_HEIGHT, this.owner.gridLoc, "res/particle_genericYellow.png", this.owner.teamID);
 		projectile.setImageScale(2);
 		this.map.addGameElement(projectile);
 		this.shotsFired++;

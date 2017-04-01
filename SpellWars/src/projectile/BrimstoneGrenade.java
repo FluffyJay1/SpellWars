@@ -17,7 +17,7 @@ public class BrimstoneGrenade extends Grenade {
 	float fireDamage;
 	float fireDuration;
 	public BrimstoneGrenade(double damage, double duration, float fireDamage, float fireDuration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
-		super(damage, duration, endDisplacement, initialHeight, endHeight, gridLoc, imagePath, teamID);
+		super(damage, duration, endDisplacement, initialHeight, endHeight, gridLoc, imagePath, teamID, false);
 		this.setImage("res/projectile/lavagrenade.png");
 		this.fireDuration = fireDuration;
 		this.fireDamage = fireDamage;

@@ -1,6 +1,7 @@
 package ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -51,6 +52,7 @@ public class SpellSelector extends UIElement {
 	Image selectorImage;
 	ArrayList<Spell> availableSpells;
 	ArrayList<Spell> selectedSpells; 
+	SpellComparator comparator;
 	ArrayList<Integer> indexesSelectedForCombo;
 	ArrayList<Spell> spellsSelectedForCombo;
 	Spell comboSpell;
@@ -69,6 +71,7 @@ public class SpellSelector extends UIElement {
 		this.setIsFront(true);
 		this.availableSpells = new ArrayList<Spell>();
 		this.selectedSpells = new ArrayList<Spell>();
+		this.comparator = new SpellComparator();
 		this.indexesSelectedForCombo = new ArrayList<Integer>();
 		this.spellsSelectedForCombo = new ArrayList<Spell>();
 		this.spellComboTimer = 0;
@@ -216,6 +219,7 @@ public class SpellSelector extends UIElement {
 				this.availableSpells.add(this.selectedSpells.get(index));
 				this.selectedSpells.remove(index);
 			}
+			this.sortSpells();
 			this.updateText();
 		}
 	}
@@ -246,6 +250,7 @@ public class SpellSelector extends UIElement {
 		for(int i = this.availableSpells.size(); i < SPELL_SELECTOR_DIMENSIONS.x * SPELL_SELECTOR_DIMENSIONS.y; i++) {
 			this.availableSpells.add(getRandomSpell(this.player, 0.02 + 0.04 * this.player.getStatusEffectCount("corrupt")));
 		}
+		this.sortSpells();
 	}
 	public boolean isComboing() {
 		return this.spellComboTimer > 0;
@@ -374,35 +379,37 @@ public class SpellSelector extends UIElement {
 				new HurricaneCannon(unit),
 				new EarthCracker(unit),
 				new AegisBarrier(unit),
+				new Rupture(unit),
+				new Crack(unit),
 		};
 		double[] weights = {0.45, //TRUMP WALL
 				0.3, //reflect barrier
 				0.55, //area grab
 				0.45, //recharging barrier
-				0.7, //time bomb
-				1.0, //forge spirit
+				0.75, //time bomb
+				0.8, //forge spirit
 				0.75, //hell rain
-				0.85, //stun
-				1.35, //bouncing orb
-				1.0, //wind cannon
-				1.8, //firebreath
-				1.95, //pistol shot
-				0.4, //blizzard
+				0.95, //stun
+				1.50, //bouncing orb
+				1.15, //wind cannon
+				2.05, //firebreath
+				2.25, //pistol shot
+				0.45, //blizzard
 				0.65, //regenerate
 				0.3, //damage amp
-				0.4, //omnislash
+				0.45, //omnislash
 				0.35, //time dilation
 				0.75, //vacuum cannon
 				0.25, //mystery box
 				0.3, //mud grenade
 				0.3, //lava grenade
 				0.2, //fire and brimstone
-				1.35, //wish upon a lucky star
+				1.4, //wish upon a lucky star
 				0.45, //sentry gun
 				0.2, //panel clear
-				1.5, //knife throw
-				1.0, //electro bolt
-				1.4, //vulcan
+				1.55, //knife throw
+				1.2, //electro bolt
+				1.65, //vulcan
 				0.5, //vampiric slash
 				0.7, //shotgun blast
 				0.45, //debuff transfer
@@ -411,6 +418,8 @@ public class SpellSelector extends UIElement {
 				0.55, //hurricane cannon
 				1.0, //earth cracker
 				0.45, //aegis barrier
+				0.55, //rupture
+				0.6 //crack
 		};
 		if(spells.length != weights.length) {
 			System.out.println("WARNING: SPELLS AND WEIGHTS MISMATCH");
@@ -424,6 +433,7 @@ public class SpellSelector extends UIElement {
 		double runningTotal = 0;
 		for(int i = 0; i < weights.length; i++) {
 			if(random < weights[i] + runningTotal) {
+				spells[i].sortWeight = weights[i];
 				return spells[i];
 			} else {
 				runningTotal += weights[i];
@@ -499,6 +509,10 @@ public class SpellSelector extends UIElement {
 			return getRandomCorruptSpell(unit);
 		}
 		return getRandomSpell(unit);
+	}
+	public void sortSpells() {
+		Collections.sort(this.availableSpells, this.comparator);
+		Collections.reverse(this.availableSpells);
 	}
 	@Override
 	public void draw(Graphics g) {

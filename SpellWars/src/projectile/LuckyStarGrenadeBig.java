@@ -15,7 +15,7 @@ public class LuckyStarGrenadeBig extends Grenade {
 	public static final ArrayList<Point> AFFECTED_POINTS = Point.getIntegerPointsInCircle(1.5);
 	double areaDamage;
 	public LuckyStarGrenadeBig(double damage, double areaDamage, int direction, Point gridLoc, int teamID) {
-		super(damage, AIR_DURATION, 4, START_HEIGHT, END_HEIGHT, direction, gridLoc, "res/projectile/luckystar.png", teamID);
+		super(damage, AIR_DURATION, 4, START_HEIGHT, END_HEIGHT, direction, gridLoc, "res/projectile/luckystar.png", teamID, true);
 		this.areaDamage = areaDamage;
 		this.drawShadow = false;
 		this.setImageScale(2.5f);
