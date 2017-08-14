@@ -44,9 +44,10 @@ public class LuckyStarGrenadeBig extends Grenade {
 			if(this.getMap().pointIsInGrid(f)) {
 				this.getMap().getPanelAt(f).crackLight();
 				if(this.getMap().getPanelAt(f).unitStandingOnPanel != null && this.getMap().getPanelAt(f).unitStandingOnPanel.teamID != this.teamID) {
-					this.getMap().getPanelAt(f).unitStandingOnPanel.doDamage(this.areaDamage, true, this.shieldbehavior, null);
-					for(Shield s : this.getMap().getPanelAt(f).unitStandingOnPanel.getShields()) {
-						s.isDead = true;
+					if(!this.getMap().getPanelAt(f).unitStandingOnPanel.doDamage(this.areaDamage, true, this.shieldbehavior, null)) {
+						for(Shield s : this.getMap().getPanelAt(f).unitStandingOnPanel.getShields()) {
+							s.isDead = true;
+						}
 					}
 				}
 				ParticleEmitter pe = new ParticleEmitter(this.getMap().gridToPosition(f), EmitterTypes.CIRCLE_DIRECTION, "res/projectile/luckystar.png", false, //point/parent, emitter type, image path, alphaDecay
