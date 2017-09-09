@@ -41,11 +41,6 @@ public class HellRain extends Spell {
 	@Override
 	public void onThink(){
 		while(this.shotsFired < (1 - (this.timer/DURATION)) * NUM_STRIKES) {
-			if(!this.owner.isCasting) {
-				System.out.println("LOL FUCK");
-				System.out.println(this.owner.isCoolingDown);
-				System.out.println(this.owner.spellCastTimer);
-			}
 			this.fire();
 			ParticleEmitter pe = new ParticleEmitter(this.owner.getLoc(), EmitterTypes.LINE_RADIAL, "res/particle_genericYellow.png", false, //point/parent, emitter type, image path, alphaDecay
 					2.8f, 3.0f, //particle start scale

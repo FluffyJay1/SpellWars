@@ -26,7 +26,7 @@ public class Trump extends Unit {
 	boolean isFirstMove;
 	int moves;
 	int level;
-	int state; //0 = normal state; 1 = just cast area grab in the combo, 2 = trying to move left to plant the bomb, 3 = trying to back the fuck up for hell rain
+	int state; //0 = normal state; 1 = just cast area grab in the combo, 2 = trying to move left to plant the bomb, 3 = trying to back up for hell rain
 	float trumpWallCooldown;
 	float specialCooldown;
 	public Trump(Point gridLoc, int teamID, int level) {
