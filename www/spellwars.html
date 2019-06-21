@@ -17,8 +17,8 @@
       <section>
         <h2>Part 1: Getting Set Up</h2>
 		<p>
-			If you have a Windows machine and you are fine with 1920x1080, 
-			you can just run the jar in the 'exectuables' folder. Else...
+		  If you have a Windows machine and you are fine with 1920x1080, 
+		  you can just run the jar in the 'exectuables' folder. Else...
 		</p>
         <h3>You need the following:</h3>
         <ul>
@@ -36,6 +36,10 @@
             project with the URI
           </li>
           <li>Open the project in Eclipse</li>
+		  <li>
+			Add the jars in 'lib' to build path and set native library location
+			to folder inside 'native'
+		  </li>
         </ol>
         <p>To run the game, run <strong>mechanic.Game.</strong></p>
       </section>
@@ -154,286 +158,286 @@
 		<h3>List of Player Spells in Patch 1.17</h3>
 		<table>
 			<tr>
-				<th>Name</th>
-				<th>Image</th>
-				<th>Description</th>
-			</tr>
-			<tr>
-				<td>Aegis Barrier</td>
-				<td><img src="../SpellWars/src/res/spell/aegisbarrier.png" alt="aegis barrier"></td>
-				<td>
-					Dispel your debuffs and give yourself a 75hp shield for 50s 
-					that regenerates 2hp/s to its owner while it is alive
-				</td>
-			</tr>
-			<tr>
-				<td>Area Grab</td>
-				<td><img src="../SpellWars/src/res/particle_genericRed.png" alt="area grab"></td>
-				<td>
-					Steal a column of tiles from your enemy, stunning units that 
-					get in the way for 1s and dealing 10 damage to them
-				</td>
-			</tr>
-			<tr>
-				<td>Berserk</td>
-				<td><img src="../SpellWars/src/res/spell/berserk.png" alt="berserk"></td>
-				<td>
-					Go berserk, losing control of your unit, but you cast random 
-					spells every second for 10 seconds, you move twice as fast and 
-					are immune to slows
-				</td>
-			</tr>
-			<tr>
-				<td>Blizzard</td>
-				<td><img src="../SpellWars/src/res/statuseffect/icon_frost.png" alt="blizzard"></td>
-				<td>
-					Gradually slow all enemy units and projectiles on the map for
-					10 seconds, dealing 1 damage per second, and reducing the 
-					damage of enemy projectiles
-				</td>
-			</tr>
-			<tr>
-				<td>Bouncing Orb</td>
-				<td><img src="../SpellWars/src/res/betterTower.png" alt="bouncing orb"></td>
-				<td>
-					Shoot an orb that bounces in the enemy territory, dealing 10 
-					damage whenever it passes an enemy
-				</td>
-			</tr>
-			<tr>
-				<td>Crack Grenade</td>
-				<td><img src="../SpellWars/src/res/spell/crack.png" alt="crack grenade"></td>
-				<td>Throw a grenade that deals 15 damage and cracks panels around it</td>
-			</tr>
-			<tr>
-				<td>Damage Amplification</td>
-				<td><img src="../SpellWars/src/res/spell/damageamp.png" alt="damage amplification"></td>
-				<td>Increase the damage you deal by 1.5x for 15 seconds</td>
-			</tr>
-			<tr>
-				<td>Debuff Transfer</td>
-				<td><img src="../SpellWars/src/res/spell/debufftransfer.png" alt="debuff transfer"></td>
-				<td>
-					Remove your debuffs, put them on a projectile, and transfer 
-					them to all enemies it hits, the projectile becomes more
-					powerful the more debuffs you remove
-				</td>
-			</tr>
-			<tr>
-				<td>Earth Cracker</td>
-				<td><img src="../SpellWars/src/res/spell/earthcracker.png" alt="earth cracker"></td>
-				<td>
-					Cracks panels in a line, dealing 40 damage to enemies it passes 
-					through, the projectile itself falls through cracks
-				</td>
-			</tr>
-			<tr>
-				<td>Electro Bolt</td>
-				<td><img src="../SpellWars/src/res/spell/electrobolt.png" alt="electro bolt"></td>
-				<td>
-					Shoot a bolt of electricity that deals 30 damage, stuns for 1.5s, 
-					purges buffs, and spreads in 4 directions dealing 5 less damage 
-					each when it hits an enemy, the extra bolts also can spread
-				</td>
-			</tr>
-			<tr>
-				<td>Fire and Brimstone</td>
-				<td><img src="../SpellWars/src/res/spell/fireandbrimstone.png" alt="fire and brimstone"></td>
-				<td>
-					Rain projectiles from the sky that change enemy panels to lava 
-					and set units hit on fire at 2dps for 20s
-				</td>
-			</tr>
-			<tr>
-				<td>Forge Spirit</td>
-				<td><img src="../SpellWars/src/res/plane.png" alt="forge spirit"></td>
-				<td>
-					Summon a unit with 75hp that shoots a projectile with 25 damage
-					every once in a while
-				</td>
-			</tr>
-			<tr>
-				<td>Hell Rain</td>
-				<td><img src="../SpellWars/src/res/spell/hellrain.png" alt="hell rain"></td>
-				<td>
-					Rain projectiles from the sky that deal 20 damage each and have a 
-					chance to crack their panels
-				</td>
-			</tr>
-			<tr>
-				<td>Hurricane Cannon</td>
-				<td><img src="../SpellWars/src/res/spell/hurricanecannon.png" alt="hurricane cannon"></td>
-				<td>Move the enemy to the same row that you are on and deal slight damage</td>
-			</tr>
-			<tr>
-				<td>Knife Throw</td>
-				<td><img src="../SpellWars/src/res/spell/knife.png" alt="knife throw"></td>
-				<td>
-					Throw a knife that deals 40 damage but also causes the enemy to 
-					bleed and be slown, multiple stacks have increased effectiveness
-				</td>
-			</tr>
-			<tr>
-				<td>Lava Grenade</td>
-				<td><img src="../SpellWars/src/res/projectile/lavagrenade.png" alt="lava grenade"></td>
-				<td>Throw a grenade that changes enemy panels to lava</td>
-			</tr>
-			<tr>
-				<td>Mud Grenade</td>
-				<td><img src="../SpellWars/src/res/projectile/mudgrenade.png" alt="mud grenade"></td>
-				<td>Throw a grenade that changes enemy panels to mud</td>
-			</tr>
-			<tr>
-				<td>Mystery Box</td>
-				<td><img src="../SpellWars/src/res/spell/mysterybox.png" alt="mystery box"></td>
-				<td>Give yourself 3 extra random spells to cast</td>
-			</tr>
-			<tr>
-				<td>Omnislash</td>
-				<td><img src="../SpellWars/src/res/spell/slash.png" alt="omnislash"></td>
-				<td>
-					Teleport and slash in a 2x3 area at an enemy in every row 
-					for 25 damage, then slash in a 3x5 area for 35 damage
-				</td>
-			</tr>
-			<tr>
-				<td>Panel Clear</td>
-				<td><img src="../SpellWars/src/res/spell/panelclear.png" alt="panel clear"></td>
-				<td>Reset all the panels on your side</td>
-			</tr>
-			<tr>
-				<td>Pistol Shot</td>
-				<td><img src="../SpellWars/src/res/spell/pistolshot.png" alt="pistol shot"></td>
-				<td>Shoot a fast projectile that deals 50 damage</td>
-			</tr>
-			<tr>
-				<td>Recharging Barrier</td>
-				<td><img src="../SpellWars/src/res/spell/rechargingbarrier.png" alt="recharging barrier"></td>
-				<td>
-					Give all your units a shield for 25s that recharges 6hp/s 
-					up to 50hp after not taking damage for 4.75s
-				</td>
-			</tr>
-			<tr>
-				<td>Reflect Barrier</td>
-				<td><img src="../SpellWars/src/res/spell/reflectbarrier.png" alt="reflect barrier"></td>
-				<td>
-					Give all your units a 50hp shield for 12s that reflects enemy 
-					projectiles after blocking their damage
-				</td>
-			</tr>
-			<tr>
-				<td>Regenerate</td>
-				<td><img src="../SpellWars/src/res/spell/regenerate.png" alt="regenerate"></td>
-				<td>Give yourself a buff that heals 75hp over 25s</td>
-			</tr>
-			<tr>
-				<td>Rupture</td>
-				<td><img src="../SpellWars/src/res/spell/rupture.png" alt="rupture"></td>
-				<td>
-					Shoot 3 projectiles that cause enemies hit to take 5 damage 
-					whenever they move, these projectiles fall through cracks
-				</td>
-			</tr>
-			<tr>
-				<td>Sanctuary</td>
-				<td><img src="../SpellWars/src/res/spell/sanctuary.png" alt="sanctuary"></td>
-				<td>
-					Change all of your panels to holy panels, that halve damage 
-					taken and double healing received
-				</td>
-			</tr>
-			<tr>
-				<td>Summon Sentry Gun</td>
-				<td><img src="../SpellWars/src/res/unit/sentrygun.png" alt="summon sentry gun"></td>
-				<td>
-					Summon an immobile sentry gun that shoots at the enemy, bullets 
-					shot can penetrate 1 panel behind the unit that it hits
-				</td>
-			</tr>
-			<tr>
-				<td>Shotgun Blast</td>
-				<td><img src="../SpellWars/src/res/spell/shotgunblast.png" alt="shotgun blast"></td>
-				<td>
-					Shoot multiple bullets in a spread, dealing a maximum of 125 
-					damage to a target, bullets deal less damage the farther they travel
-				</td>
-			</tr>
-			<tr>
-				<td>Stun Grenade</td>
-				<td><img src="../SpellWars/src/res/particle_genericBlue.png" alt="stun grenade"></td>
-				<td>
-					Throw a grenade that stuns for 4s if target was hit directly, 
-					or 3s if target was next to explosion
-				</td>
-			</tr>
-			<tr>
-				<td>Firebreath</td>
-				<td><img src="../SpellWars/src/res/particle_explosion.png" alt="firebreath"></td>
-				<td>
-					Shoot a bunch of fire, dealing 15-30 damage initially in 3 
-					rows then up to 45 extra damage in the same row
-				</td>
-			</tr>
-			<tr>
-				<td>Summon Time Bomb</td>
-				<td><img src="../SpellWars/src/res/unit/timebomb.png" alt="summon time bomb"></td>
-				<td>
-					Summon a time bomb that explodes for 75 damage in a huge radius
-					if it isn't destroyed prematurely
-				</td>
-			</tr>
-			<tr>
-				<td>Time Dilation</td>
-				<td><img src="../SpellWars/src/res/spell/timedilation.png" alt="time dilation"></td>
-				<td>Periodically speed up allied units and projectiles while slowing enemies</td>
-			</tr>
-			<tr>
-				<td>Trump's Wall</td>
-				<td><img src="../SpellWars/src/res/spell/trumpwall.png" alt="trump's wall"></td>
-				<td>Summon a wall of 50hp units that slowly degrade over time</td>
-			</tr>
-			<tr>
-				<td>Vacuum Cannon</td>
-				<td><img src="../SpellWars/src/res/spell/vacuumcannon.png" alt="vacuum cannon"></td>
-				<td>
-					Shoot 10 projectiles among 3 rows that stun and move enemy 
-					units closer to you, each projectile deals 5 damage
-				</td>
-			</tr>
-			<tr>
-				<td>Vampiric Slash</td>
-				<td><img src="../SpellWars/src/res/spell/vampiricslash.png" alt="vampiric slash"></td>
-				<td>Slash a 3x3 area in front of you, stealing 25 hp from all enemies hit</td>
-			</tr>
-			<tr>
-				<td>Vulcan</td>
-				<td><img src="../SpellWars/src/res/spell/vulcan.png" alt="vulcan"></td>
-				<td>
-					Shoot 5 bullets dealing 10 damage each in rapid succession, the
-					bullets stun and deal 5 extra damage if the enemy hit is in the 
-					middle of casting a spell
-				</td>
-			</tr>
-			<tr>
-				<td>Wind Cannon</td>
-				<td><img src="../SpellWars/src/res/spell/windcannon.png" alt="wind cannon"></td>
-				<td>
-					Shoot 13 projectiles among 3 rows that stun, cancel the current 
-					casting spell, move them away from you, and deal 5 damage
-				</td>
-			</tr>
-			<tr>
-				<td>Wish Upon a Lucky Star</td>
-				<td><img src="../SpellWars/src/res/projectile/luckystar.png" alt="wish upon a lucky star"></td>
-				<td>
-					A star lands 4 panels ahead, penetrating and destroying all shields, 
-					cracks their panels, has small chance of launching a shower of stars, 
-					and an even smaller chance of launching a big star instead
-				</td>
-			</tr>
-		</table>
-	  </section>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>Aegis Barrier</td>
+        <td><img src="../SpellWars/src/res/spell/aegisbarrier.png" alt="aegis barrier"></td>
+        <td>
+          Dispel your debuffs and give yourself a 75hp shield for 50s 
+          that regenerates 2hp/s to its owner while it is alive
+        </td>
+      </tr>
+      <tr>
+        <td>Area Grab</td>
+        <td><img src="../SpellWars/src/res/particle_genericRed.png" alt="area grab"></td>
+        <td>
+          Steal a column of tiles from your enemy, stunning units that 
+          get in the way for 1s and dealing 10 damage to them
+        </td>
+      </tr>
+      <tr>
+        <td>Berserk</td>
+        <td><img src="../SpellWars/src/res/spell/berserk.png" alt="berserk"></td>
+        <td>
+          Go berserk, losing control of your unit, but you cast random 
+          spells every second for 10 seconds, you move twice as fast and 
+          are immune to slows
+        </td>
+      </tr>
+      <tr>
+        <td>Blizzard</td>
+        <td><img src="../SpellWars/src/res/statuseffect/icon_frost.png" alt="blizzard"></td>
+        <td>
+          Gradually slow all enemy units and projectiles on the map for
+          10 seconds, dealing 1 damage per second, and reducing the 
+          damage of enemy projectiles
+        </td>
+      </tr>
+      <tr>
+        <td>Bouncing Orb</td>
+        <td><img src="../SpellWars/src/res/betterTower.png" alt="bouncing orb"></td>
+        <td>
+          Shoot an orb that bounces in the enemy territory, dealing 10 
+          damage whenever it passes an enemy
+        </td>
+      </tr>
+      <tr>
+        <td>Crack Grenade</td>
+        <td><img src="../SpellWars/src/res/spell/crack.png" alt="crack grenade"></td>
+        <td>Throw a grenade that deals 15 damage and cracks panels around it</td>
+      </tr>
+      <tr>
+        <td>Damage Amplification</td>
+        <td><img src="../SpellWars/src/res/spell/damageamp.png" alt="damage amplification"></td>
+        <td>Increase the damage you deal by 1.5x for 15 seconds</td>
+      </tr>
+      <tr>
+        <td>Debuff Transfer</td>
+        <td><img src="../SpellWars/src/res/spell/debufftransfer.png" alt="debuff transfer"></td>
+        <td>
+          Remove your debuffs, put them on a projectile, and transfer 
+          them to all enemies it hits, the projectile becomes more
+          powerful the more debuffs you remove
+        </td>
+      </tr>
+      <tr>
+        <td>Earth Cracker</td>
+        <td><img src="../SpellWars/src/res/spell/earthcracker.png" alt="earth cracker"></td>
+        <td>
+          Cracks panels in a line, dealing 40 damage to enemies it passes 
+          through, the projectile itself falls through cracks
+        </td>
+      </tr>
+      <tr>
+        <td>Electro Bolt</td>
+        <td><img src="../SpellWars/src/res/spell/electrobolt.png" alt="electro bolt"></td>
+        <td>
+          Shoot a bolt of electricity that deals 30 damage, stuns for 1.5s, 
+          purges buffs, and spreads in 4 directions dealing 5 less damage 
+          each when it hits an enemy, the extra bolts also can spread
+        </td>
+      </tr>
+      <tr>
+        <td>Fire and Brimstone</td>
+        <td><img src="../SpellWars/src/res/spell/fireandbrimstone.png" alt="fire and brimstone"></td>
+        <td>
+          Rain projectiles from the sky that change enemy panels to lava 
+          and set units hit on fire at 2dps for 20s
+        </td>
+      </tr>
+      <tr>
+        <td>Forge Spirit</td>
+        <td><img src="../SpellWars/src/res/plane.png" alt="forge spirit"></td>
+        <td>
+          Summon a unit with 75hp that shoots a projectile with 25 damage
+          every once in a while
+        </td>
+      </tr>
+      <tr>
+        <td>Hell Rain</td>
+        <td><img src="../SpellWars/src/res/spell/hellrain.png" alt="hell rain"></td>
+        <td>
+          Rain projectiles from the sky that deal 20 damage each and have a 
+          chance to crack their panels
+        </td>
+      </tr>
+      <tr>
+        <td>Hurricane Cannon</td>
+        <td><img src="../SpellWars/src/res/spell/hurricanecannon.png" alt="hurricane cannon"></td>
+        <td>Move the enemy to the same row that you are on and deal slight damage</td>
+      </tr>
+      <tr>
+        <td>Knife Throw</td>
+        <td><img src="../SpellWars/src/res/spell/knife.png" alt="knife throw"></td>
+        <td>
+          Throw a knife that deals 40 damage but also causes the enemy to 
+          bleed and be slown, multiple stacks have increased effectiveness
+        </td>
+      </tr>
+      <tr>
+        <td>Lava Grenade</td>
+        <td><img src="../SpellWars/src/res/projectile/lavagrenade.png" alt="lava grenade"></td>
+        <td>Throw a grenade that changes enemy panels to lava</td>
+      </tr>
+      <tr>
+        <td>Mud Grenade</td>
+        <td><img src="../SpellWars/src/res/projectile/mudgrenade.png" alt="mud grenade"></td>
+        <td>Throw a grenade that changes enemy panels to mud</td>
+      </tr>
+      <tr>
+        <td>Mystery Box</td>
+        <td><img src="../SpellWars/src/res/spell/mysterybox.png" alt="mystery box"></td>
+        <td>Give yourself 3 extra random spells to cast</td>
+      </tr>
+      <tr>
+        <td>Omnislash</td>
+        <td><img src="../SpellWars/src/res/spell/slash.png" alt="omnislash"></td>
+        <td>
+          Teleport and slash in a 2x3 area at an enemy in every row 
+          for 25 damage, then slash in a 3x5 area for 35 damage
+        </td>
+      </tr>
+      <tr>
+        <td>Panel Clear</td>
+        <td><img src="../SpellWars/src/res/spell/panelclear.png" alt="panel clear"></td>
+        <td>Reset all the panels on your side</td>
+      </tr>
+      <tr>
+        <td>Pistol Shot</td>
+        <td><img src="../SpellWars/src/res/spell/pistolshot.png" alt="pistol shot"></td>
+        <td>Shoot a fast projectile that deals 50 damage</td>
+      </tr>
+      <tr>
+        <td>Recharging Barrier</td>
+        <td><img src="../SpellWars/src/res/spell/rechargingbarrier.png" alt="recharging barrier"></td>
+        <td>
+          Give all your units a shield for 25s that recharges 6hp/s 
+          up to 50hp after not taking damage for 4.75s
+        </td>
+      </tr>
+      <tr>
+        <td>Reflect Barrier</td>
+        <td><img src="../SpellWars/src/res/spell/reflectbarrier.png" alt="reflect barrier"></td>
+        <td>
+          Give all your units a 50hp shield for 12s that reflects enemy 
+          projectiles after blocking their damage
+        </td>
+      </tr>
+      <tr>
+        <td>Regenerate</td>
+        <td><img src="../SpellWars/src/res/spell/regenerate.png" alt="regenerate"></td>
+        <td>Give yourself a buff that heals 75hp over 25s</td>
+      </tr>
+      <tr>
+        <td>Rupture</td>
+        <td><img src="../SpellWars/src/res/spell/rupture.png" alt="rupture"></td>
+        <td>
+          Shoot 3 projectiles that cause enemies hit to take 5 damage 
+          whenever they move, these projectiles fall through cracks
+        </td>
+      </tr>
+      <tr>
+        <td>Sanctuary</td>
+        <td><img src="../SpellWars/src/res/spell/sanctuary.png" alt="sanctuary"></td>
+        <td>
+          Change all of your panels to holy panels, that halve damage 
+          taken and double healing received
+        </td>
+      </tr>
+      <tr>
+        <td>Summon Sentry Gun</td>
+        <td><img src="../SpellWars/src/res/unit/sentrygun.png" alt="summon sentry gun"></td>
+        <td>
+          Summon an immobile sentry gun that shoots at the enemy, bullets 
+          shot can penetrate 1 panel behind the unit that it hits
+        </td>
+      </tr>
+      <tr>
+        <td>Shotgun Blast</td>
+        <td><img src="../SpellWars/src/res/spell/shotgunblast.png" alt="shotgun blast"></td>
+        <td>
+          Shoot multiple bullets in a spread, dealing a maximum of 125 
+          damage to a target, bullets deal less damage the farther they travel
+        </td>
+      </tr>
+      <tr>
+        <td>Stun Grenade</td>
+        <td><img src="../SpellWars/src/res/particle_genericBlue.png" alt="stun grenade"></td>
+        <td>
+          Throw a grenade that stuns for 4s if target was hit directly, 
+          or 3s if target was next to explosion
+        </td>
+      </tr>
+      <tr>
+        <td>Firebreath</td>
+        <td><img src="../SpellWars/src/res/particle_explosion.png" alt="firebreath"></td>
+        <td>
+          Shoot a bunch of fire, dealing 15-30 damage initially in 3 
+          rows then up to 45 extra damage in the same row
+        </td>
+      </tr>
+      <tr>
+        <td>Summon Time Bomb</td>
+        <td><img src="../SpellWars/src/res/unit/timebomb.png" alt="summon time bomb"></td>
+        <td>
+          Summon a time bomb that explodes for 75 damage in a huge radius
+          if it isn't destroyed prematurely
+        </td>
+      </tr>
+      <tr>
+        <td>Time Dilation</td>
+        <td><img src="../SpellWars/src/res/spell/timedilation.png" alt="time dilation"></td>
+        <td>Periodically speed up allied units and projectiles while slowing enemies</td>
+      </tr>
+      <tr>
+        <td>Trump's Wall</td>
+        <td><img src="../SpellWars/src/res/spell/trumpwall.png" alt="trump's wall"></td>
+        <td>Summon a wall of 50hp units that slowly degrade over time</td>
+      </tr>
+      <tr>
+        <td>Vacuum Cannon</td>
+        <td><img src="../SpellWars/src/res/spell/vacuumcannon.png" alt="vacuum cannon"></td>
+        <td>
+          Shoot 10 projectiles among 3 rows that stun and move enemy 
+          units closer to you, each projectile deals 5 damage
+        </td>
+      </tr>
+      <tr>
+        <td>Vampiric Slash</td>
+        <td><img src="../SpellWars/src/res/spell/vampiricslash.png" alt="vampiric slash"></td>
+        <td>Slash a 3x3 area in front of you, stealing 25 hp from all enemies hit</td>
+      </tr>
+      <tr>
+        <td>Vulcan</td>
+        <td><img src="../SpellWars/src/res/spell/vulcan.png" alt="vulcan"></td>
+        <td>
+          Shoot 5 bullets dealing 10 damage each in rapid succession, the
+          bullets stun and deal 5 extra damage if the enemy hit is in the 
+          middle of casting a spell
+        </td>
+      </tr>
+      <tr>
+        <td>Wind Cannon</td>
+        <td><img src="../SpellWars/src/res/spell/windcannon.png" alt="wind cannon"></td>
+        <td>
+          Shoot 13 projectiles among 3 rows that stun, cancel the current 
+          casting spell, move them away from you, and deal 5 damage
+        </td>
+      </tr>
+      <tr>
+        <td>Wish Upon a Lucky Star</td>
+        <td><img src="../SpellWars/src/res/projectile/luckystar.png" alt="wish upon a lucky star"></td>
+        <td>
+          A star lands 4 panels ahead, penetrating and destroying all shields, 
+          cracks their panels, has small chance of launching a shower of stars, 
+          and an even smaller chance of launching a big star instead
+        </td>
+      </tr>
+    </table>
+    </section>
 
       <section>
         <h2>Part 5: Advanced Gamplay</h2>
@@ -461,13 +465,13 @@
         <table>
           <tr>
             <th>Combo</th>
-			<th>Image</th>
+      <th>Image</th>
             <th>Recipe</th>
             <th>Description</th>
           </tr>
           <tr>
             <th>Awp Shot</th>
-			<td><img src="../SpellWars/src/res/spell/awpshot.png" alt="awp shot"></td>
+      <td><img src="../SpellWars/src/res/spell/awpshot.png" alt="awp shot"></td>
             <td>3x Pistol Shot</td>
             <td>
               Instantly shoot a piercing, shield-penetrating bullet dealing 200
@@ -476,7 +480,7 @@
           </tr>
           <tr>
             <th>Dragon's Breath</th>
-			<td><img src="../SpellWars/src/res/spell/dragonbreath.png" alt="dragon's breath"></td>
+      <td><img src="../SpellWars/src/res/spell/dragonbreath.png" alt="dragon's breath"></td>
             <td>3x Firebreath</td>
             <td>
               Shoot a moving wall of fire, dealing 125 total damage to each row
@@ -484,19 +488,19 @@
           </tr>
           <tr>
             <th>Hopes and Dreams</th>
-			<td><img src="../SpellWars/src/res/spell/hopesanddreams.png" alt="hopes and dreams"></td>
+      <td><img src="../SpellWars/src/res/spell/hopesanddreams.png" alt="hopes and dreams"></td>
             <td>3x Wish Upon a Lucky Star</td>
             <td>Unleash a barrage of stars upon the opponent's field</td>
           </tr>
           <tr>
             <th>Knife Volley</th>
-			<td><img src="../SpellWars/src/res/spell/knifevolley.png" alt="knife volley"></td>
+      <td><img src="../SpellWars/src/res/spell/knifevolley.png" alt="knife volley"></td>
             <td>3x Knife Throw</td>
             <td>Throw 10 knives among 3 rows with reduced damage</td>
           </tr>
           <tr>
             <th>Chronosphere</th>
-			<td><img src="../SpellWars/src/res/spell/chronosphere.png" alt="chronosphere"></td>
+      <td><img src="../SpellWars/src/res/spell/chronosphere.png" alt="chronosphere"></td>
             <td>3x Stun Grenade</td>
             <td>
               Instantly freeze an area in front for 6s, enemies caught take bonus damage
@@ -504,7 +508,7 @@
           </tr>
           <tr>
             <th>Za Warudo</th>
-			<td><img src="../SpellWars/src/res/spell/zawarudo.png" alt="za warudo"></td>
+      <td><img src="../SpellWars/src/res/spell/zawarudo.png" alt="za warudo"></td>
             <td>3x Time Dilation</td>
             <td>
               Directly enter the spell select phase, then stop time for
@@ -513,7 +517,7 @@
           </tr>
           <tr>
             <th>Tempest</th>
-			<td><img src="../SpellWars/src/res/spell/tempest.png" alt="tempest"></td>
+      <td><img src="../SpellWars/src/res/spell/tempest.png" alt="tempest"></td>
             <td>1x Wind Cannon, 1x Vacuum Cannon, 1x Hurricane Cannon</td>
             <td>Blow all enemies all over the place for 10 seconds</td>
           </tr>
@@ -533,27 +537,27 @@
         <table>
           <tr>
             <th>Spell</th>
-			<th>Image</th>
+      <th>Image</th>
             <th>Description</th>
           </tr>
           <tr>
             <th>Corrupt Pistol Shot</th>
-			<td><img src="../SpellWars/src/res/spell/corruptpistolshot.png" alt="corrupt pistol shot"></td>
+      <td><img src="../SpellWars/src/res/spell/corruptpistolshot.png" alt="corrupt pistol shot"></td>
             <td>Deal immense damage</td>
           </tr>
           <tr>
             <th>Corrupt Vulcan</th>
-			<td><img src="../SpellWars/src/res/spell/corruptvulcan.png" alt="corrupt vulcan"></td>
+      <td><img src="../SpellWars/src/res/spell/corruptvulcan.png" alt="corrupt vulcan"></td>
             <td>Shoot an immense number of bullets</td>
           </tr>
           <tr>
             <th>Corrupt Hell Rain</th>
-			<td><img src="../SpellWars/src/res/spell/corrupthellrain.png" alt="corrupt hell rain"></td>
+      <td><img src="../SpellWars/src/res/spell/corrupthellrain.png" alt="corrupt hell rain"></td>
             <td>Say goodbye to your opponent's panels</td>
           </tr>
           <tr>
             <th>Corrupt Electro Bolt</th>
-			<td><img src="../SpellWars/src/res/spell/corruptelectrobolt.png" alt="corrupt electro bolt"></td>
+      <td><img src="../SpellWars/src/res/spell/corruptelectrobolt.png" alt="corrupt electro bolt"></td>
             <td>Spread electricity everywhere</td>
           </tr>
         </table>
