@@ -489,7 +489,7 @@ public class Unit extends GameElement {
 			float height = endPic.getHeight();
 			Color col = Color.white;
 			if(this.drawMoveCooldown && this.moveCooldown > 0) {
-				col = new Color(205, 205, 235);
+				col = new Color(195, 195, 215);
 			}
 			if(this.drawSpellCasting && this.isCasting && this.spellCastTimer > 0) {
 				col = new Color(220, 180, 90);

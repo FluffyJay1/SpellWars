@@ -5,7 +5,7 @@ import projectile.CorruptElectroBoltProjectile;
 import unit.Unit;
 
 public class CorruptElectroBolt extends Spell {
-	public static final double DAMAGE = 40;
+	public static final double DAMAGE = 35;
 	public static final float STUN_DURATION = 2.5f;
 	public static final float SPEED = 0.05f;
 	public CorruptElectroBolt(Unit owner) {

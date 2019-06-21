@@ -373,6 +373,9 @@ public class StatusEffect {
 		this.ownerColorModifier = color;
 	}
 	public Color getColorModifier() {
+		if(this.muteEffect) {
+			return Color.white;
+		}
 		return this.ownerColorModifier;
 	}
 }

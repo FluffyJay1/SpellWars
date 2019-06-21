@@ -11,7 +11,7 @@ public class StunGrenade extends Grenade {
 	float maxStunDuration;
 	float minStunDuration;
 	public StunGrenade(double damage, float maxStunDuration, float minStunDuration, int direction, Point gridLoc, int teamID) {
-		super(damage, AIR_DURATION, 4, 70, 10, direction, gridLoc, "res/particle_genericBlue.png", teamID);
+		super(damage, AIR_DURATION, 4, 70, 10, direction, gridLoc, "res/particle_genericBlue.png", teamID, false);
 		this.setImageScale(3);
 		this.maxStunDuration = maxStunDuration;
 		this.minStunDuration = minStunDuration;

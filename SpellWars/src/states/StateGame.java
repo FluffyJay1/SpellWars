@@ -128,10 +128,10 @@ public class StateGame extends BasicGameState{
 			ui.setMap(map);
 			Point leftStartLoc = new Point(0, 0);
 			Point rightStartLoc = new Point(7, 3);
-			leftPlayer = new Player(500, 5, GameMap.ID_LEFT, leftStartLoc);
+			leftPlayer = new Player(500, 4, GameMap.ID_LEFT, leftStartLoc);
 			//this.map.getPanelAt(leftPlayer.gridLoc).unitStandingOnPanel = leftPlayer;
 			leftSelect = new SpellSelector(ui, new Point(0, 0), GameMap.ID_LEFT, leftPlayer);
-			rightPlayer = new Player(500, 5, GameMap.ID_RIGHT, rightStartLoc);
+			rightPlayer = new Player(500, 4, GameMap.ID_RIGHT, rightStartLoc);
 			//this.map.getPanelAt(rightPlayer.gridLoc).unitStandingOnPanel = rightPlayer;
 			rightSelect = new SpellSelector(ui, new Point(Game.WINDOW_WIDTH, 0), GameMap.ID_RIGHT, rightPlayer);
 			if(Game.leftPlayer.equals(PlayerType.PLAYER)) {

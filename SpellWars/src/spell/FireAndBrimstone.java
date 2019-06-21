@@ -5,7 +5,7 @@ import mechanic.Point;
 import particlesystem.EmitterTypes;
 import particlesystem.ParticleEmitter;
 import projectile.BrimstoneGrenade;
-import projectile.CrackGrenade;
+import projectile.HellRainGrenade;
 import projectile.Grenade;
 import projectile.Projectile;
 
@@ -15,7 +15,7 @@ import mechanic.GameMap;
 import unit.Unit;
 
 public class FireAndBrimstone extends Spell {
-	public static final float DURATION = 5.0f;
+	public static final float DURATION = 3.0f;
 	public static final int NUM_STRIKES = 14;
 	public static final double DAMAGE = 5;
 	public static final float DAMAGE_PER_SECOND = 2;

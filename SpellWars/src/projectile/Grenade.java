@@ -1,6 +1,7 @@
 package projectile;
 
 import mechanic.GameMap;
+import mechanic.PanelState;
 import mechanic.Point;
 import particlesystem.EmitterTypes;
 import particlesystem.ParticleEmitter;
@@ -26,8 +27,9 @@ public class Grenade extends Projectile {
 	
 	double grenadeDamage;
 	boolean hasHitApex;
+	boolean grenadeIgnoreHoles;
 	public boolean flashDestinationPanel;
-	public Grenade(double damage, double duration, int distance, float initialHeight, float endHeight, int direction, Point gridLoc, String imagePath, int teamID) {
+	public Grenade(double damage, double duration, int distance, float initialHeight, float endHeight, int direction, Point gridLoc, String imagePath, int teamID, boolean grenadeIgnoreHoles) {
 		super(0, distance/duration, direction, gridLoc, imagePath, teamID, false, true, true);
 		this.distance = distance;
 		this.duration = (float)duration;
@@ -46,8 +48,9 @@ public class Grenade extends Projectile {
 		this.hasHitApex = false;
 		this.canDoDamage = false;
 		this.setDrawHeight(this.getHeightAt(this.timeElapsed));
+		this.grenadeIgnoreHoles = grenadeIgnoreHoles;
 	}
-	public Grenade(double damage, double duration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID) {
+	public Grenade(double damage, double duration, Point endDisplacement, float initialHeight, float endHeight, Point gridLoc, String imagePath, int teamID, boolean grenadeIgnoreHoles) {
 		super(0, 1/duration, endDisplacement, gridLoc, imagePath, teamID, false, true, true);
 		this.distance = (int) Point.getDistance(new Point(), endDisplacement);
 		this.duration = (float)duration;
@@ -66,6 +69,7 @@ public class Grenade extends Projectile {
 		this.hasHitApex = false;
 		this.canDoDamage = false;
 		this.setDrawHeight(this.getHeightAt(this.timeElapsed));
+		this.grenadeIgnoreHoles = grenadeIgnoreHoles;
 	}
 	public void setInitialHeight(float initialHeight) {
 		this.initialHeight = initialHeight;
@@ -128,7 +132,9 @@ public class Grenade extends Projectile {
 					}
 				}
 				if(this.timeElapsed >= this.duration) { //IN CASE IT GETS REFLECTED, MAY SEEM REDUNDANT BUT IT'S NOT
-					this.onGrenadeLanded();
+					if(this.grenadeIgnoreHoles || this.getMap().getPanelAt(this.endLoc).getPanelState() != PanelState.HOLE) {
+						this.onGrenadeLanded();
+					}
 					this.setRemove(true);
 				}
 			}
