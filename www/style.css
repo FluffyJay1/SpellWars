@@ -1,0 +1,58 @@
+/*
+  Michael Yang
+  4/6/19
+
+  This is the style sheet for about.html and spellwars/spellwars.html.
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans');
+
+body {
+  background-color: #DDDDDD;
+  font-family: 'Alegreya Sans', sans-serif;
+  font-size: 150%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+section {
+  text-align: center;
+}
+
+ul, ol, table {
+  text-align: left;
+  display: inline-block;
+}
+
+table, th, td {
+  border: 1px solid #A0A0A0;
+}
+
+table img {
+	width: 48px;
+}
+
+p, li, th, td {
+  color: #503000;
+}
+
+h1 {
+  color: #803000;
+}
+
+h2 {
+  color: #805030;
+}
+
+h3 {
+  color: #806060;
+}
+
+h4 {
+  color: #807070;
+}
+
+.previewimage {
+  width: 50%;
+}

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<!--
+  ***
+  Michael Yang
+  4/6/19
+
+  This is the page that shows how to play a game I made. It is linked from
+  ../about.html and uses ../style.css. All of the images found in this page
+  are screenshots from the game I made. This game contains assets made by me,
+  images made public by Valve and Capcom, and other images protected by fair use.
+  ***
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <title>SpellWars</title>
+  </head>
+  <body>
+    <main>
+      <h1>SpellWars: A Comprehensive Guide</h1>
+      <section>
+        <h2>Part 1: Getting Set Up</h2>
+        <h3>You need the following:</h3>
+        <ul>
+          <li>Eclipse</li>
+          <li>git or Eclipse's Egit plugin</li>
+        </ul>
+        <h3>Getting the game:</h3>
+        <ol>
+          <li>
+            Copy this link to the clipboard:
+            <strong>https://github.com/FluffyJay1/SpellWars.git</strong>
+          </li>
+          <li>
+            Clone the repository using git or use Eclipse to import a git
+            project with the URI
+          </li>
+          <li>Open the project in Eclipse</li>
+        </ol>
+        <p>To run the game, run <strong>mechanic.Game.</strong></p>
+      </section>
+
+      <section>
+        <h2>Part 2: The Controls</h2>
+        <h3>Menu controls:</h3>
+        <table>
+          <tr>
+            <th>Action</th>
+            <th>Player 1:</th>
+            <th>Player 2:</th>
+          </tr>
+          <tr>
+            <th>Select combatant</th>
+            <td>W, S</td>
+            <td>Up, down arrows</td>
+          </tr>
+          <tr>
+            <th>Change AI level</th>
+            <td>A, D</td>
+            <td>Left, right arrows</td>
+          </tr>
+        </table>
+        <h3>In-game controls:</h3>
+        <table>
+          <tr>
+            <th>Battle phase action</th>
+            <th>Spell select phase action</th>
+            <th>Player 1:</th>
+            <th>Player 2:</th>
+          </tr>
+          <tr>
+            <th>Movement</th>
+            <th>Move spell selector</th>
+            <td>WASD</td>
+            <td>Arrow keys</td>
+          </tr>
+          <tr>
+            <th>Cast spell</th>
+            <th>Select spell</th>
+            <td>E</td>
+            <td>. (period)</td>
+          </tr>
+          <tr>
+            <th>Shoot pellet</th>
+            <th>Deselect spell</th>
+            <td>Q</td>
+            <td>/ (slash)</td>
+          </tr>
+          <tr>
+            <th>---</th>
+            <th>Finish selecting spells</th>
+            <td>T</td>
+            <td>L</td>
+          </tr>
+        </table>
+      </section>
+
+      <section>
+        <h2>Part 3: Basic Gameplay</h2>
+        <p>
+          In this game, two players occupy two different sides of an 8x4 grid
+          battlefield.
+        </p>
+        <img class="previewimage" src="img/basic.png"
+        alt="The battlefield in SpellWars." />
+        <p>
+          Player 1, the red player, can move anywhere in his 4x4 area on the
+          left. Likewise player 2, the blue player, has control over the 4x4
+          area of panels on the right.
+        </p>
+        <p>
+          Each player starts with 500 health. The objective of the game is to
+          <strong>destroy the other player by bringing their health total to 0.
+          </strong> In order to achieve this, each player can shoot pellets at
+          each other, which deal 5 damage each. This method is tedious, so
+          players have another option at their disposal:
+        </p>
+        <p><strong>CASTING POWERFUL SPELLS.</strong></p>
+        <img class="previewimage" src="img/spells.png"
+        alt="Players casting spells. The blue player also stole a column of
+        panels from the red player." />
+        <p>
+          Every 15 seconds, players choose from a wide variety of spells to
+          load 4 of them into combat. These spells have effects ranging from
+          dealing a burst of damage to altering the landscape of the battle.
+          During the so-called <strong>combat phase</strong>, it's up to the
+          players to maximize the effectiveness of their spells through creative
+          combinations and planning from the <strong>spell select phase.</strong>
+        </p>
+        <img class="previewimage" src="img/spellselect.png"
+        alt="The spell select panel." />
+        <p>
+          If, however, playing against another player isn't your cup of tea,
+          you can instead play against various AI characters. You can also change
+          their difficulty setting in the menu. You could even pit two AIs to
+          fight against each other and watch them go.
+        </p>
+        <img class="previewimage" src="img/ai.png"
+        alt="A player playing against the computer." />
+      </section>
+	  
+	  <section>
+		<h2>Part 4: Spells</h2>
+		<h3>Casting a Spell</h3>
+		<p>
+			To cast a spell, player 1 presses 'E', and player 2 presses '.'. You can cast a spell only when you aren't currently casting a spell.
+		</p>
+		<h3>Casting Phases</h3>
+		<p>
+			All spells cast in 2 phases: windup phase -> execution -> winddown phase. All spells have a windup time (indicated by the gray bar) 
+			and a winddown time (indicated by the red bar). Should a unit get stunned while casting a spell, these phases get paused, and the
+			spell execution usually gets paused as well. The pellet shot has a lengthy windup phase.
+		</p>
+		<h3>List of Player Spells in Patch 1.17</h3>
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Image</th>
+				<th>Description</th>
+			</tr>
+			<tr>
+				<td>Aegis Barrier</td>
+				<td><img src="../SpellWars/src/res/spell/aegisbarrier.png" alt="aegis barrier"></td>
+				<td>
+					Dispel your debuffs and give yourself a 75hp shield for 50s 
+					that regenerates 2hp/s to its owner while it is alive
+				</td>
+			</tr>
+			<tr>
+				<td>Area Grab</td>
+				<td><img src="../SpellWars/src/res/particle_genericRed.png" alt="area grab"></td>
+				<td>
+					Steal a column of tiles from your enemy, stunning units that 
+					get in the way for 1s and dealing 10 damage to them
+				</td>
+			</tr>
+			<tr>
+				<td>Berserk</td>
+				<td><img src="../SpellWars/src/res/spell/berserk.png" alt="berserk"></td>
+				<td>
+					Go berserk, losing control of your unit, but you cast random 
+					spells every second for 10 seconds, you move twice as fast and 
+					are immune to slows
+				</td>
+			</tr>
+			<tr>
+				<td>Blizzard</td>
+				<td><img src="../SpellWars/src/res/statuseffect/icon_frost.png" alt="blizzard"></td>
+				<td>
+					Gradually slow all enemy units and projectiles on the map for
+					10 seconds, dealing 1 damage per second, and reducing the 
+					damage of enemy projectiles
+				</td>
+			</tr>
+			<tr>
+				<td>Bouncing Orb</td>
+				<td><img src="../SpellWars/src/res/betterTower.png" alt="bouncing orb"></td>
+				<td>
+					Shoot an orb that bounces in the enemy territory, dealing 10 
+					damage whenever it passes an enemy
+				</td>
+			</tr>
+			<tr>
+				<td>Crack Grenade</td>
+				<td><img src="../SpellWars/src/res/spell/crack.png" alt="crack grenade"></td>
+				<td>Throw a grenade that deals 15 damage and cracks panels around it</td>
+			</tr>
+			<tr>
+				<td>Damage Amplification</td>
+				<td><img src="../SpellWars/src/res/spell/damageamp.png" alt="damage amplification"></td>
+				<td>Increase the damage you deal by 1.5x for 15 seconds</td>
+			</tr>
+			<tr>
+				<td>Debuff Transfer</td>
+				<td><img src="../SpellWars/src/res/spell/debufftransfer.png" alt="debuff transfer"></td>
+				<td>
+					Remove your debuffs, put them on a projectile, and transfer 
+					them to all enemies it hits, the projectile becomes more
+					powerful the more debuffs you remove
+				</td>
+			</tr>
+			<tr>
+				<td>Earth Cracker</td>
+				<td><img src="../SpellWars/src/res/spell/earthcracker.png" alt="earth cracker"></td>
+				<td>
+					Cracks panels in a line, dealing 40 damage to enemies it passes 
+					through, the projectile itself falls through cracks
+				</td>
+			</tr>
+			<tr>
+				<td>Electro Bolt</td>
+				<td><img src="../SpellWars/src/res/spell/electrobolt.png" alt="electro bolt"></td>
+				<td>
+					Shoot a bolt of electricity that deals 30 damage, stuns for 1.5s, 
+					purges buffs, and spreads in 4 directions dealing 5 less damage 
+					each when it hits an enemy, the extra bolts also can spread
+				</td>
+			</tr>
+			<tr>
+				<td>Fire and Brimstone</td>
+				<td><img src="../SpellWars/src/res/spell/fireandbrimstone.png" alt="fire and brimstone"></td>
+				<td>
+					Rain projectiles from the sky that change enemy panels to lava 
+					and set units hit on fire at 2dps for 20s
+				</td>
+			</tr>
+			<tr>
+				<td>Forge Spirit</td>
+				<td><img src="../SpellWars/src/res/plane.png" alt="forge spirit"></td>
+				<td>
+					Summon a unit with 75hp that shoots a projectile with 25 damage
+					every once in a while
+				</td>
+			</tr>
+			<tr>
+				<td>Hell Rain</td>
+				<td><img src="../SpellWars/src/res/spell/hellrain.png" alt="hell rain"></td>
+				<td>
+					Rain projectiles from the sky that deal 20 damage each and have a 
+					chance to crack their panels
+				</td>
+			</tr>
+			<tr>
+				<td>Hurricane Cannon</td>
+				<td><img src="../SpellWars/src/res/spell/hurricanecannon.png" alt="hurricane cannon"></td>
+				<td>Move the enemy to the same row that you are on and deal slight damage</td>
+			</tr>
+			<tr>
+				<td>Knife Throw</td>
+				<td><img src="../SpellWars/src/res/spell/knife.png" alt="knife throw"></td>
+				<td>
+					Throw a knife that deals 40 damage but also causes the enemy to 
+					bleed and be slown, multiple stacks have increased effectiveness
+				</td>
+			</tr>
+			<tr>
+				<td>Lava Grenade</td>
+				<td><img src="../SpellWars/src/res/projectile/lavagrenade.png" alt="lava grenade"></td>
+				<td>Throw a grenade that changes enemy panels to lava</td>
+			</tr>
+			<tr>
+				<td>Mud Grenade</td>
+				<td><img src="../SpellWars/src/res/projectile/mudgrenade.png" alt="mud grenade"></td>
+				<td>Throw a grenade that changes enemy panels to mud</td>
+			</tr>
+			<tr>
+				<td>Mystery Box</td>
+				<td><img src="../SpellWars/src/res/spell/mysterybox.png" alt="mystery box"></td>
+				<td>Give yourself 3 extra random spells to cast</td>
+			</tr>
+			<tr>
+				<td>Omnislash</td>
+				<td><img src="../SpellWars/src/res/spell/slash.png" alt="omnislash"></td>
+				<td>
+					Teleport and slash in a 2x3 area at an enemy in every row 
+					for 25 damage, then slash in a 3x5 area for 35 damage
+				</td>
+			</tr>
+			<tr>
+				<td>Panel Clear</td>
+				<td><img src="../SpellWars/src/res/spell/panelclear.png" alt="panel clear"></td>
+				<td>Reset all the panels on your side</td>
+			</tr>
+			<tr>
+				<td>Pistol Shot</td>
+				<td><img src="../SpellWars/src/res/spell/pistolshot.png" alt="pistol shot"></td>
+				<td>Shoot a fast projectile that deals 50 damage</td>
+			</tr>
+			<tr>
+				<td>Recharging Barrier</td>
+				<td><img src="../SpellWars/src/res/spell/rechargingbarrier.png" alt="recharging barrier"></td>
+				<td>
+					Give all your units a shield for 25s that recharges 6hp/s 
+					up to 50hp after not taking damage for 4.75s
+				</td>
+			</tr>
+			<tr>
+				<td>Reflect Barrier</td>
+				<td><img src="../SpellWars/src/res/spell/reflectbarrier.png" alt="reflect barrier"></td>
+				<td>
+					Give all your units a 50hp shield for 12s that reflects enemy 
+					projectiles after blocking their damage
+				</td>
+			</tr>
+			<tr>
+				<td>Regenerate</td>
+				<td><img src="../SpellWars/src/res/spell/regenerate.png" alt="regenerate"></td>
+				<td>Give yourself a buff that heals 75hp over 25s</td>
+			</tr>
+			<tr>
+				<td>Rupture</td>
+				<td><img src="../SpellWars/src/res/spell/rupture.png" alt="rupture"></td>
+				<td>
+					Shoot 3 projectiles that cause enemies hit to take 5 damage 
+					whenever they move, these projectiles fall through cracks
+				</td>
+			</tr>
+			<tr>
+				<td>Sanctuary</td>
+				<td><img src="../SpellWars/src/res/spell/sanctuary.png" alt="sanctuary"></td>
+				<td>
+					Change all of your panels to holy panels, that halve damage 
+					taken and double healing received
+				</td>
+			</tr>
+			<tr>
+				<td>Summon Sentry Gun</td>
+				<td><img src="../SpellWars/src/res/unit/sentrygun.png" alt="summon sentry gun"></td>
+				<td>
+					Summon an immobile sentry gun that shoots at the enemy, bullets 
+					shot can penetrate 1 panel behind the unit that it hits
+				</td>
+			</tr>
+			<tr>
+				<td>Shotgun Blast</td>
+				<td><img src="../SpellWars/src/res/spell/shotgunblast.png" alt="shotgun blast"></td>
+				<td>
+					Shoot multiple bullets in a spread, dealing a maximum of 125 
+					damage to a target, bullets deal less damage the farther they travel
+				</td>
+			</tr>
+			<tr>
+				<td>Stun Grenade</td>
+				<td><img src="../SpellWars/src/res/particle_genericBlue.png" alt="stun grenade"></td>
+				<td>
+					Throw a grenade that stuns for 4s if target was hit directly, 
+					or 3s if target was next to explosion
+				</td>
+			</tr>
+			<tr>
+				<td>Firebreath</td>
+				<td><img src="../SpellWars/src/res/particle_explosion.png" alt="firebreath"></td>
+				<td>
+					Shoot a bunch of fire, dealing 15-30 damage initially in 3 
+					rows then up to 45 extra damage in the same row
+				</td>
+			</tr>
+			<tr>
+				<td>Summon Time Bomb</td>
+				<td><img src="../SpellWars/src/res/unit/timebomb.png" alt="summon time bomb"></td>
+				<td>
+					Summon a time bomb that explodes for 75 damage in a huge radius
+					if it isn't destroyed prematurely
+				</td>
+			</tr>
+			<tr>
+				<td>Time Dilation</td>
+				<td><img src="../SpellWars/src/res/spell/timedilation.png" alt="time dilation"></td>
+				<td>Periodically speed up allied units and projectiles while slowing enemies</td>
+			</tr>
+			<tr>
+				<td>Trump's Wall</td>
+				<td><img src="../SpellWars/src/res/spell/trumpwall.png" alt="trump's wall"></td>
+				<td>Summon a wall of 50hp units that slowly degrade over time</td>
+			</tr>
+			<tr>
+				<td>Vacuum Cannon</td>
+				<td><img src="../SpellWars/src/res/spell/vacuumcannon.png" alt="vacuum cannon"></td>
+				<td>
+					Shoot 10 projectiles among 3 rows that stun and move enemy 
+					units closer to you, each projectile deals 5 damage
+				</td>
+			</tr>
+			<tr>
+				<td>Vampiric Slash</td>
+				<td><img src="../SpellWars/src/res/spell/vampiricslash.png" alt="vampiric slash"></td>
+				<td>Slash a 3x3 area in front of you, stealing 25 hp from all enemies hit</td>
+			</tr>
+			<tr>
+				<td>Vulcan</td>
+				<td><img src="../SpellWars/src/res/spell/vulcan.png" alt="vulcan"></td>
+				<td>
+					Shoot 5 bullets dealing 10 damage each in rapid succession, the
+					bullets stun and deal 5 extra damage if the enemy hit is in the 
+					middle of casting a spell
+				</td>
+			</tr>
+			<tr>
+				<td>Wind Cannon</td>
+				<td><img src="../SpellWars/src/res/spell/windcannon.png" alt="wind cannon"></td>
+				<td>
+					Shoot 13 projectiles among 3 rows that stun, cancel the current 
+					casting spell, move them away from you, and deal 5 damage
+				</td>
+			</tr>
+			<tr>
+				<td>Wish Upon a Lucky Star</td>
+				<td><img src="../SpellWars/src/res/projectile/luckystar.png" alt="wish upon a lucky star"></td>
+				<td>
+					A star lands 4 panels ahead, penetrating and destroying all shields, 
+					cracks their panels, has small chance of launching a shower of stars, 
+					and an even smaller chance of launching a big star instead
+				</td>
+			</tr>
+		</table>
+	  </section>
+
+      <section>
+        <h2>Part 5: Advanced Gamplay</h2>
+        <h3>Shields</h3>
+        <p>
+          Shields block damage from all sources and can stack. Different
+          projectiles interact differently with shields. For default behavior,
+          if a shield is active, it will block all incoming damage from the unit
+          or shields below it, even if its health is lower than the projectile's
+          damage (i.e. a shield with 1 hp will still block an entire pistol shot).
+        </p>
+        <h3>Spell Frequencies</h3>
+        <p>
+          Not all spells are created equal. Certain spells will appear more
+          often than others. In the spell selection panel, the most frequently
+          occuring spells will appear first. Keep this in mind when trying to
+          find spell combos.
+        </p>
+        <h3>List of Spell Combos</h3>
+        <p>
+          When you select 3 specific spells (usually 3 of the same spell), the
+          spells combine into a more powerful version as you enter the combat
+          phase.
+        </p>
+        <table>
+          <tr>
+            <th>Combo</th>
+			<th>Image</th>
+            <th>Recipe</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <th>Awp Shot</th>
+			<td><img src="../SpellWars/src/res/spell/awpshot.png" alt="awp shot"></td>
+            <td>3x Pistol Shot</td>
+            <td>
+              Instantly shoot a piercing, shield-penetrating bullet dealing 200
+              damage to the first target
+            </td>
+          </tr>
+          <tr>
+            <th>Dragon's Breath</th>
+			<td><img src="../SpellWars/src/res/spell/dragonbreath.png" alt="dragon's breath"></td>
+            <td>3x Firebreath</td>
+            <td>
+              Shoot a moving wall of fire, dealing 125 total damage to each row
+            </td>
+          </tr>
+          <tr>
+            <th>Hopes and Dreams</th>
+			<td><img src="../SpellWars/src/res/spell/hopesanddreams.png" alt="hopes and dreams"></td>
+            <td>3x Wish Upon a Lucky Star</td>
+            <td>Unleash a barrage of stars upon the opponent's field</td>
+          </tr>
+          <tr>
+            <th>Knife Volley</th>
+			<td><img src="../SpellWars/src/res/spell/knifevolley.png" alt="knife volley"></td>
+            <td>3x Knife Throw</td>
+            <td>Throw 10 knives among 3 rows with reduced damage</td>
+          </tr>
+          <tr>
+            <th>Chronosphere</th>
+			<td><img src="../SpellWars/src/res/spell/chronosphere.png" alt="chronosphere"></td>
+            <td>3x Stun Grenade</td>
+            <td>
+              Instantly freeze an area in front for 6s, enemies caught take bonus damage
+            </td>
+          </tr>
+          <tr>
+            <th>Za Warudo</th>
+			<td><img src="../SpellWars/src/res/spell/zawarudo.png" alt="za warudo"></td>
+            <td>3x Time Dilation</td>
+            <td>
+              Directly enter the spell select phase, then stop time for
+              everything else for 10 seconds
+            </td>
+          </tr>
+          <tr>
+            <th>Tempest</th>
+			<td><img src="../SpellWars/src/res/spell/tempest.png" alt="tempest"></td>
+            <td>1x Wind Cannon, 1x Vacuum Cannon, 1x Hurricane Cannon</td>
+            <td>Blow all enemies all over the place for 10 seconds</td>
+          </tr>
+        </table>
+        <img class="previewimage" src="img/combo.png"
+        alt="A Chronosphere spell being created." />
+        <p>(An example of a spell being combined as the battle phase starts)</p>
+        <h3>Corrupt Spells</h3>
+        <img class="previewimage" src="img/corrupt.png"
+        alt="A Corrupt Hell Rain appearing in the spell select panel." />
+        <p>
+          Every once in a while, a player will come across what looks like a
+          normal spell, but purple. These are corrupt spells: spells that are
+          vastly more powerful than their vanilla counterpart. This power,
+          however, comes at a price...
+        </p>
+        <table>
+          <tr>
+            <th>Spell</th>
+			<th>Image</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <th>Corrupt Pistol Shot</th>
+			<td><img src="../SpellWars/src/res/spell/corruptpistolshot.png" alt="corrupt pistol shot"></td>
+            <td>Deal immense damage</td>
+          </tr>
+          <tr>
+            <th>Corrupt Vulcan</th>
+			<td><img src="../SpellWars/src/res/spell/corruptvulcan.png" alt="corrupt vulcan"></td>
+            <td>Shoot an immense number of bullets</td>
+          </tr>
+          <tr>
+            <th>Corrupt Hell Rain</th>
+			<td><img src="../SpellWars/src/res/spell/corrupthellrain.png" alt="corrupt hell rain"></td>
+            <td>Say goodbye to your opponent's panels</td>
+          </tr>
+          <tr>
+            <th>Corrupt Electro Bolt</th>
+			<td><img src="../SpellWars/src/res/spell/corruptelectrobolt.png" alt="corrupt electro bolt"></td>
+            <td>Spread electricity everywhere</td>
+          </tr>
+        </table>
+        <h3>Special Status Effects</h3>
+        <h4>Corrupt</h4>
+        <p>
+          Gets applied to you whenever you cast a corrupt spell. At 1+ stacks,
+          your healing input gets reduced, you take periodic damage, and corrupt
+          spells appear more frequently in your spell select panel. At 2+ stacks,
+          your movement becomes erratic. At 3 stacks, you trade your health and
+          control over your character in exchange for raw power.
+        </p>
+        <h4>Bleed</h4>
+        <p>
+          Applied from the knife projectile. Each stack of the debuff is
+          additional 1 damage per second for 10 seconds, as well as a minor slow.
+          After 10 seconds, rather than the debuff disappearing, the stack count
+          gets decreased by 1 and the debuff refreshes. This mean that 1 stack
+          deals 10 damage total, 2 stacks deal 30 damage, 3 deal 60, 4 deal 100, etc.
+        </p>
+        <h4>Mei's frost</h4>
+        <p>
+          Applied from Mei's attacks and ultimate. In addition to slowing for
+          each stack, at 20 stacks, the target becomes stunned.
+        </p>
+        <h4>Ruptured</h4>
+        <p>
+          Applied from the Rupture spell. Deals 5 damage for every grid unit moved.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
